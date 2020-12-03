@@ -1,0 +1,2 @@
+Een kleine TO-DO lijst:
+- Portfolio omzetten tot een showcase van auteurs
