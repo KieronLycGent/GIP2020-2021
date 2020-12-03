@@ -1,2 +1,2 @@
 Een kleine TO-DO lijst:
-- Portfolio omzetten tot een showcase van auteurs
+- Het probleem is nu dat bootstrap tegenwerkt met de grootte van de DIVs

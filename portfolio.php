@@ -119,49 +119,54 @@
     <!-- ======= Portfolio Section ======= -->
     <section id="portfolio" class="portfolio">
       <div class="container">
-          <?php
-          
-          ?>
-        <div class="row portfolio-container">
-            
-        </div>
-
-      </div>
-    </section><!-- End Portfolio Section -->
-<!-- ====== Auteurs ====== -->
-      <?php
-      $mysqli= new MySQLi("localhost","root","","gipcorr");
-      if(mysqli_connect_errno()){
-        trigger_error("Fout bij verbinding: ".$mysqli->error);
-      }
-      else{
-          $sql = "select * from tblAuteur";
-          if($stmt = $mysqli->prepare($sql)){
-              if(!$stmt->execute()){
-                  echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
-              }
-              else{
-                  $stmt->bind_result($auteurID, $auteurNm, $auteurBesch, $auteurFoto);
-                  echo"<table>";
-                  while($stmt->fetch()){
-                      echo 
-                          "<tr>
-                          <td> ".$auteurID." </td><td> ".$auteurNm." </td><td> ".$auteurBesch." </td><td> <img src=\"assets/img/".$auteurFoto."\" width = \"50px\"> </td>
-                          </tr>";
+          <div class="container">
+              <div class="row portfolio-container">
+                  <?php
+                  $mysqli= new MySQLi("localhost","root","","gipcorr");
+                  if(mysqli_connect_errno()){
+                      trigger_error("Fout bij verbinding: ".$mysqli->error);
                   }
-                  echo"</table>";
-              }
-              $stmt->close();
-          }
-          else{
-        echo"Er zit een fout in de qry: ".$mysqli->error;
-          }
-      }
-      ?>
+                  else{
+                      $sql = "select * from tblAuteur";
+                      if($stmt = $mysqli->prepare($sql)){
+                          if(!$stmt->execute()){
+                              echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
+                          }
+                          else{
+                              $stmt->bind_result($auteurID, $auteurNm, $auteurBesch, $auteurFoto);
+                              while($stmt->fetch()){
+                                  echo"
+                                  <div class=\"col-lg-2 col-md-6 portfolio-item  filter-app\">
+                                  <div class=\"portfolio-wrap\">
+                                  <img src=\"assets/img/".$auteurFoto."\" class=\"img-fluid\"  alt=\"\" padding = \"0\">
+                                  <div class=\"portfolio-info\">
+                                  <h4>".$auteurNm."</h4>
+                                  <p>".$auteurBesch."</p>
+                                  <div class=\"portfolio-links\">
+                                  <a href=\"assets/img/".$auteurFoto."\" data-gall=\"portfolioGallery\" class=\"venobox\" title=\".$auteurNm.\"><i class=\"bx bx-plus\"></i></a>
+                                  <a href=\"portfolio-details.html\" title=\"More Details\"><i class=\"bx bx-link\"></i></a>
+                                  </div>
+                                  </div>
+                                  </div>";
+                              }
+                          }
+                          $stmt->close();
+                      }
+                      else{
+                          echo"Er zit een fout in de qry: ".$mysqli->error;
+                      }
+                  }
+                  ?>
+                  <br>
+              </div>
+          </div>
+        </div>
+      </section><!-- End Portfolio Section -->
+<!-- ====== Auteurs ====== -->
+      
     <!-- ======= Clients Section ======= -->
     <section id="clients" class="clients">
-      <div class="container">
-
+      
         <div class="section-title">
           <h2>Clients</h2>
           <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
@@ -177,7 +182,7 @@
           <img src="assets/img/clients/client-7.png" alt="">
           <img src="assets/img/clients/client-8.png" alt="">
         </div>
-
+          
       </div>
     </section><!-- End Clients Section -->
 
