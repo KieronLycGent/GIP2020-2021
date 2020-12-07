@@ -70,6 +70,7 @@
 
             <li><a href="about.php">Over</a></li>
           <li class="active"><a href="contact.php">Contact</a></li>
+                     <li><a href="portfolio.php">Auteurs</a></li>
 
         </ul>
       </nav><!-- .nav-menu -->
