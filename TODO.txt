@@ -1,2 +1,2 @@
 Een kleine TO-DO lijst:
-- Het probleem is nu dat bootstrap tegenwerkt met de grootte van de DIVs
+- 
