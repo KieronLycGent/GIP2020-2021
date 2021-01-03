@@ -1,9 +1,27 @@
 <!DOCTYPE html>
 <?php
-if(isset($_GET["item"])){
-            setcookie("ID",$_GET["item"]);   
-            header("location:portfolio-details.php");
-        }    
+    
+if(!isset($_COOKIE["ID"])){
+    header("location:portfolio.php");
+}
+if(isset($_POST["naam"])&&$_POST["naam"]!=""&&(isset($_POST["besch"]))&&$_POST["besch"]!=""&&(isset($_POST["foto"]))&&$_POST["foto"]!=""){
+     
+    $mysqli = new MySQLi("localhost","root","","gip");
+        if(mysqli_connect_errno()){
+            trigger_error("fout bij de verbinding: ".$mysqli->error);
+        }
+        $sql = "UPDATE tblAuteur SET auteurNm = '".$_POST["naam"]."', auteurBesch = '".$_POST["besch"]."', auteurFoto = '".$_POST["foto"]."' WHERE auteurID = ".$_COOKIE["ID"];;
+        if($stmt = $mysqli->prepare($sql)){
+            if(!$stmt->execute()){
+                echo"het uitvoeren van de qry is mislukt";
+            }
+            $stmt->close();
+        }
+        else{
+            echo"Er zit een fout in de qry";
+        }
+}
+
 ?>
 <html lang="en">
 
@@ -11,12 +29,12 @@ if(isset($_GET["item"])){
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Auteurs - Workshopp.er</title>
+  <title>Details auteur - Workshopp.er</title>
   <meta content="" name="descriptison">
   <meta content="" name="keywords">
 
   <!-- Favicons -->
- <link href="assets/img/ws.png" rel="icon">
+  <link href="assets/img/ws.png" rel="icon">
   <link href="assets/img/ws.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
@@ -42,7 +60,6 @@ if(isset($_GET["item"])){
 </head>
 
 <body>
-
   <!-- ======= Top Bar ======= -->
   <section id="topbar" class="d-none d-lg-block">
     <div class="container d-flex">
@@ -72,162 +89,83 @@ if(isset($_GET["item"])){
 
       <nav class="nav-menu d-none d-lg-block">
         <ul>
-            <li><a href="index.php">Home</a></li>
+          <li><a href="index.php">Home</a></li>
+
             <li><a href="about.php">Over</a></li>
-            <li><a href="contact.php">Contact</a></li>
-            <li class="active"><a href="portfolio.php">Auteurs</a></li>
+          <li><a href="contact.php">Contact</a></li>
+              <li class="active"><a href="portfolio.php">Auteurs</a></li>
 
         </ul>
       </nav><!-- .nav-menu -->
 
     </div>
   </header><!-- End Header -->
-
-
-  <main id="main">
-
+<main id="main">
     <!-- ======= Breadcrumbs ======= -->
     <section id="breadcrumbs" class="breadcrumbs">
       <div class="container">
+
         <ol>
           <li><a href="index.php">Home</a></li>
           <li>Auteurs</li>
+          <li>Details</li>
         </ol>
-        <h2>Auteurs</h2>
+        <h2>Auteur Details</h2>
+
       </div>
-    </section>
-    <!-- End Breadcrumbs -->
-    
-    <!-- ======== Search ======== -->  
-    <section id="search" class="search">
-        <div class = "container">
-            <form method="post" action="<?php $_SERVER['PHP_SELF'] ?>">
-                <input type="text" name="search" id="search">
-                <button type="submit"><i class="icofont-search"></i></button>
-            </form>  
-        </div>
-    </section>
-    <!-- End Search -->
+    </section><!-- End Breadcrumbs -->
 
-    <!-- ======= Portfolio Section ======= -->
-    <section id="portfolio" class="portfolio">
-      <div class="container">
-          <div class="container">
-              <div class="row portfolio-container">
-                  <?php
-    
-
-    if(!isset($_POST["search"])){
-        $mysqli= new MySQLi("localhost","root","","gip");
-                  if(mysqli_connect_errno()){
-                      trigger_error("Fout bij verbinding: ".$mysqli->error);
-                  }
-                  else{
-                      
-                          $sql = "select * from tblAuteur";
-                      
-                   
-                      if($stmt = $mysqli->prepare($sql)){
-                          if(!$stmt->execute()){
-                              echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
-                          }
-                          else{
-                              $stmt->bind_result($auteurID, $auteurNm, $auteurBesch, $auteurFoto);
-                              while($stmt->fetch()){
-                                  //alle foto's moeten een aspect ratio hebben van 8:6 --> zo breekt de opmaak niet.
-                                  echo"
-                                  <div class=\"col-lg-4 col-md-6 portfolio-item filter-app\">
-                                    <div class=\"portfolio-wrap\">
-                                      <img src=\"assets/img/".$auteurFoto."\" width=\"800\" class=\"img-fluid\" alt=\"\">
-                                      <div class=\"portfolio-info\">
-                                        <h4>".$auteurNm."</h4>
-                                        <p>".$auteurBesch."</p>
-                                        <div class=\"portfolio-links\">
-                                          <a href=\"assets/img/".$auteurFoto."\" data-gall=\"portfolioGallery\" class=\"venobox\" title=\"App 1\"><i class=\"bx bx-plus\"></i></a>
-                                          <a href=\"portfolio.php?item=".$auteurID."\" title=\"More Details\"><i class=\"bx bx-link\"></i></a>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>";
-                              }
-                          }
-                          $stmt->close();
-                      }
-                      else{
-                          echo"Er zit een fout in de qry: ".$mysqli->error;
-                      }
-                  }
+    <!-- ======= Portfolio Details Section ======= -->
+    <form action="<?php $_SERVER["PHP_SELF"]?>" method="post">
+    <?php
+    $mysqli= new MySQLi("localhost","root","","gip");
+    if(mysqli_connect_errno()){
+        trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
     else{
-                   $term = $_POST["search"]."%";
-         $mysqli= new MySQLi("localhost","root","","gip");
-                  if(mysqli_connect_errno()){
-                      trigger_error("Fout bij verbinding: ".$mysqli->error);
-                  }
-                  else{
-                      
-                         $sql = "SELECT * FROM tblAuteur WHERE auteurNm LIKE ? ORDER BY auteurNm";
-                      
-                   
-                      if($stmt = $mysqli->prepare($sql)){
-                           $stmt->bind_param("s",$zoek);
-                          $zoek = $term;
-                          if(!$stmt->execute()){
-                              echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
-                          }
-                          else{
-                              $stmt->bind_result($auteurID, $auteurNm, $auteurBesch, $auteurFoto);
-                              while($stmt->fetch()){
-                                  //alle foto's moeten een aspect ratio hebben van 8:6 --> zo breekt de opmaak niet.
-                                  echo"
-                                  <div class=\"col-lg-4 col-md-6 portfolio-item filter-app\">
-                                    <div class=\"portfolio-wrap\">
-                                      <img src=\"assets/img/".$auteurFoto."\" width=\"800\" class=\"img-fluid\" alt=\"\">
-                                      <div class=\"portfolio-info\">
-                                        <h4>".$auteurNm."</h4>
-                                        <p>".$auteurBesch."</p>
-                                        <div class=\"portfolio-links\">
-                                          <a href=\"assets/img/".$auteurFoto."\" data-gall=\"portfolioGallery\" class=\"venobox\" title=\"App 1\"><i class=\"bx bx-plus\"></i></a>
-                                          <a href=\"portfolio.php?item=".$auteurID."\" title=\"More Details\"><i class=\"bx bx-link\"></i></a>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>";
-                              }
-                          }
-                          $stmt->close();
-                      }
-                      else{
-                          echo"Er zit een fout in de qry: ".$mysqli->error;
-                      }
-                  }
-        
+        $sql = "select * from tblAuteur where auteurID=".$_COOKIE["ID"];
+        if($stmt = $mysqli->prepare($sql)){
+            if(!$stmt->execute()){
+                echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
+            }
+            else{
+                $stmt->bind_result($auteurID, $auteurNm, $auteurBesch, $auteurFoto);
+                echo"
+                <section id=\"portfolio-details\" class=\"portfolio-details\">
+                    <div class=\"container\">
+                        <div class=\"row\">
+                        <div class=\"col-lg-8\">
+                ";
+                while($stmt->fetch()){
+                    echo"
+                     <img src=\"assets/img/".$auteurFoto."\" class=\"img-fluid\" alt=\"\">
+                     <input type=\"text\" name=\"foto\" id=\"foto\" value=".$auteurFoto.">";
+                }
+                echo"
+                <div class=\"col-lg-4 portfolio-info\">
+                    <h3>Informatie Auteur</h3>
+                    <ul>
+                        <li><input type=\"text\" id=\"naam\" name=\"naam\" value=\"".$auteurNm."\"></li>
+                        <li><textarea id=\"besch\" name=\"besch\">".$auteurBesch."</textarea></li>     
+                    </ul>
+                </div>
+                <input type=\"submit\" value=\"Wijzigen\">
+                </div>
+                </div>
+                </div>
+                </section>
+                ";
+            }
+            $stmt->close();
+        }
+        else{
+            echo"Er zit een fout in de qry: ".$mysqli->error;
+        }
     }
-                  
-                  ?>
-                  <br>
-              </div>
-          </div>
-           <div>
-               <br>
-               <a href="aanmaken.php">Wilt u een auteursaccount aanmaken?</a>
-               <br>
-        </div>
-        </div>
-      </section><!-- End Portfolio Section -->
-<!-- ====== Auteurs ====== -->
-      
-    <!-- ======= Clients Section ======= -->
-    <section id="clients" class="clients">
-      
-        <div class="section-title">
-          <h2>Auteurs</h2>
-          <p>Dit is een lijst van al onze auteurs. Hier kunt u naar bepaalde auteurs op naam.</p>
-        </div>
-        
-       
-    </section><!-- End Clients Section -->
 
+    ?>
+        
+    </form>
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
@@ -293,7 +231,6 @@ if(isset($_GET["item"])){
       </div>
     </div>
   </footer><!-- End Footer -->
-
   <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
 
   <!-- Vendor JS Files -->

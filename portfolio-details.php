@@ -11,13 +11,13 @@ if(!isset($_COOKIE["ID"])){
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Portfolio Details - Eterna Bootstrap Template</title>
+  <title>Details auteur - Workshopp.er</title>
   <meta content="" name="descriptison">
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="assets/img/favicon.png" rel="icon">
-  <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="assets/img/ws.png" rel="icon">
+  <link href="assets/img/ws.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
@@ -98,6 +98,7 @@ if(!isset($_COOKIE["ID"])){
     </section><!-- End Breadcrumbs -->
 
     <!-- ======= Portfolio Details Section ======= -->
+
     <?php
     $mysqli= new MySQLi("localhost","root","","gip");
     if(mysqli_connect_errno()){
@@ -114,8 +115,10 @@ if(!isset($_COOKIE["ID"])){
                 echo"
                 <section id=\"portfolio-details\" class=\"portfolio-details\">
                     <div class=\"container\">
+                            <a href=\"wijzigen.php\">Wilt u uw auteursaccount wijzigen?</a>
                         <div class=\"row\">
                         <div class=\"col-lg-8\">
+                        
                 ";
                 while($stmt->fetch()){
                     echo"
@@ -123,7 +126,7 @@ if(!isset($_COOKIE["ID"])){
                 }
                 echo"
                 <div class=\"col-lg-4 portfolio-info\">
-                    <h3>Project information</h3>
+                    <h3>Informatie auteur</h3>
                     <ul>
                         <li><strong>Naam</strong>: ".$auteurNm."</li>
                         <li><strong>Beschrijving</strong>:</li>
@@ -145,9 +148,10 @@ if(!isset($_COOKIE["ID"])){
         }
     }
     ?>
+
   </main><!-- End #main -->
 
-  <<!-- ======= Footer ======= -->
+  <!-- ======= Footer ======= -->
   <footer id="footer">
 
     <div class="footer-newsletter">
