@@ -159,7 +159,7 @@ if(isset($_GET["item"])){
                   }
     }
     else{
-                   $term = $_POST["search"]."%";
+                   $term = "%".$_POST["search"]."%";
          $mysqli= new MySQLi("localhost","root","","gip");
                   if(mysqli_connect_errno()){
                       trigger_error("Fout bij verbinding: ".$mysqli->error);
