@@ -1,2 +1,3 @@
 Een kleine TO-DO lijst:
-- 
+- !!! Zoekfucntie uitbreiden --> filters
+- Uploaden foto --> zie cursus html om dit te testen, print_r om te kijken hoe dit ontvangen wordt.
