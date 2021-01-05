@@ -138,7 +138,7 @@ if(isset($_GET["item"])){
                                   echo"
                                   <div class=\"col-lg-4 col-md-6 portfolio-item filter-app\">
                                     <div class=\"portfolio-wrap\">
-                                      <img src=\"assets/img/".$auteurFoto."\" width=\"800\" class=\"img-fluid\" alt=\"\">
+                                      <img src=\"assets/img/auteurs/".$auteurFoto."\" width=\"800\" class=\"img-fluid\" alt=\"\">
                                       <div class=\"portfolio-info\">
                                         <h4>".$auteurNm."</h4>
                                         <p>".$auteurBesch."</p>

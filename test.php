@@ -1,37 +1,59 @@
-<?php
-$mysqli= new MySQLi("localhost","root","","gipcorr");
-if(mysqli_connect_errno()){
-    trigger_error("Fout bij verbinding: ".$mysqli->error);
-}
-else{
-    $sql = "select * from tblAuteur";
-    if($stmt = $mysqli->prepare($sql)){
-        if(!$stmt->execute()){
-            echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
-        }
-        else{
-            $stmt->bind_result($auteurID, $auteurNm, $auteurBesch, $auteurFoto);
-            while($stmt->fetch()){
-                echo"
-                <div class=\"row portfolio-container\">
 
-          <div class=\"col-lg-4 col-md-6 portfolio-item\">
-            <div class=\"portfolio-wrap\">
-              <img src=\"assets/img/".$auteurFoto."\" class=\"img-fluid\" alt=\"\">
-              <div class=\"portfolio-info\">
-                
-                <div class=\"portfolio-links\">
-                  <a href=\"assets/img/portfolio/portfolio-1.jpg\" data-gall=\"portfolioGallery\" class=\"venobox\" title=\"App 1\"><i class=\"bx bx-plus\"></i></a>
-                  <a href=\"portfolio-details.html\" title=\"More Details\"><i class=\"bx bx-link\"></i></a>
-                </div>
-              </div>
-            </div>
-          </div>";
-            }
-        }
-        $stmt->close();
-    }
-    else{
-        echo"Er zit een fout in de qry: ".$mysqli->error;
-    }
+<?php
+$target_dir = "assets/img/uploads/"; //plaats waar de file naar wordt geload
+$uploadOk = 1;// boolean
+// Check if image file is a actual image or fake image
+if(isset($_POST["submit"])) {
+    $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);//de naam van de file
+    $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+  $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+  if($check !== false) {
+    echo "File is an image - " . $check["mime"] . ".";
+    $uploadOk = 1;
+  } else {
+    echo "File is not an image.";
+    $uploadOk = 0;
+  }
+
+// Check if file already exists
+if (file_exists($target_file)) {
 }
+
+// Check file size
+if ($_FILES["fileToUpload"]["size"] > 500000) {
+  echo "Sorry, your file is too large.";
+  $uploadOk = 0;
+}
+
+// Allow certain file formats
+if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+&& $imageFileType != "gif" ) {
+  echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+  $uploadOk = 0;
+}
+
+// Check if $uploadOk is set to 0 by an error
+// if everything is ok, try to upload file
+if($uploadOk == 1){
+  if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+    echo "The file ". htmlspecialchars( basename( $_FILES["fileToUpload"]["name"])). " has been uploaded.";
+  } else {
+    echo "Sorry, there was an error uploading your file.";
+  }
+}
+}
+?>
+
+<!DOCTYPE html>
+<html>
+<body>
+
+<form action="<?php echo($_SERVER["PHP_SELF"]); ?>" method="post" enctype="multipart/form-data">
+  Select image to upload:
+  <input type="file" name="fileToUpload" id="fileToUpload">
+    <br>
+  <input type="submit" value="Upload Image" name="submit">
+</form>
+
+</body>
+</html>
