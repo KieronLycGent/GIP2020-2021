@@ -1,12 +1,17 @@
 <!DOCTYPE html>
-
+<?php
+    
+if(!isset($_COOKIE["autID"])){
+    header("location:portfolioAut.php");
+}
+?>
 <html lang="en">
 
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Auteur aanmaken - Workshopp.er</title>
+  <title>Details auteur - Workshopp.er</title>
   <meta content="" name="descriptison">
   <meta content="" name="keywords">
 
@@ -70,7 +75,7 @@
 
             <li><a href="about.php">Over</a></li>
           <li><a href="contact.php">Contact</a></li>
-              <li><a href="portfolio.php">Auteurs</a></li>
+              <li class="active"><a href="portfolio.php">Auteurs</a></li>
 
         </ul>
       </nav><!-- .nav-menu -->
@@ -78,111 +83,72 @@
     </div>
   </header><!-- End Header -->
 <main id="main">
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <ol>
+          <li><a href="index.php">Home</a></li>
+          <li>Auteurs</li>
+          <li>Details</li>
+        </ol>
+        <h2>Auteur Details</h2>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
 
     <!-- ======= Portfolio Details Section ======= -->
-        <section>
-            <div class="container">
-                    <?php 
-                        if((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&isset($_POST["besch"])&&$_POST["besch"]!=""&&(isset($_POST["foto"]))&&$_POST["foto"]!=""){
-                            $mysqli= new MySQLi("localhost","root","","gip");
-                            if(mysqli_connect_errno()){
-                                trigger_error('Fout bij verbinding: '.$mysqli->error); 
-                            }
-                            else{
-                                $sql = "INSERT INTO tblAuteur (auteurNm,auteurBesch,auteurFoto) VALUES (?,?,?)"; 
-                                if($stmt = $mysqli->prepare($sql)) {     
-                                    $stmt->bind_param('sss',$naam,$besch,$foto);
-                                    $naam = $mysqli->real_escape_string($_POST["naam"]) ;
-                                    $besch = $mysqli->real_escape_string($_POST["besch"]);
-                                    $foto = $mysqli->real_escape_string($_POST["foto"]);
-                                    if(!$stmt->execute()){
-                                        echo 'het uitvoeren van de query is mislukt:';
-                                    }
-                                    else{  
-                                        echo 'Account aangemaakt'; 
-                                    }
-                                    $stmt->close();
-                                }
-                                else{
-                                    echo 'Er zit een fout in de query'; 
-                                }
-                            }
-                        }
-                ?> 
-                <form id="form1" name="form1" method="post" action="<?php echo $_SERVER['PHP_SELF'];?>">
-                    <p>Auteur aanmaken</p>
-                    <p>naam:  &nbsp;
-                        <input type="text" name="naam" id="naam" placeholder="naam" required value="<?php
-                                                                                           if(isset($_POST["naam"])){
-                                                                                               echo $naam;
-                                                                                           }?>">
-                    </p>
-                    <p>Beschrijving: &nbsp;
-                        <input type="text" name="besch" id="besch" placeholder="besch" required value="<?php
-                                                                                                       if(isset($_POST["besch"])){
-                                                                                                           echo $besch;
-                                                                                                       }?>">
-                    </p>
-                    <p>Foto: &nbsp;
-                        <input type="file" name="foto" id="foto" required value="<?php 
-                                                                                              if(isset($_POST["foto"])){ 
-                                                                                                  echo $foto;
-                                                                                              }?>">
-<?php
-if(isset($_POST["verzenden"])){
-    $target_dir = "assets/img/auteurs/"; //plaats waar de file naar wordt geload
-    $uploadOk = 1;// boolean
-    // Check if image file is a actual image or fake image
-        $target_file = $target_dir . basename($_FILES["foto"]["name"]);//de naam van de file
-        $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
-      $check = getimagesize($_FILES["foto"]["tmp_name"]);
-      if($check !== false) {
-        $uploadOk = 1;
-      } else {
-        echo "Bestand is geen foto.";
-        $uploadOk = 0;
-      }
-    // Check if file already exists
-    if (file_exists($target_file)) {
-    }
 
-    // Check file size
-    if ($_FILES["foto"]["size"] > 500000) {
-      echo "Sorry, het bestand is te groot.";
-      $uploadOk = 0;
+    <?php
+    $mysqli= new MySQLi("localhost","root","","gip");
+    if(mysqli_connect_errno()){
+        trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
+    else{
+        $sql = "select * from tblAuteur where auteurID=".$_COOKIE["ID"];
+        if($stmt = $mysqli->prepare($sql)){
+            if(!$stmt->execute()){
+                echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
+            }
+            else{
+                $stmt->bind_result($auteurID, $auteurNm, $auteurBesch, $auteurFoto);
+                echo"
+                <section id=\"portfolio-details\" class=\"portfolio-details\">
+                    <div class=\"container\">
+                            <a class=\"icofont-pencil-alt-5\" href=\"wijzigenAut.php\">Wijzigen</a>
+                        <div class=\"row\">
+                        <div class=\"col-lg-8\">
+                        
+                ";
+                while($stmt->fetch()){
+                    echo"
+                     <img src=\"assets/img/auteurs/".$auteurFoto."\" class=\"img-fluid\" alt=\"\">";
+                }
+                echo"
+                <div class=\"col-lg-4 portfolio-info\">
+                    <h3>Informatie auteur</h3>
+                    <ul>
+                        <li><strong>Naam</strong>: ".$auteurNm."</li>
+                        <li><strong>Beschrijving</strong>:</li>
+                    </ul>
+                    <p>
+                    ".$auteurBesch."
+                    </p>
+                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                ";
+            }
+            $stmt->close();
+        }
+        else{
+            echo"Er zit een fout in de qry: ".$mysqli->error;
+        }
+    }
+    ?>
 
-    // Allow certain file formats
-    if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-    && $imageFileType != "gif" ) {
-      echo "Sorry, enkel JPG, JPEG, PNG & GIF files zijn toegestaan.";
-      $uploadOk = 0;
-    }
-
-    // Check if $uploadOk is set to 0 by an error
-    // if everything is ok, try to upload file
-    if($uploadOk == 1){
-      if (move_uploaded_file($_FILES["foto"]["tmp_name"], $target_file)) {
-        echo "The file ". htmlspecialchars( basename( $_FILES["foto"]["name"])). " has been uploaded.";
-      } else {
-        echo "Sorry, er was een probleem tijdens het uploaden van uw profielfoto";
-      }
-    }
-}
-?>
-                    </p>
-                    <p>
-                        &nbsp;
-                    </p>
-                    <p>
-                        <input type="submit" name="verzenden" id="verzenden" value="Aanmaken">
-                    </p>
-                    <p>
-                        &nbsp;
-                    </p>
-                </form>
-            </div>
-        </section>
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->

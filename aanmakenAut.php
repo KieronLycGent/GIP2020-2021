@@ -1,11 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Home - Workshopp.er</title>
+  <title>Auteur aanmaken - Workshopp.er</title>
   <meta content="" name="descriptison">
   <meta content="" name="keywords">
 
@@ -36,14 +37,19 @@
 </head>
 
 <body>
-
   <!-- ======= Top Bar ======= -->
   <section id="topbar" class="d-none d-lg-block">
     <div class="container d-flex">
+      <div class="contact-info mr-auto">
+        <i class="icofont-envelope"></i><a href="mailto:contact@example.com">kieron.parmentier@telenet.be</a>
+        <i class="icofont-phone"></i> +32 499 75 98 34
+      </div>
       <div class="social-links">
-          <?php
-            echo"<a href=\"inloggen.php\">Inloggen</a>";
-          ?>
+        <a href="#" class="twitter"><i class="icofont-twitter"></i></a>
+        <a href="#" class="facebook"><i class="icofont-facebook"></i></a>
+        <a href="#" class="instagram"><i class="icofont-instagram"></i></a>
+        <a href="#" class="skype"><i class="icofont-skype"></i></a>
+        <a href="#" class="linkedin"><i class="icofont-linkedin"></i></a>
       </div>
     </div>
   </section>
@@ -60,133 +66,75 @@
 
       <nav class="nav-menu d-none d-lg-block">
         <ul>
-          <li class="active"><a href="index.php">Home</a></li>
+          <li><a href="index.php">Home</a></li>
 
             <li><a href="about.php">Over</a></li>
           <li><a href="contact.php">Contact</a></li>
               <li><a href="portfolioAut.php">Auteurs</a></li>
-            <li><a href="portfolioUser.php">Users</a></li>
 
         </ul>
       </nav><!-- .nav-menu -->
 
     </div>
   </header><!-- End Header -->
+<main id="main">
 
-  <!-- ======= Hero Section ======= -->
-  <section id="hero">
-    <div class="hero-container">
-      <div id="heroCarousel" class="carousel slide carousel-fade" data-ride="carousel">
-
-        <ol class="carousel-indicators" id="hero-carousel-indicators"></ol>
-
-        <div class="carousel-inner" role="listbox">
-
-          <!-- Slide 1 -->
-          <div class="carousel-item active" style="background: url(assets/img/slide/slide-1.jpg)">
-            <div class="carousel-container">
-              <div class="carousel-content">
-                <h2 class="animate__animated animate__fadeInDown">Welkom bij <span>Workshopp.er</span></h2>
-                <p class="animate__animated animate__fadeInUp">Dé site voor workshops.</p>
-              </div>
+    <!-- ======= Portfolio Details Section ======= -->
+        <section>
+            <div class="container">
+                    <?php 
+                        if((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&isset($_POST["besch"])&&$_POST["besch"]!=""){
+                            $mysqli= new MySQLi("localhost","root","","gip");
+                            if(mysqli_connect_errno()){
+                                trigger_error('Fout bij verbinding: '.$mysqli->error); 
+                            }
+                            else{
+                                $sql = "INSERT INTO tblAuteur (auteurNm,auteurBesch,auteurFoto) VALUES (?,?,?)"; 
+                                if($stmt = $mysqli->prepare($sql)) {     
+                                    $stmt->bind_param('sss',$naam,$besch,$foto);
+                                    $naam = $mysqli->real_escape_string($_POST["naam"]) ;
+                                    $besch = $mysqli->real_escape_string($_POST["besch"]);
+                                    $foto = $mysqli->real_escape_string("ws.png");
+                                    if(!$stmt->execute()){
+                                        echo 'het uitvoeren van de query is mislukt:';
+                                    }
+                                    else{  
+                                        echo 'Account aangemaakt';
+                                    }
+                                    $stmt->close();
+                                }
+                                else{
+                                    echo 'Er zit een fout in de query'; 
+                                }
+                            }
+                        }
+                ?> 
+                <form id="form1" name="form1" method="post" action="aanmakenAut.php">
+                    <p>Auteur aanmaken</p>
+                    <p>naam:  &nbsp;
+                        <input type="text" name="naam" id="naam" placeholder="naam" required value="<?php
+                                                                                           if(isset($_POST["naam"])){
+                                                                                               echo($_POST["naam"]);
+                                                                                           }?>">
+                    </p>
+                    <p>Beschrijving: &nbsp;
+                        <input type="text" name="besch" id="besch" placeholder="besch" required value="<?php
+                                                                                                       if(isset($_POST["besch"])){
+                                                                                                           echo($_POST["besch"]);
+                                                                                                       }?>">
+                    </p>
+                    <p>
+                        &nbsp;
+                    </p>
+                    <p>
+                        <input type="submit" name="verzenden" id="verzenden" value="Aanmaken">
+                    </p>
+                    <p>
+                        &nbsp;
+                    </p>
+                </form>
             </div>
-          </div>
-
-          <!-- Slide 2 -->
-          <div class="carousel-item" style="background: url(assets/img/slide/slide-2.jpg)">
-            <div class="carousel-container">
-              <div class="carousel-content">
-                <h2 class="animate__animated fanimate__adeInDown">Beleef <span> de beste activiteiten</span></h2>
-                <p class="animate__animated animate__fadeInUp">Onze community zorgt ervoor dat je vanalles kunt beleven met een glimlach.</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Slide 3 -->
-          <div class="carousel-item" style="background: url(assets/img/slide/slide-3.jpg)">
-            <div class="carousel-container">
-              <div class="carousel-content">
-                <h2 class="animate__animated animate__fadeInDown">Wordt deel van <span>onze community&#33;</span></h2>
-                <p class="animate__animated animate__fadeInUp">Wordt deel van de community en beleef alle activiteiten die ooit zou willen.</p>
-                <a href="" class="btn-get-started animate__animated animate__fadeInUp">Lees meer</a>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <a class="carousel-control-prev" href="#heroCarousel" role="button" data-slide="prev">
-          <span class="carousel-control-prev-icon icofont-rounded-left" aria-hidden="true"></span>
-          <span class="sr-only">Previous</span>
-        </a>
-
-        <a class="carousel-control-next" href="#heroCarousel" role="button" data-slide="next">
-          <span class="carousel-control-next-icon icofont-rounded-right" aria-hidden="true"></span>
-          <span class="sr-only">Next</span>
-        </a>
-
-      </div>
-    </div>
-  </section><!-- End Hero -->
-
-  <main id="main">
-
-    <!-- ======= Featured Section ======= -->
-    <section id="featured" class="featured">
-      <div class="container">
-
-        <div class="row">
-          <div class="col-lg-4">
-            <div class="icon-box">
-              <i class="icofont-computer"></i>
-              <h3><a href="">Online</a></h3>
-              <p>We zorgen voor de beste experiences online.</p>
-            </div>
-          </div>
-          <div class="col-lg-4 mt-4 mt-lg-0">
-            <div class="icon-box">
-              <i class="icofont-image"></i>
-              <h3><a href="">Foto's en video's</a></h3>
-              <p>We zorgen voor genoeg mogelijkheden.</p>
-            </div>
-          </div>
-          <div class="col-lg-4 mt-4 mt-lg-0">
-            <div class="icon-box">
-              <i class="icofont-tasks-alt"></i>
-              <h3><a href="">Overzicht</a></h3>
-              <p>We zorgen voor overzicht via de agenda-functie.</p>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section><!-- End Featured Section -->
-
-    <!-- ======= About Section ======= -->
-    <section id="about" class="about">
-      <div class="container">
-
-        <div class="row">
-          <div class="col-lg-6">
-            <img src="assets/img/about.jpg" class="img-fluid" alt="">
-          </div>
-          <div class="col-lg-6 pt-4 pt-lg-0 content">
-            <h3>Dag &amp; nacht</h3>
-            <p class="font-italic">
-              We staan dag en nacht klaar om ervoor te zorgen dat we de beste ervaring op de website kunnen geven.
-            </p>
-            <ul>
-              <li><i class="icofont-check-circled"></i> Administrators die ervoor zorgen dat incorrecte dingen worden afgestraft.</li>
-              <li><i class="icofont-check-circled"></i> De website wordt om de zoveel tijd nagekeken om te zien of alles nog werkt.</li>
-            </ul>
-            <p>
-              Als er iets niet werkt of als je u nog vragen hebt, dan kunt u ons altijd contacteren via email.
-            </p>
-          </div>
-        </div>
-
-      </div>
-    </section><!-- End About Section -->
+        </section>
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
@@ -252,7 +200,6 @@
       </div>
     </div>
   </footer><!-- End Footer -->
-
   <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
 
   <!-- Vendor JS Files -->

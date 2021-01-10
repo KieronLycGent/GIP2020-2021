@@ -1,16 +1,22 @@
 <!DOCTYPE html>
+<?php
+if(isset($_GET["item"])){
+            setcookie("uID",$_GET["item"]);   
+            header("location:portfolio-detailsUser.php");
+        }    
+?>
 <html lang="en">
 
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Contact - Workshopp.er</title>
+  <title>Auteurs - Workshopp.er</title>
   <meta content="" name="descriptison">
   <meta content="" name="keywords">
 
   <!-- Favicons -->
-  <link href="assets/img/ws.png" rel="icon">
+ <link href="assets/img/ws.png" rel="icon">
   <link href="assets/img/ws.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
@@ -66,11 +72,11 @@
 
       <nav class="nav-menu d-none d-lg-block">
         <ul>
-          <li><a href="index.php">Home</a></li>
-
+            <li><a href="index.php">Home</a></li>
             <li><a href="about.php">Over</a></li>
-          <li class="active"><a href="contact.php">Contact</a></li>
-                     <li><a href="portfolioAut.php">Auteurs</a></li>
+            <li><a href="contact.php">Contact</a></li>
+            <li><a href="portfolioAut.php">Auteurs</a></li>
+            <li class="active"><a href="portfolioUser.php">Users</a></li>
 
         </ul>
       </nav><!-- .nav-menu -->
@@ -78,91 +84,150 @@
     </div>
   </header><!-- End Header -->
 
+
   <main id="main">
 
     <!-- ======= Breadcrumbs ======= -->
     <section id="breadcrumbs" class="breadcrumbs">
       <div class="container">
-
         <ol>
           <li><a href="index.php">Home</a></li>
-          <li>Contact</li>
+          <li><a href="portfolioUser.php">Users</a></li>
         </ol>
-        <h2>Contact</h2>
-
+        <h2>Users</h2>
       </div>
-    </section><!-- End Breadcrumbs -->
+    </section>
+    <!-- End Breadcrumbs -->
+    
+    <!-- ======== Search ======== -->  
+    <section id="search" class="search">
+        <div class = "container">
+            <form method="post" action="<?php $_SERVER['PHP_SELF'] ?>">
+                <input type="text" name="search" id="search">
+                <button type="submit"><i class="icofont-search"></i></button>
+            </form>  
+        </div>
+    </section>
+    <!-- End Search -->
 
-    <!-- ======= Contact Section ======= -->
-    <section id="contact" class="contact">
+    <!-- ======= Portfolio Section ======= -->
+    <section id="portfolio" class="portfolio">
       <div class="container">
+          <div class="container">
+              <div class="row portfolio-container">
+                  <?php
+    
 
-        <div class="row">
-          <div class="col-lg-6">
-            <div class="info-box mb-4">
-              <i class="bx bx-map"></i>
-              <h3>Ons adres</h3>
-              <p>Damaststraat 56, 9030 Mariakerke, Belgi&euml;</p>
-            </div>
+    if(!isset($_POST["search"])){
+        $mysqli= new MySQLi("localhost","root","","gip");
+                  if(mysqli_connect_errno()){
+                      trigger_error("Fout bij verbinding: ".$mysqli->error);
+                  }
+                  else{
+                      
+                          $sql = "select userID, userNm, userFoto from tblUser";
+                      
+                   
+                      if($stmt = $mysqli->prepare($sql)){
+                          if(!$stmt->execute()){
+                              echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
+                          }
+                          else{
+                              $stmt->bind_result($userID, $userNm, $userFoto);
+                              while($stmt->fetch()){
+                                  //alle foto's moeten een aspect ratio hebben van 8:6 --> zo breekt de opmaak niet.
+                                  echo"
+                                  <div class=\"col-lg-4 col-md-6 portfolio-item filter-app\">
+                                    <div class=\"portfolio-wrap\">
+                                      <img src=\"assets/img/uploads/".$userFoto."\" width=\"800\" class=\"img-fluid\" alt=\"\">
+                                      <div class=\"portfolio-info\">
+                                        <h4>".$userNm."</h4>
+                                        <p></p>
+                                        <div class=\"portfolio-links\">
+                                          <a href=\"assets/img/uploads/".$userFoto."\" data-gall=\"portfolioGallery\" class=\"venobox\"><i class=\"bx bx-plus\"></i></a>
+                                          <a href=\"portfolioUser.php?item=".$userID."\" title=\"More Details\"><i class=\"bx bx-link\"></i></a>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>";
+                              }
+                          }
+                          $stmt->close();
+                      }
+                      else{
+                          echo"Er zit een fout in de qry: ".$mysqli->error;
+                      }
+                  }
+    }
+    else{
+                   $term = "%".$_POST["search"]."%";
+         $mysqli= new MySQLi("localhost","root","","gip");
+                  if(mysqli_connect_errno()){
+                      trigger_error("Fout bij verbinding: ".$mysqli->error);
+                  }
+                  else{
+                      
+                         $sql = "SELECT userID, userNm, userFoto FROM tblUser WHERE userNm LIKE ? ORDER BY userNm";
+                      
+                   
+                      if($stmt = $mysqli->prepare($sql)){
+                           $stmt->bind_param("s",$zoek);
+                          $zoek = $term;
+                          if(!$stmt->execute()){
+                              echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
+                          }
+                          else{
+                              $stmt->bind_result($userID, $userNm, $userFoto);
+                              while($stmt->fetch()){
+                                  //alle foto's moeten een aspect ratio hebben van 8:6 --> zo breekt de opmaak niet.
+                                  echo"
+                                  <div class=\"col-lg-4 col-md-6 portfolio-item filter-app\">
+                                    <div class=\"portfolio-wrap\">
+                                      <img src=\"assets/img/uploads/".$userFoto."\" width=\"800\" class=\"img-fluid\" alt=\"\">
+                                      <div class=\"portfolio-info\">
+                                        <h4>".$userNm."</h4>
+                                        <p></p>
+                                        <div class=\"portfolio-links\">
+                                          <a href=\"assets/img/".$userFoto."\" data-gall=\"portfolioGallery\" class=\"venobox\" title=\"App 1\"><i class=\"bx bx-plus\"></i></a>
+                                          <a href=\"portfolioUser.php?item=".$userID."\" title=\"More Details\"><i class=\"bx bx-link\"></i></a>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>";
+                              }
+                          }
+                          $stmt->close();
+                      }
+                      else{
+                          echo"Er zit een fout in de qry: ".$mysqli->error;
+                      }
+                  }
+        
+    }
+                  
+                  ?>
+                  <br>
+              </div>
           </div>
-
-          <div class="col-lg-3 col-md-6">
-            <div class="info-box  mb-4">
-              <i class="bx bx-envelope"></i>
-              <h3>Email ons</h3>
-              <p>kieron.parmentier@telenet.be</p>
-            </div>
-          </div>
-
-          <div class="col-lg-3 col-md-6">
-            <div class="info-box  mb-4">
-              <i class="bx bx-phone-call"></i>
-              <h3>Bel ons</h3>
-              <p>+32 499 75 98 34</p>
-            </div>
-          </div>
-
+           <div>
+               <br>
+               <a href="aanmakenUser.php">Wilt u een useraccount aanmaken?</a>
+               <br>
         </div>
-
-        <div class="row">
-
-          <div class="col-lg-6 ">
-            <iframe class="mb-4 mb-lg-0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2507.097603903612!2d3.6834113161153823!3d51.069748279565616!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c371af525863dd%3A0x86882c0cb08efa43!2sDamaststraat%2056%2C%209030%20Gent!5e0!3m2!1sen!2sbe!4v1606661707611!5m2!1sen!2sbe" frameborder="0" style="border:0; width: 100%; height: 384px;" allowfullscreen></iframe>
-          </div>
-
-          <div class="col-lg-6">
-            <form action="forms/contact.php" method="post" role="form" class="php-email-form">
-              <div class="form-row">
-                <div class="col form-group">
-                  <input type="text" name="name" class="form-control" id="name" placeholder="Uw naam" data-rule="minlen:3"data-msg="Gelieve minstens 3 tekens in te geven" />
-                  <div class="validate"></div>
-                </div>
-                <div class="col form-group">
-                  <input type="email" class="form-control" name="email" id="email" placeholder="Uw email" data-rule="email" data-msg="Gelieve een correcte email in te geven" />
-                  <div class="validate"></div>
-                </div>
-              </div>
-              <div class="form-group">
-                <input type="text" class="form-control" name="subject" id="subject" placeholder="Onderwerp" data-rule="minlen:4" data-msg="Gelieve minimum 8 tekens te gebruiken voor onderwerp" />
-                <div class="validate"></div>
-              </div>
-              <div class="form-group">
-                <textarea class="form-control" name="message" rows="5" data-rule="required" data-msg="Schrijf ons een bericht" placeholder="Bericht"></textarea>
-                <div class="validate"></div>
-              </div>
-              <div class="mb-3">
-                <div class="loading">Loading</div>
-                <div class="error-message"></div>
-                <div class="sent-message">Your message has been sent. Thank you!</div>
-              </div>
-              <div class="text-center"><button type="submit">Send Message</button></div>
-            </form>
-          </div>
-
         </div>
-
-      </div>
-    </section><!-- End Contact Section -->
+      </section><!-- End Portfolio Section -->
+<!-- ====== Auteurs ====== -->
+      
+    <!-- ======= Clients Section ======= -->
+    <section id="clients" class="clients">
+      
+        <div class="section-title">
+          <h2>Auteurs</h2>
+          <p>Dit is een lijst van al onze auteurs. Hier kunt u naar bepaalde auteurs op naam.</p>
+        </div>
+        
+       
+    </section><!-- End Clients Section -->
 
   </main><!-- End #main -->
 

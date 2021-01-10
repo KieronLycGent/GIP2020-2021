@@ -1,9 +1,27 @@
 <!DOCTYPE html>
 <?php
     
-if(!isset($_COOKIE["ID"])){
-    header("location:portfolio.php");
+if(!isset($_COOKIE["autID"])){
+    header("location:portfolioAut.php");
 }
+if(isset($_POST["naam"])&&$_POST["naam"]!=""&&(isset($_POST["besch"]))&&$_POST["besch"]!=""&&(isset($_POST["foto"]))&&$_POST["foto"]!=""){
+     
+    $mysqli = new MySQLi("localhost","root","","gip");
+        if(mysqli_connect_errno()){
+            trigger_error("fout bij de verbinding: ".$mysqli->error);
+        }
+        $sql = "UPDATE tblAuteur SET auteurNm = '".$_POST["naam"]."', auteurBesch = '".$_POST["besch"]."', auteurFoto = '".$_POST["foto"]."' WHERE auteurID = ".$_COOKIE["ID"];;
+        if($stmt = $mysqli->prepare($sql)){
+            if(!$stmt->execute()){
+                echo"het uitvoeren van de qry is mislukt";
+            }
+            $stmt->close();
+        }
+        else{
+            echo"Er zit een fout in de qry";
+        }
+}
+
 ?>
 <html lang="en">
 
@@ -75,7 +93,8 @@ if(!isset($_COOKIE["ID"])){
 
             <li><a href="about.php">Over</a></li>
           <li><a href="contact.php">Contact</a></li>
-              <li class="active"><a href="portfolio.php">Auteurs</a></li>
+              <li class="active"><a href="portfolioAut.php">Auteurs</a></li>
+            <li><a href="portfolioUser.php">Users</a></li>
 
         </ul>
       </nav><!-- .nav-menu -->
@@ -98,7 +117,7 @@ if(!isset($_COOKIE["ID"])){
     </section><!-- End Breadcrumbs -->
 
     <!-- ======= Portfolio Details Section ======= -->
-
+    <form action="<?php $_SERVER["PHP_SELF"]?>" method="post">
     <?php
     $mysqli= new MySQLi("localhost","root","","gip");
     if(mysqli_connect_errno()){
@@ -115,29 +134,26 @@ if(!isset($_COOKIE["ID"])){
                 echo"
                 <section id=\"portfolio-details\" class=\"portfolio-details\">
                     <div class=\"container\">
-                            <a href=\"wijzigen.php\">Wilt u uw auteursaccount wijzigen?</a>
                         <div class=\"row\">
                         <div class=\"col-lg-8\">
-                        
                 ";
                 while($stmt->fetch()){
                     echo"
-                     <img src=\"assets/img/".$auteurFoto."\" class=\"img-fluid\" alt=\"\">";
+                     <img src=\"assets/img/uploads/".$auteurFoto."\" class=\"img-fluid\" alt=\"\">
+                     <input type=\"text\" name=\"foto\" id=\"foto\" value=".$auteurFoto.">";
                 }
                 echo"
                 <div class=\"col-lg-4 portfolio-info\">
-                    <h3>Informatie auteur</h3>
+                    <h3>Informatie Auteur</h3>
                     <ul>
-                        <li><strong>Naam</strong>: ".$auteurNm."</li>
-                        <li><strong>Beschrijving</strong>:</li>
+                        <li><input type=\"text\" id=\"naam\" name=\"naam\" value=\"".$auteurNm."\"></li>
+                        <li><textarea id=\"besch\" name=\"besch\">".$auteurBesch."</textarea></li>     
                     </ul>
-                    <p>
-                    ".$auteurBesch."
-                    </p>
                 </div>
-                            </div>
-                        </div>
-                    </div>
+                <input type=\"submit\" value=\"Wijzigen\">
+                </div>
+                </div>
+                </div>
                 </section>
                 ";
             }
@@ -147,8 +163,10 @@ if(!isset($_COOKIE["ID"])){
             echo"Er zit een fout in de qry: ".$mysqli->error;
         }
     }
-    ?>
 
+    ?>
+        
+    </form>
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
