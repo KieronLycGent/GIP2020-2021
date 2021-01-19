@@ -151,7 +151,7 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
                                 trigger_error('Fout bij verbinding: '.$mysqli->error); 
                             }
                             else{
-                                $sql = "INSERT INTO tblUser (userNm, userFoto, postID, userStraat) VALUES (?,?,?,?)"; 
+                                $sql = "INSERT INTO tblUser (userNm, userFoto, userPostcode, userStraat) VALUES (?,?,?,?)"; 
                                 if($stmt = $mysqli->prepare($sql)) {     
                                     $stmt->bind_param('ssis',$naam,$foto,$post,$straat);
                                     $naam = $mysqli->real_escape_string($_POST["naam"]) ;
@@ -168,7 +168,7 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
                                     $stmt->close();
                                 }
                                 else{
-                                    echo 'Er zit een fout in de query'; 
+                                    echo 'Er zit een fout in de query'.$mysqli->error; 
                                 }
                             }
                         }
@@ -188,14 +188,14 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
                                                                                                                 if(isset($_POST["gemeente"])){
                                                                                                                     echo($_POST["gemeente"]);
                                                                                                                 }
-                                                                                                                ?>"
+                                                                                                                ?>">
                     </p>
                     <p>
                         Postcode: &nbsp;
                         <input type="text" name="postcode" id="postcode" placeholder="postcode" required value="<?php
                                                                                                                 if(isset($_POST["postcode"])){
                                                                                                                     echo($_POST["postcode"]);
-                                                                                                                }?>"
+                                                                                                                }?>">
                     </p>
                     <p>
                         Straat + Nr: &nbsp;
@@ -203,7 +203,7 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
                                                                                                                     if(isset($_POST["straat"])){
                                                                                                                         echo($_POST["straat"]);
                                                                                                                     }
-                                                                                                                    ?>"
+                                                                                                                    ?>">
                     </p>
                     <p>
                         &nbsp;
