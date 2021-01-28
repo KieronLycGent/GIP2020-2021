@@ -206,6 +206,42 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
                                                                                                                     ?>">
                     </p>
                     <p>
+                        Interesses (optioneel)<br>
+                    <?php
+                    $i = 0;
+                    for($i=0; $i<3; $i++){
+                        $mysqli= new MySQLi("localhost","root","","gip");
+                        if(mysqli_connect_errno()){
+                            trigger_error("Fout bij verbinding: ".$mysqli->error);
+                        }
+                        else{
+                            $sql = "select interesseID, interesseNm from tblInteresse";
+                            if($stmt = $mysqli->prepare($sql)){
+                                if(!$stmt->execute()){
+                                    echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
+                                }
+                                else{                          
+                                    echo"&nbsp; <select name=\"interesse".($i+1)."\" id=\"interesse".($i+1)."\"><option value=\"-\">-</option>";
+                                    $stmt->bind_result($ID, $interesse);
+                                    while($stmt->fetch()){
+                                        echo"<option value=\"$ID\">".$interesse."</option>";
+                                    }
+                                }
+                                echo"</select>
+                                <br>
+                                &nbsp;
+                                <br>
+                                ";
+                                $stmt->close();
+                            }
+                            else{
+                                echo"Er zit een fout in de qry: ".$mysqli->error;
+                            }
+                        }
+                    }
+                    ?>
+                    </p>
+                    <p>
                         &nbsp;
                     </p>
                     <p>
