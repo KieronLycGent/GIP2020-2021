@@ -101,12 +101,15 @@ if(!isset($_COOKIE["uID"])){
     <!-- ======= Portfolio Details Section ======= -->
 
     <?php
+    $int1;
+    $int2;
+    $int3;
     $mysqli= new MySQLi("localhost","root","","gip");
     if(mysqli_connect_errno()){
         trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
     else{
-        $sql = "SELECT u.userID, u.userNm, u.userFoto, u.userStraat, g.PCode, g.Gemeente FROM tblUser u, tblgemeente g WHERE u.userID=".$_COOKIE["ID"]." AND u.postID = g.PostcodeID";
+        $sql = "SELECT u.userID, u.userNm, u.userFoto, u.userStraat, g.PCode, g.Gemeente FROM tblUser u, tblgemeente g WHERE u.userID=".$_COOKIE["uID"]." AND u.userPostcode = g.PostcodeID";
         if($stmt = $mysqli->prepare($sql)){
             if(!$stmt->execute()){
                 echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
@@ -119,7 +122,6 @@ if(!isset($_COOKIE["uID"])){
                             <a class=\"icofont-pencil-alt-5\" href=\"wijzigenUser.php\">Wijzigen</a>
                         <div class=\"row\">
                         <div class=\"col-lg-8\">
-                        
                 ";
                 while($stmt->fetch()){
                     echo"
@@ -131,8 +133,39 @@ if(!isset($_COOKIE["uID"])){
                     <ul>
                         <li><strong>Naam</strong>: ".$userNm."</li>
                         <li><strong>Adres</strong>:</li>
-                        <li>".$userStraat."<br>".$pcode." ".$gemeente."</li>
-                    </ul>
+                        <li>".$userStraat."<br>".$pcode." ".$gemeente."</li>";
+                $stmt->close(); 
+            }
+        }
+        else{
+            echo"Er zit een fout in de qry: ".$mysqli->error;
+        }
+    }
+    for($i=0; $i<3; $i++){
+        $mysqli= new MySQLi("localhost","root","","gip");
+        $sql = "SELECT i.interesseID, i.interesseNm FROM tblinteresse i WHERE i.interesseID = 2";
+        if($stmt = $mysqli->prepare($sql)){
+            if(!$stmt->execute()){
+                echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in qry";
+            }  
+            else{
+                echo"ok1";
+                $stmt->bind_result($iid,$int1);
+                echo"ok2";
+                echo($iid);
+                echo($int1."ok3");
+            }
+            $stmt->close();
+        }
+        else{
+            echo"Er zit een fout in de qry: ".$mysqli->error;
+        }
+    }     
+    echo"   <li><strong>Interesses</strong>:</li>
+                        <li>".$int1."a</li>".
+                        /*<li>"$int2."</li>
+                        <li>".$int3."c</li>*/
+                    "</ul>
                     <p>
                         
                     </p>
@@ -142,10 +175,6 @@ if(!isset($_COOKIE["uID"])){
                     </div>
                 </section>
                 ";
-                $stmt->close();
-            }
-        }           
-    }
     
     ?>
 
