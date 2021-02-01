@@ -15,18 +15,19 @@
                 echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in qry";
             }  
             else{
-
-                    echo"ok1<br>";//Werkt ok
-                    $stmt->bind_result($iid, $int1);//werkt niet, geen errors gegeven<----------------------------------<------------------------------------------<-----------------------------------
-                    echo"ok2<br>";//Werkt ok
-                    echo($iid."<br>");//Werkt ok
-                    echo($int1."<br>ok3");//Werkt ok
+                    
+                echo"ok1<br>";
+                $stmt->bind_result($iid, $int1);
+                $stmt->fetch();//Vergeet deze lijn code niet -> anders haalt hij het niet uit de database!!!
+                echo"ok2<br>";
+                echo($iid."<br>");
+                echo($int1."<br>ok3");
 
             }
             $stmt->close();
         }
         else{
-            echo"Er zit een fout in de qry: ".$mysqli->error;//Wordt niet gerunt
+            echo"Er zit een fout in de qry: ".$mysqli->error;
         }
     }
 ?>

@@ -11,7 +11,7 @@ if(isset($_GET["item"])){
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Auteurs - Workshopp.er</title>
+  <title>Gebruikers - Workshopp.er</title>
   <meta content="" name="descriptison">
   <meta content="" name="keywords">
 

@@ -101,9 +101,6 @@ if(!isset($_COOKIE["uID"])){
     <!-- ======= Portfolio Details Section ======= -->
 
     <?php
-    $int1;
-    $int2;
-    $int3;
     $mysqli= new MySQLi("localhost","root","","gip");
     if(mysqli_connect_errno()){
         trigger_error("Fout bij verbinding: ".$mysqli->error);
@@ -143,17 +140,22 @@ if(!isset($_COOKIE["uID"])){
     }
     for($i=0; $i<3; $i++){
         $mysqli= new MySQLi("localhost","root","","gip");
-        $sql = "SELECT i.interesseID, i.interesseNm FROM tblinteresse i WHERE i.interesseID = 2";
+        $sql = "SELECT i.interesseNm FROM tblinteresse i, tblinteressesuser iu, tbluser u WHERE u.userID=".$_COOKIE["uID"]." AND iu.interessesID = u.interessesID";
         if($stmt = $mysqli->prepare($sql)){
             if(!$stmt->execute()){
                 echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in qry";
             }  
             else{
-                echo"ok1";
-                $stmt->bind_result($iid,$int1);
-                echo"ok2";
-                echo($iid);
-                echo($int1."ok3");
+                if($i=1){
+                    $stmt->bind_result($int1);
+                }
+                if($i=2){
+                    $stmt->bind_result($int2);
+                }
+                if($i=3){
+                    $stmt->bind_result($int3);
+                }
+                $stmt->fetch();
             }
             $stmt->close();
         }
@@ -162,10 +164,10 @@ if(!isset($_COOKIE["uID"])){
         }
     }     
     echo"   <li><strong>Interesses</strong>:</li>
-                        <li>".$int1."a</li>".
-                        /*<li>"$int2."</li>
-                        <li>".$int3."c</li>*/
-                    "</ul>
+                        <li>".$int1."</li>
+                        <li>".$int2."</li>
+                        <li>".$int3."</li>
+                    </ul>
                     <p>
                         
                     </p>
