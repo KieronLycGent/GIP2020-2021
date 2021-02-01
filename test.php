@@ -18,6 +18,7 @@
 
                     echo"ok1<br>";//Werkt ok
                     $stmt->bind_result($iid, $int1);//werkt niet, geen errors gegeven<----------------------------------<------------------------------------------<-----------------------------------
+                $stmt->fetch();
                     echo"ok2<br>";//Werkt ok
                     echo($iid."<br>");//Werkt ok
                     echo($int1."<br>ok3");//Werkt ok

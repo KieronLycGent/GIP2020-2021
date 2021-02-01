@@ -76,7 +76,7 @@ if(!isset($_COOKIE["uID"])){
             <li><a href="about.php">Over</a></li>
           <li><a href="contact.php">Contact</a></li>
               <li><a href="portfolioUser.php">Auteurs</a></li>
-            <li class="active"><a href="portfolio-detailsUser.php">User</a></li>
+            <li class="active"><a href="portfolioUser.php">User</a></li>
 
         </ul>
       </nav><!-- .nav-menu -->
@@ -133,7 +133,8 @@ if(!isset($_COOKIE["uID"])){
                     <ul>
                         <li><strong>Naam</strong>: ".$userNm."</li>
                         <li><strong>Adres</strong>:</li>
-                        <li>".$userStraat."<br>".$pcode." ".$gemeente."</li>";
+                        <li>".$userStraat."<br>".$pcode." ".$gemeente."</li>
+                        <li><strong>Interesses</strong>:</li>";
                 $stmt->close(); 
             }
         }
@@ -141,31 +142,72 @@ if(!isset($_COOKIE["uID"])){
             echo"Er zit een fout in de qry: ".$mysqli->error;
         }
     }
-    for($i=0; $i<3; $i++){
         $mysqli= new MySQLi("localhost","root","","gip");
-        $sql = "SELECT i.interesseID, i.interesseNm FROM tblinteresse i WHERE i.interesseID = 2";
+            $sql = "SELECT  i.interesseNm FROM tblinteresse i, tbluser u, tblinteressesuser iu WHERE u.userID=".$_COOKIE["uID"]." AND u.interessesID = iu.interessesID AND iu.interesseID1 = i.interesseID";
+        
         if($stmt = $mysqli->prepare($sql)){
             if(!$stmt->execute()){
                 echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in qry";
             }  
             else{
-                echo"ok1";
-                $stmt->bind_result($iid,$int1);
-                echo"ok2";
-                echo($iid);
-                echo($int1."ok3");
+                $stmt->bind_result($int1);
+                while($stmt->fetch()){
+                    if($int1 == NULL){
+                        $int1 = "-";
+                    }
+                    echo"<li>".$int1."</li>";
+                }
             }
             $stmt->close();
         }
         else{
             echo"Er zit een fout in de qry: ".$mysqli->error;
         }
-    }     
-    echo"   <li><strong>Interesses</strong>:</li>
-                        <li>".$int1."a</li>".
-                        /*<li>"$int2."</li>
-                        <li>".$int3."c</li>*/
-                    "</ul>
+    $mysqli= new MySQLi("localhost","root","","gip");
+    $sql = "SELECT  i.interesseNm FROM tblinteresse i, tbluser u, tblinteressesuser iu WHERE u.userID=".$_COOKIE["uID"]." AND u.interessesID = iu.interessesID AND iu.interesseID2 = i.interesseID";
+        
+        if($stmt = $mysqli->prepare($sql)){
+            if(!$stmt->execute()){
+                echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in qry";
+            }  
+            else{
+                $stmt->bind_result($int2);
+                while($stmt->fetch()){
+                    if($int2 == NULL){
+                        $int2 = "-";
+                    }
+                    echo"<li>".$int2."</li>";
+                }
+            }
+            $stmt->close();
+        }
+        else{
+            echo"Er zit een fout in de qry: ".$mysqli->error;
+        }     
+    $mysqli= new MySQLi("localhost","root","","gip");
+            $sql = "SELECT  i.interesseNm FROM tblinteresse i, tbluser u, tblinteressesuser iu WHERE  u.userID=".$_COOKIE["uID"]." AND u.interessesID = iu.interessesID AND iu.interesseID3 = i.interesseID";
+        
+        if($stmt = $mysqli->prepare($sql)){
+            if(!$stmt->execute()){
+                echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in qry";
+            }  
+            else{
+                $stmt->bind_result($int3);
+                while($stmt->fetch()){
+                    if($int3 == NULL){
+                        $int3 = "-";
+                    }
+                    echo"<li>".$int3."</li>";
+                }
+            }
+            $stmt->close();
+        }
+        else{
+            echo"Er zit een fout in de qry: ".$mysqli->error;
+        }     
+    echo"   
+                        
+                    </ul>
                     <p>
                         
                     </p>
