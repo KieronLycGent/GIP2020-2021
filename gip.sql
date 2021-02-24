@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 31, 2021 at 10:01 PM
+-- Generation Time: Feb 24, 2021 at 08:01 PM
 -- Server version: 5.7.17
 -- PHP Version: 5.6.30
 
@@ -54,19 +54,21 @@ CREATE TABLE `tblauteur` (
   `auteurID` int(11) NOT NULL,
   `auteurNm` tinytext NOT NULL,
   `auteurBesch` mediumtext NOT NULL,
-  `auteurFoto` text NOT NULL
+  `auteurFoto` text NOT NULL,
+  `auteurEmail` tinytext NOT NULL,
+  `auteurPasw` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tblauteur`
 --
 
-INSERT INTO `tblauteur` (`auteurID`, `auteurNm`, `auteurBesch`, `auteurFoto`) VALUES
-(1, 'Alfa', 'Test1', 'portfolio-2.jpg'),
-(2, 'beter', 'test2', 'WallpaperCrystal.jpg'),
-(3, 'Delta', 'ughghg', 'blog-author.jpg'),
-(4, 'Uno', 'a', 'portfolio-2.jpg'),
-(5, 'Dos', 'b', 'WallpaperCrystal.jpg');
+INSERT INTO `tblauteur` (`auteurID`, `auteurNm`, `auteurBesch`, `auteurFoto`, `auteurEmail`, `auteurPasw`) VALUES
+(1, 'Alfa', 'Test1', 'portfolio-2.jpg', '', ''),
+(2, 'beter', 'test2', 'WallpaperCrystal.jpg', '', ''),
+(3, 'Delta', 'ughghg', 'blog-author.jpg', '', ''),
+(4, 'Uno', 'a', 'portfolio-2.jpg', '', ''),
+(5, 'Dos', 'b', 'WallpaperCrystal.jpg', '', '');
 
 -- --------------------------------------------------------
 
@@ -3057,8 +3059,14 @@ CREATE TABLE `tblinteressesuser` (
 
 INSERT INTO `tblinteressesuser` (`interessesID`, `interesseID1`, `interesseID2`, `interesseID3`) VALUES
 (1, 1, 2, 4),
-(2, 2, 3, 1),
-(3, 2, 3, 1);
+(2, 2, 3, NULL),
+(3, 2, 3, 1),
+(4, 2, 1, 3),
+(5, NULL, NULL, NULL),
+(6, NULL, NULL, NULL),
+(7, NULL, NULL, NULL),
+(8, NULL, NULL, NULL),
+(9, 1, 5, 3);
 
 -- --------------------------------------------------------
 
@@ -3083,18 +3091,22 @@ CREATE TABLE `tbluser` (
   `userStraat` text NOT NULL,
   `userPostcode` int(11) NOT NULL,
   `interessesID` int(11) NOT NULL DEFAULT '0',
-  `userFoto` text NOT NULL
+  `userFoto` text NOT NULL,
+  `userEmail` tinytext NOT NULL,
+  `userPasw` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `tbluser`
 --
 
-INSERT INTO `tbluser` (`userID`, `userNm`, `userStraat`, `userPostcode`, `interessesID`, `userFoto`) VALUES
-(2, 'Alfatest', 'Damaststraat 200', 385, 0, 'wallpaperCrystal.jpg'),
-(3, 'abac', 'test', 385, 0, 'ws.png'),
-(4, 'a', 'test', 385, 0, 'ws.png'),
-(5, 'Altijd', 'testen ok', 385, 3, 'ws.png');
+INSERT INTO `tbluser` (`userID`, `userNm`, `userStraat`, `userPostcode`, `interessesID`, `userFoto`, `userEmail`, `userPasw`) VALUES
+(2, 'Alfatest', 'Damaststraat 200', 861, 0, 'wallpaperCrystal.jpg', '', ''),
+(3, 'abac', 'test', 385, 0, 'ws.png', '', ''),
+(4, 'e', 'test', 861, 2, 'ws.png', '', ''),
+(5, 'Altijd', 'testen ok', 385, 3, 'ws.png', '', ''),
+(6, 'e', 'test', 861, 8, 'ws.png', '', ''),
+(7, 'Alfatest', 'Damaststraat 200', 861, 9, 'ws.png', '', '');
 
 -- --------------------------------------------------------
 
@@ -3205,7 +3217,7 @@ ALTER TABLE `tblinteresse`
 -- AUTO_INCREMENT for table `tblinteressesuser`
 --
 ALTER TABLE `tblinteressesuser`
-  MODIFY `interessesID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `interessesID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `tbltypes`
 --
@@ -3215,7 +3227,7 @@ ALTER TABLE `tbltypes`
 -- AUTO_INCREMENT for table `tbluser`
 --
 ALTER TABLE `tbluser`
-  MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;COMMIT;
+  MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

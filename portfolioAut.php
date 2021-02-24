@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <?php
 if(isset($_GET["item"])){
@@ -46,16 +49,22 @@ if(isset($_GET["item"])){
   <!-- ======= Top Bar ======= -->
   <section id="topbar" class="d-none d-lg-block">
     <div class="container d-flex">
-      <div class="contact-info mr-auto">
-        <i class="icofont-envelope"></i><a href="mailto:contact@example.com">kieron.parmentier@telenet.be</a>
-        <i class="icofont-phone"></i> +32 499 75 98 34
-      </div>
       <div class="social-links">
-        <a href="#" class="twitter"><i class="icofont-twitter"></i></a>
-        <a href="#" class="facebook"><i class="icofont-facebook"></i></a>
-        <a href="#" class="instagram"><i class="icofont-instagram"></i></a>
-        <a href="#" class="skype"><i class="icofont-skype"></i></a>
-        <a href="#" class="linkedin"><i class="icofont-linkedin"></i></a>
+          <?php
+          if(isset($_SESSION["login"])){
+              if(!($_SESSION["login"])){
+                  echo"<a href=\"inloggen.php\">Inloggen</a>";
+                  echo"<a href=\"registreer.php\">Registreren</a>";
+              }
+              else{
+                  echo"<a href=\"".$_SERVER["PHP_SELF"]."?end=true\">Uitloggen</a>";
+              }
+          }
+          else{
+              echo"<a href=\"inloggen.php\">Inloggen</a>";
+              echo"<a href=\"registreer.php\">Registreren</a>";
+          }
+          ?>
       </div>
     </div>
   </section>
@@ -72,10 +81,12 @@ if(isset($_GET["item"])){
 
       <nav class="nav-menu d-none d-lg-block">
         <ul>
-            <li><a href="index.php">Home</a></li>
+          <li><a href="index.php">Home</a></li>
+
             <li><a href="about.php">Over</a></li>
-            <li><a href="contact.php">Contact</a></li>
-            <li class="active"><a href="portfolio.php">Auteurs</a></li>
+          <li><a href="contact.php">Contact</a></li>
+              <li class="active"><a href="portfolioAut.php">Auteurs</a></li>
+            <li><a href="portfolioUser.php">Gebruikers</a></li>
 
         </ul>
       </nav><!-- .nav-menu -->
@@ -124,7 +135,7 @@ if(isset($_GET["item"])){
                   }
                   else{
                       
-                          $sql = "select * from tblAuteur";
+                          $sql = "select auteurID, auteurNm, auteurBesch, auteurFoto from tblAuteur";
                       
                    
                       if($stmt = $mysqli->prepare($sql)){

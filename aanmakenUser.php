@@ -40,16 +40,10 @@
   <!-- ======= Top Bar ======= -->
   <section id="topbar" class="d-none d-lg-block">
     <div class="container d-flex">
-      <div class="contact-info mr-auto">
-        <i class="icofont-envelope"></i><a href="mailto:contact@example.com">kieron.parmentier@telenet.be</a>
-        <i class="icofont-phone"></i> +32 499 75 98 34
-      </div>
       <div class="social-links">
-        <a href="#" class="twitter"><i class="icofont-twitter"></i></a>
-        <a href="#" class="facebook"><i class="icofont-facebook"></i></a>
-        <a href="#" class="instagram"><i class="icofont-instagram"></i></a>
-        <a href="#" class="skype"><i class="icofont-skype"></i></a>
-        <a href="#" class="linkedin"><i class="icofont-linkedin"></i></a>
+          <?php
+            //echo"<a href=\"inloggen.php\">Inloggen</a>";
+          ?>
       </div>
     </div>
   </section>
@@ -71,7 +65,7 @@
             <li><a href="about.php">Over</a></li>
           <li><a href="contact.php">Contact</a></li>
               <li><a href="portfolioAut.php">Auteurs</a></li>
-            <li><a href="portfolioUser.php">Gebruikers</a></li>
+            <li class="active"><a href="portfolioUser.php">Gebruikers</a></li>
 
         </ul>
       </nav><!-- .nav-menu -->
@@ -146,8 +140,9 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
 ?>  
                     <?php 
                         //Kijken ofdat verzenden en straat zijn ingevuld.
-                        if((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&(isset($_POST["straat"]))&&($_POST["straat"]!="")){
+                        if((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&(isset($_POST["straat"]))&&($_POST["straat"]!="")&&isset($_POST["pw"])&&($_POST["pw"]!="")&&isset($_POST["pwCheck"])&&isset($_POST["email"])&&($_POST["email"]!="")){
                             //Kijken ofdat interesses bestaan
+                            if($_POST["pw"]== $_POST["pwCheck"]){
                             if((isset($_POST["interesse1"]))&&(isset($_POST["interesse2"]))&&(isset($_POST["interesse3"]))){
                                 //Kijken ofdat er dubbele zijn binnenin de interesses behalve als deze leeggelaten worden.
                                 if((($_POST["interesse1"]==$_POST["interesse2"])&&($_POST["interesse1"]!="-")) || (($_POST["interesse1"] == $_POST["interesse3"])&&($_POST["interesse3"]!="-")) || (($_POST["interesse2"] == $_POST["interesse3"])&&($_POST["interesse2"]!="-"))){
@@ -179,19 +174,22 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
                                         trigger_error('Fout bij verbinding: '.$mysqli->error); 
                                     }
                                     else{
-                                        $sql = "INSERT INTO tblUser (userNm, userFoto, userPostcode, userStraat, interessesID) VALUES (?,?,?,?,?)"; 
+                                        $sql = "INSERT INTO tblUser (userNm, userEmail, userPasw, userFoto, userPostcode, userStraat, interessesID) VALUES (?,?,?,?,?,?,?)"; 
                                         if($stmt = $mysqli->prepare($sql)) {     
-                                            $stmt->bind_param('ssisi',$naam,$foto,$post,$straat,$bindID);
+                                            $stmt->bind_param('ssssisi',$naam,$email,$pw,$foto,$post,$straat,$bindID);
+                                            $email = $mysqli->real_escape_string($_POST["email"]);
+                                            $pw = $mysqli->real_escape_string($_POST["pw"]);
                                             $naam = $mysqli->real_escape_string($_POST["naam"]) ;
                                             $foto = $mysqli->real_escape_string("ws.png");
                                             $post = $PostcodeId1;
                                             $straat = $mysqli->real_escape_string($_POST["straat"]);
+                                            
                                             if(!$stmt->execute()){
                                                 //MAAK UW ERROR MESSAGES AF GIJ MINKUKEL!!!!!!!! 2 UUR VERLOREN AAN DEZE SHIT!!!!
                                                 echo 'Het uitvoeren van de qry is mislukt:'.$mysqli->error;
                                             }
                                             else{  
-                                                echo 'Account aangemaakt';
+                                                header("location:inloggen.php");
                                             }
                                             $stmt->close();
                                         }
@@ -241,16 +239,40 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
                                     //-------------Einde insert 2(interesses)----------------------------
                                 }
                             }
+                            }
                         }
                 ?> 
                 
                 <form id="form1" name="form1" method="post" action="aanmakenUser.php">
-                    <p>User aanmaken</p>
+                    <h2>User aanmaken</h2>
                     <p>naam:  &nbsp;
                         <input type="text" name="naam" id="naam" placeholder="naam" required value="<?php
                                                                                            if(isset($_POST["naam"])){
                                                                                                echo($_POST["naam"]);
                                                                                            }?>">
+                    </p>
+                    <p>
+                        E-mail: &nbsp;
+                        <input type="email" name="email" id="email" placeholder="e-mail" required value="<?php
+                                                                                                         if(isset($_POST["email"])){
+                                                                                                             echo($_POST["email"]);
+                                                                                                         }
+                                                                                                         ?>">
+                    </p>
+                    <p>
+                        Paswoord: &nbsp;
+                        <input type="password" name="pw" id="pw" placeholder="Paswoord" required>
+                    </p>
+                    <p>
+                        Paswoord bevestigen: &nbsp;
+                        <input type="password" name="pwCheck" id="pwCheck" placeholder="Paswoord bevestigen" required>
+                        <?php
+                        if(isset($_POST["pw"])&& isset($_POST["pwCheck"])){
+                            if($_POST["pw"]!=$_POST["pwCheck"]){
+                                echo"<br><a id=\"error\">Paswoord in het eerste veld komt niet overeen met paswoord in het tweede veld!</a>";
+                            }
+                        }    
+                        ?>
                     </p>
                     <p>
                         Gemeente: &nbsp;

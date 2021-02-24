@@ -1,3 +1,12 @@
+<?php
+session_start();
+if(isset($_GET["end"])){
+    if($_GET["end"]){
+        session_destroy();
+        header("location:".$_SERVER["PHP_SELF"]);
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -42,7 +51,19 @@
     <div class="container d-flex">
       <div class="social-links">
           <?php
-            echo"<a href=\"inloggen.php\">Inloggen</a>";
+          if(isset($_SESSION["login"])){
+              if(!($_SESSION["login"])){
+                  echo"<a href=\"inloggen.php\">Inloggen</a>";
+                  echo"<a href=\"registreer.php\">Registreren</a>";
+              }
+              else{
+                  echo"<a href=\"".$_SERVER["PHP_SELF"]."?end=true\">Uitloggen</a>";
+              }
+          }
+          else{
+              echo"<a href=\"inloggen.php\">Inloggen</a>";
+              echo"<a href=\"registreer.php\">Registreren</a>";
+          }
           ?>
       </div>
     </div>
@@ -61,11 +82,10 @@
       <nav class="nav-menu d-none d-lg-block">
         <ul>
           <li class="active"><a href="index.php">Home</a></li>
-
             <li><a href="about.php">Over</a></li>
           <li><a href="contact.php">Contact</a></li>
               <li><a href="portfolioAut.php">Auteurs</a></li>
-            <li><a href="portfolioUser.php">Users</a></li>
+            <li><a href="portfolioUser.php">Gebruikers</a></li>
 
         </ul>
       </nav><!-- .nav-menu -->

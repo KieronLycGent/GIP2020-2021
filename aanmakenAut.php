@@ -37,25 +37,18 @@
 </head>
 
 <body>
-  <!-- ======= Top Bar ======= -->
   <section id="topbar" class="d-none d-lg-block">
     <div class="container d-flex">
-      <div class="contact-info mr-auto">
-        <i class="icofont-envelope"></i><a href="mailto:contact@example.com">kieron.parmentier@telenet.be</a>
-        <i class="icofont-phone"></i> +32 499 75 98 34
-      </div>
       <div class="social-links">
-        <a href="#" class="twitter"><i class="icofont-twitter"></i></a>
-        <a href="#" class="facebook"><i class="icofont-facebook"></i></a>
-        <a href="#" class="instagram"><i class="icofont-instagram"></i></a>
-        <a href="#" class="skype"><i class="icofont-skype"></i></a>
-        <a href="#" class="linkedin"><i class="icofont-linkedin"></i></a>
+          <?php
+            //echo"<a href=\"inloggen.php\">Inloggen</a>";
+          ?>
       </div>
     </div>
   </section>
 
   <!-- ======= Header ======= -->
-  <header id="header">
+ <header id="header">
     <div class="container d-flex">
 
       <div class="logo mr-auto">
@@ -70,7 +63,8 @@
 
             <li><a href="about.php">Over</a></li>
           <li><a href="contact.php">Contact</a></li>
-              <li><a href="portfolioAut.php">Auteurs</a></li>
+              <li class="active"><a href="portfolioAut.php">Auteurs</a></li>
+            <li><a href="portfolioUser.php">Gebruikers</a></li>
 
         </ul>
       </nav><!-- .nav-menu -->
@@ -83,16 +77,18 @@
         <section>
             <div class="container">
                     <?php 
-                        if((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&isset($_POST["besch"])&&$_POST["besch"]!=""){
+                        if((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&isset($_POST["besch"])&&$_POST["besch"]!=""&&isset($_POST["email"])&&$_POST["email"]!=""&&isset($_POST["pw"])&&isset($_POST["pwCheck"])&&$_POST["pwCheck"]==$_POST["pw"]){
                             $mysqli= new MySQLi("localhost","root","","gip");
                             if(mysqli_connect_errno()){
                                 trigger_error('Fout bij verbinding: '.$mysqli->error); 
                             }
                             else{
-                                $sql = "INSERT INTO tblAuteur (auteurNm,auteurBesch,auteurFoto) VALUES (?,?,?)"; 
+                                $sql = "INSERT INTO tblAuteur (auteurNm,auteurEmail,auteurPasw,auteurBesch,auteurFoto) VALUES (?,?,?,?,?)"; 
                                 if($stmt = $mysqli->prepare($sql)) {     
-                                    $stmt->bind_param('sss',$naam,$besch,$foto);
+                                    $stmt->bind_param('sssss',$naam,$email,$pw,$besch,$foto);
                                     $naam = $mysqli->real_escape_string($_POST["naam"]) ;
+                                    $email = $mysqli->real_escape_string($_POST["email"]);
+                                    $pw = $mysqli->real_escape_string($_POST["pw"]) ;
                                     $besch = $mysqli->real_escape_string($_POST["besch"]);
                                     $foto = $mysqli->real_escape_string("ws.png");
                                     if(!$stmt->execute()){
@@ -110,12 +106,33 @@
                         }
                 ?> 
                 <form id="form1" name="form1" method="post" action="aanmakenAut.php">
-                    <p>Auteur aanmaken</p>
-                    <p>naam:  &nbsp;
+                    <h2>Auteur aanmaken</h2>
+                    <p>Naam:  &nbsp;
                         <input type="text" name="naam" id="naam" placeholder="naam" required value="<?php
                                                                                            if(isset($_POST["naam"])){
                                                                                                echo($_POST["naam"]);
                                                                                            }?>">
+                    </p>
+                    <p>E-mail: &nbsp;
+                        <input type="email" name="email" id="email" placeholder="e-mail" required value="<?php
+                                                                                           if(isset($_POST["email"])){
+                                                                                               echo($_POST["email"]);
+                                                                                           }?>">
+                    </p>
+                     <p>
+                        Paswoord: &nbsp;
+                        <input type="password" name="pw" id="pw" placeholder="Paswoord" required>
+                    </p>
+                    <p>
+                        Paswoord bevestigen: &nbsp;
+                        <input type="password" name="pwCheck" id="pwCheck" placeholder="Paswoord bevestigen" required>
+                        <?php
+                        if(isset($_POST["pw"])&& isset($_POST["pwCheck"])){
+                            if($_POST["pw"]!=$_POST["pwCheck"]){
+                                echo"<br><a id=\"error\">Paswoord in het eerste veld komt niet overeen met paswoord in het tweede veld!</a>";
+                            }
+                        }    
+                        ?>
                     </p>
                     <p>Beschrijving: &nbsp;
                         <input type="text" name="besch" id="besch" placeholder="besch" required value="<?php
