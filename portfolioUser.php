@@ -1,12 +1,18 @@
 <?php
 session_start();
+if(isset($_GET["end"])){
+    if($_GET["end"]){
+        session_destroy();
+        header("location:".$_SERVER["PHP_SELF"]);
+    }
+}
 ?>
 <!DOCTYPE html>
 <?php
 if(isset($_GET["item"])){
-            setcookie("uID",$_GET["item"]);   
-            header("location:portfolio-detailsUser.php");
-        }    
+    $_SESSION["ID"] = $_GET["item"];
+    header("location:portfolio-detailsUser.php");
+}    
 ?>
 <html lang="en">
 
@@ -58,6 +64,13 @@ if(isset($_GET["item"])){
               }
               else{
                   echo"<a href=\"".$_SERVER["PHP_SELF"]."?end=true\">Uitloggen</a>";
+                  if($_SESSION["loginType"] == "user"){
+                      
+                      echo"<a href=\"wijzigenUser.php\">Profiel</a>";
+                  }
+                  else{
+                      echo"<a href=\"wijzigenAut.php\">Profiel</a>";
+                  }
               }
           }
           else{
@@ -218,11 +231,6 @@ if(isset($_GET["item"])){
                   <br>
               </div>
           </div>
-           <div>
-               <br>
-               <a href="aanmakenUser.php">Wilt u een useraccount aanmaken?</a>
-               <br>
-        </div>
         </div>
       </section><!-- End Portfolio Section -->
 <!-- ====== Auteurs ====== -->

@@ -8,8 +8,8 @@
         -Login moet mogelijk zijn V
         -Alle pagina's aanpassen cookie->session
         -editing profile mag enkel door profiel zelf
-	-Workshop pagina aanmaken 
-		-portfolio kopieren
+	-Workshop pagina aanmaken !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		-portfolio kopieren   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	-Workshop zoeken aanmaken
 	-Workshops kunnen aanmaken als auteur
 		-Login moet eerst werken

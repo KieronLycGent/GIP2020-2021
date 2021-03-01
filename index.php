@@ -58,6 +58,13 @@ if(isset($_GET["end"])){
               }
               else{
                   echo"<a href=\"".$_SERVER["PHP_SELF"]."?end=true\">Uitloggen</a>";
+                  if($_SESSION["loginType"] == "user"){
+                      
+                      echo"<a href=\"wijzigenUser.php\">Profiel</a>";
+                  }
+                  else{
+                      echo"<a href=\"wijzigenAut.php\">Profiel</a>";
+                  }
               }
           }
           else{
@@ -86,6 +93,18 @@ if(isset($_GET["end"])){
           <li><a href="contact.php">Contact</a></li>
               <li><a href="portfolioAut.php">Auteurs</a></li>
             <li><a href="portfolioUser.php">Gebruikers</a></li>
+            <?php
+            if(isset($_SESSION["login"])){
+                if(($_SESSION["login"])){
+                    if($_SESSION["loginType"] == "aut"){
+                        echo"<li><a href=\"aanmakenWS.php\">Workshop aanmaken</a></li>";
+                    }
+                    else if($_SESSION["loginType"] == "user"){
+                        echo"<li><a href=\"portfolioWS.php\">Workshops</a></li>";
+                    }
+                }
+            }                
+            ?>
 
         </ul>
       </nav><!-- .nav-menu -->

@@ -1,10 +1,16 @@
 <?php
 session_start();
+if(isset($_GET["end"])){
+    if($_GET["end"]){
+        session_destroy();
+        header("location:".$_SERVER["PHP_SELF"]);
+    }
+}
 ?>
 <!DOCTYPE html>
 <?php
     
-if(!isset($_COOKIE["uID"])){
+if(!isset($_SESSION["ID"])){
     header("location:portfolioUser.php");
 }
 ?>
@@ -46,7 +52,7 @@ if(!isset($_COOKIE["uID"])){
 
 <body>
   <!-- ======= Top Bar ======= -->
-  <section id="topbar" class="d-none d-lg-block">
+ <section id="topbar" class="d-none d-lg-block">
     <div class="container d-flex">
       <div class="social-links">
           <?php
@@ -57,6 +63,13 @@ if(!isset($_COOKIE["uID"])){
               }
               else{
                   echo"<a href=\"".$_SERVER["PHP_SELF"]."?end=true\">Uitloggen</a>";
+                  if($_SESSION["loginType"] == "user"){
+                      
+                      echo"<a href=\"wijzigenUser.php\">Profiel</a>";
+                  }
+                  else{
+                      echo"<a href=\"wijzigenAut.php\">Profiel</a>";
+                  }
               }
           }
           else{
@@ -118,7 +131,7 @@ if(!isset($_COOKIE["uID"])){
         trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
     else{
-        $sql = "SELECT u.userID, u.userNm, u.userFoto, u.userStraat, g.PCode, g.Gemeente FROM tblUser u, tblgemeente g WHERE u.userID=".$_COOKIE["uID"]." AND u.userPostcode = g.PostcodeID";
+        $sql = "SELECT u.userID, u.userNm, u.userFoto, u.userStraat, g.PCode, g.Gemeente FROM tblUser u, tblgemeente g WHERE u.userID=".$_SESSION["ID"]." AND u.userPostcode = g.PostcodeID";
         if($stmt = $mysqli->prepare($sql)){
             if(!$stmt->execute()){
                 echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
@@ -128,7 +141,7 @@ if(!isset($_COOKIE["uID"])){
                 echo"
                 <section id=\"portfolio-details\" class=\"portfolio-details\">
                     <div class=\"container\">
-                            <a class=\"icofont-pencil-alt-5\" href=\"wijzigenUser.php\">Wijzigen</a>
+                            <a class=\"icofont-arrow-left\" href=\"portfolioUser.php\">Terug</a>
                         <div class=\"row\">
                         <div class=\"col-lg-8\">
                 ";
@@ -152,7 +165,7 @@ if(!isset($_COOKIE["uID"])){
         }
     }
         $mysqli= new MySQLi("localhost","root","","gip");
-            $sql = "SELECT  i.interesseNm FROM tblinteresse i, tbluser u, tblinteressesuser iu WHERE u.userID=".$_COOKIE["uID"]." AND u.interessesID = iu.interessesID AND iu.interesseID1 = i.interesseID";
+            $sql = "SELECT  i.interesseNm FROM tblinteresse i, tbluser u, tblinteressesuser iu WHERE u.userID=".$_SESSION["ID"]." AND u.interessesID = iu.interessesID AND iu.interesseID1 = i.interesseID";
         
         if($stmt = $mysqli->prepare($sql)){
             if(!$stmt->execute()){
@@ -173,7 +186,7 @@ if(!isset($_COOKIE["uID"])){
             echo"Er zit een fout in de qry: ".$mysqli->error;
         }
     $mysqli= new MySQLi("localhost","root","","gip");
-    $sql = "SELECT  i.interesseNm FROM tblinteresse i, tbluser u, tblinteressesuser iu WHERE u.userID=".$_COOKIE["uID"]." AND u.interessesID = iu.interessesID AND iu.interesseID2 = i.interesseID";
+    $sql = "SELECT  i.interesseNm FROM tblinteresse i, tbluser u, tblinteressesuser iu WHERE u.userID=".$_SESSION["ID"]." AND u.interessesID = iu.interessesID AND iu.interesseID2 = i.interesseID";
         
         if($stmt = $mysqli->prepare($sql)){
             if(!$stmt->execute()){
@@ -194,7 +207,7 @@ if(!isset($_COOKIE["uID"])){
             echo"Er zit een fout in de qry: ".$mysqli->error;
         }     
     $mysqli= new MySQLi("localhost","root","","gip");
-            $sql = "SELECT  i.interesseNm FROM tblinteresse i, tbluser u, tblinteressesuser iu WHERE  u.userID=".$_COOKIE["uID"]." AND u.interessesID = iu.interessesID AND iu.interesseID3 = i.interesseID";
+            $sql = "SELECT  i.interesseNm FROM tblinteresse i, tbluser u, tblinteressesuser iu WHERE  u.userID=".$_SESSION["ID"]." AND u.interessesID = iu.interessesID AND iu.interesseID3 = i.interesseID";
         
         if($stmt = $mysqli->prepare($sql)){
             if(!$stmt->execute()){

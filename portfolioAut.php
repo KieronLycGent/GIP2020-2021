@@ -1,12 +1,18 @@
 <?php
 session_start();
+if(isset($_GET["end"])){
+    if($_GET["end"]){
+        session_destroy();
+        header("location:".$_SERVER["PHP_SELF"]);
+    }
+}
 ?>
 <!DOCTYPE html>
 <?php
 if(isset($_GET["item"])){
-            setcookie("autID",$_GET["item"]);   
-            header("location:portfolio-detailsAut.php");
-        }    
+    $_SESSION["ID"] = $_GET["item"];
+    header("location:portfolio-detailsAut.php");
+}    
 ?>
 <html lang="en">
 
@@ -58,6 +64,13 @@ if(isset($_GET["item"])){
               }
               else{
                   echo"<a href=\"".$_SERVER["PHP_SELF"]."?end=true\">Uitloggen</a>";
+                  if($_SESSION["loginType"] == "user"){
+                      
+                      echo"<a href=\"wijzigenUser.php\">Profiel</a>";
+                  }
+                  else{
+                      echo"<a href=\"wijzigenAut.php\">Profiel</a>";
+                  }
               }
           }
           else{
@@ -211,19 +224,13 @@ if(isset($_GET["item"])){
                       else{
                           echo"Er zit een fout in de qry: ".$mysqli->error;
                       }
-                  }
-        
+                  }   
     }
                   
                   ?>
                   <br>
               </div>
           </div>
-           <div>
-               <br>
-               <a href="aanmakenAut.php">Wilt u een auteursaccount aanmaken?</a>
-               <br>
-        </div>
         </div>
       </section><!-- End Portfolio Section -->
 <!-- ====== Auteurs ====== -->

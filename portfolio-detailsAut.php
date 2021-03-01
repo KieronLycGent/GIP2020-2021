@@ -1,10 +1,16 @@
 <?php
 session_start();
+if(isset($_GET["end"])){
+    if($_GET["end"]){
+        session_destroy();
+        header("location:".$_SERVER["PHP_SELF"]);
+    }
+}
 ?>
 <!DOCTYPE html>
 <?php
     
-if(!isset($_COOKIE["autID"])){
+if(!isset($_SESSION["ID"])){
     header("location:portfolioAut.php");
 }
 ?>
@@ -57,6 +63,13 @@ if(!isset($_COOKIE["autID"])){
               }
               else{
                   echo"<a href=\"".$_SERVER["PHP_SELF"]."?end=true\">Uitloggen</a>";
+                  if($_SESSION["loginType"] == "user"){
+                      
+                      echo"<a href=\"wijzigenUser.php\">Profiel</a>";
+                  }
+                  else{
+                      echo"<a href=\"wijzigenAut.php\">Profiel</a>";
+                  }
               }
           }
           else{
@@ -115,7 +128,7 @@ if(!isset($_COOKIE["autID"])){
         trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
     else{
-        $sql = "select auteurID, auteurNm, auteurBesch, auteurFoto from tblAuteur where auteurID=".$_COOKIE["autID"];
+        $sql = "select auteurID, auteurNm, auteurBesch, auteurFoto from tblAuteur where auteurID=".$_SESSION["ID"];
         if($stmt = $mysqli->prepare($sql)){
             if(!$stmt->execute()){
                 echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
@@ -125,7 +138,7 @@ if(!isset($_COOKIE["autID"])){
                 echo"
                 <section id=\"portfolio-details\" class=\"portfolio-details\">
                     <div class=\"container\">
-                            <a class=\"icofont-pencil-alt-5\" href=\"wijzigenAut.php\">Wijzigen</a>
+                            <a class=\"icofont-arrow-left\" href=\"portfolioAut.php\">Terug</a>
                         <div class=\"row\">
                         <div class=\"col-lg-8\">
                         
