@@ -203,32 +203,30 @@ if(!isset($_SESSION["ID"])){
             echo"Er zit een fout in de qry: ".$mysqli->error;
         }     
     $mysqli= new MySQLi("localhost","root","","gip");
-            $sql = "SELECT  i.interesseNm FROM tblinteresse i, tbluser u, tblinteressesuser iu WHERE  u.userID=".$_SESSION["ID"]." AND u.interessesID = iu.interessesID AND iu.interesseID3 = i.interesseID";
+    $sql = "SELECT  i.interesseNm FROM tblinteresse i, tbluser u, tblinteressesuser iu WHERE  u.userID=".$_SESSION["ID"]." AND u.interessesID = iu.interessesID AND iu.interesseID3 = i.interesseID";
         
-        if($stmt = $mysqli->prepare($sql)){
-            if(!$stmt->execute()){
-                echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in qry";
-            }  
-            else{
-                $stmt->bind_result($int3);
-                while($stmt->fetch()){
-                    if($int3 == NULL){
-                        $int3 = "-";
-                    }
-                    echo"<li>".$int3."</li>";
-                }
-            }
-            $stmt->close();
-        }
-    }     
-    echo"   <li><strong>Interesses</strong>:</li>
-                        <li>".$int1."</li>
-                        <li>".$int2."</li>
-                        <li>".$int3."</li>"
+    if($stmt = $mysqli->prepare($sql)){
+        if(!$stmt->execute()){
+            echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in qry";
+        }  
         else{
+            $stmt->bind_result($int3);
+            while($stmt->fetch()){
+                if($int3 == NULL){
+                    $int3 = "-";
+                }
+                echo"<li>".$int3."</li>";
+            }
+        }
+            $stmt->close();
+    }     
+    else{
             echo"Er zit een fout in de qry: ".$mysqli->error;
         }     
-    echo"   
+    echo"     <li><strong>Interesses</strong>:</li>
+    <li>".$int1."</li>
+    <li>".$int2."</li>
+    <li>".$int3."</li>
                     </ul>
                     <p>
                         
