@@ -78,6 +78,7 @@
         <section>
             <div class="container">
                 <?php
+//----------------------------------------------------------De check voor postcodes en gemeentes-------------------------------------------------------------//
 if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postcode"] != "") &&isset($_POST["gemeente"]) && $_POST["gemeente"] !="" ){
     $mysqli=new MySQLI("localhost","root","","gip");
     if (mysqli_connect_errno()){
@@ -137,8 +138,13 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
         }
     }
 }
+//================================================================================================================================================================//
 ?>  
                     <?php 
+/*----------------------------------------------------------------------------------------------------------------------------------------------------------
+ Dus: deze code moet herschreven worden. Liefst geen strings opvragen in de dropdownboxes maar ints waarbij de optie er UITZIET als een string.
+ Deze int gaan we dan elk apart met dezelfde NIEUWE userID (aanmakenUser, duh) in tblInteressesUser steken.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------*/
                         //Kijken ofdat verzenden en straat zijn ingevuld.
                         if((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&(isset($_POST["straat"]))&&($_POST["straat"]!="")&&isset($_POST["pw"])&&($_POST["pw"]!="")&&isset($_POST["pwCheck"])&&isset($_POST["email"])&&($_POST["email"]!="")){
                             //Kijken ofdat interesses bestaan
@@ -224,6 +230,7 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
                                         else{
                                             $i3 = $_POST["interesse3"];
                                         }
+
                                         $sql = "INSERT INTO `tblinteressesuser` (`interessesID`, `interesseID1`, `interesseID2`, `interesseID3`) VALUES (NULL,?,?,?) ";
                                         if($stmt = $mysqli->prepare($sql)) {     
                                             $stmt->bind_param('sss',$i1,$i2,$i3);

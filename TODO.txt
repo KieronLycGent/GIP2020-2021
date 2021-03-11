@@ -1,23 +1,38 @@
 tblInteressesUser aanpassen:
-	-samengestelde sleutel V
-	-2 kolommen V
+	-samengestelde sleutel 			V | 2021-03-11
+	-2 kolommen				V | 2021-03-11
+	-SQL file aanpassen 			V | 2021-03-11
 	-structuren van opslaan veranderen
-		-aanmakenUser.php X
-		-wijzigenUser.php X
+		-aanmakenUser.php 		X |
+		-wijzigenUser.php 		X |
 Registratie:
-	-password hashing X
-	-dubbele emails niet toelaten X
-	-
+	-password hashing 			X |
+	-dubbele emails niet toelaten 		X |
 
-- Code pagina's despaghettiën X
+Code pagina's despaghettiën(have fun) 		X |
+	-aanmakenAut 				X |
+	-aanmakenUser 				X | (WIP 2021-03-11)
+	-aanmakenWS 				X |
+	-inloggen 				X |
+	-portfolio-detailsAut 			X |
+	-portfolio-detailsUser 			X |
+	-portfolioAut 				X |
+	-portfolioUser 				X |
+	-portfolioWS 				X |
+	-registreer 				X |
+	-wijzigenAut 				X |
+	-wijzigenUser 				X |
 
 Workshops:
-	-Workshop pagina aanmaken X
+	-Workshop pagina aanmaken 		X |
 		-portfolio kopieren
-	-Workshop zoeken aanmaken --> filters (misschien ook filters aanmaken bij de rest?) X
-	-Workshops kunnen aanmaken als auteur X
-	-Workshops kunnen veranderen als auteur X
+	-Workshop zoeken aanmaken --> filters	X |
+(misschien ook filters aanmaken bij de rest?) 	
+	-Workshops kunnen aanmaken als auteur 	X |
+	-Workshops kunnen veranderen als auteur X |
 		-Hangt dus vast aan 1 auteur
-	-Joinen in workshops als user X
+	-Joinen in workshops als user 		X |
 
-- Uploaden foto --> zie cursus html om dit te testen, print_r om te kijken hoe dit ontvangen wordt. X
+- Uploaden foto 				X |
+--> zie cursus html om dit te testen,
+ print_r om te kijken hoe dit ontvangen wordt. 
