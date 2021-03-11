@@ -1,22 +1,23 @@
--Workshops
-	-logins mogelijk maken: DATABANKEN AANPASSEN!!!
-		-auteur V
-		-user V
-		-sql file updaten V
-		-Paswoord hexing X
-		-Registreren moet mogelijk gemaakt worden! user V aut V
-        -Login moet mogelijk zijn V
-        -Alle pagina's aanpassen cookie->session
-        -editing profile mag enkel door profiel zelf
-	-Workshop pagina aanmaken !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		-portfolio kopieren   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	-Workshop zoeken aanmaken
-	-Workshops kunnen aanmaken als auteur
-		-Login moet eerst werken
-	-Workshops kunnen veranderen als auteur
+tblInteressesUser aanpassen:
+	-samengestelde sleutel V
+	-2 kolommen V
+	-structuren van opslaan veranderen
+		-aanmakenUser.php X
+		-wijzigenUser.php X
+Registratie:
+	-password hashing X
+	-dubbele emails niet toelaten X
+	-
+
+- Code pagina's despaghettiën X
+
+Workshops:
+	-Workshop pagina aanmaken X
+		-portfolio kopieren
+	-Workshop zoeken aanmaken --> filters (misschien ook filters aanmaken bij de rest?) X
+	-Workshops kunnen aanmaken als auteur X
+	-Workshops kunnen veranderen als auteur X
 		-Hangt dus vast aan 1 auteur
-	-Joinen in workshops als user
+	-Joinen in workshops als user X
 
-
-- !!! Zoekfucntie uitbreiden --> filters
-- Uploaden foto --> zie cursus html om dit te testen, print_r om te kijken hoe dit ontvangen wordt.
+- Uploaden foto --> zie cursus html om dit te testen, print_r om te kijken hoe dit ontvangen wordt. X

@@ -223,11 +223,7 @@ if(!isset($_SESSION["ID"])){
     else{
             echo"Er zit een fout in de qry: ".$mysqli->error;
         }     
-    echo"     <li><strong>Interesses</strong>:</li>
-    <li>".$int1."</li>
-    <li>".$int2."</li>
-    <li>".$int3."</li>
-                    </ul>
+    echo"            </ul>
                     <p>
                         
                     </p>
