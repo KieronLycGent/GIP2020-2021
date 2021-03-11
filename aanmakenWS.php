@@ -2,13 +2,14 @@
 session_start();
 ?>
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Inloggen - Workshopp.er</title>
+  <title>Workshop aanmaken - Workshopp.er</title>
   <meta content="" name="descriptison">
   <meta content="" name="keywords">
 
@@ -60,15 +61,15 @@ session_start();
       </div>
 
       <nav class="nav-menu d-none d-lg-block">
-        <!---<ul>
+        <ul>
           <li><a href="index.php">Home</a></li>
 
             <li><a href="about.php">Over</a></li>
           <li><a href="contact.php">Contact</a></li>
-              <li><a href="portfolioAut.php">Auteurs</a></li>
+              <li class="active"><a href="portfolioAut.php">Auteurs</a></li>
             <li><a href="portfolioUser.php">Gebruikers</a></li>
 
-        </ul>-->
+        </ul>
       </nav><!-- .nav-menu -->
 
     </div>
@@ -79,111 +80,74 @@ session_start();
         <section>
             <div class="container">
                     <?php 
-                $klopt = false;
-                $ID = 0;
-                        if((isset($_POST["verzenden"]))&&(isset($_POST["email"]))&&($_POST["email"]!="")&&isset($_POST["pw"])&&$_POST["pw"]!=""){
+                        if((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&isset($_POST["besch"])&&$_POST["besch"]!=""&&isset($_POST["email"])&&$_POST["email"]!=""&&isset($_POST["pw"])&&isset($_POST["pwCheck"])&&$_POST["pwCheck"]==$_POST["pw"]){
                             $mysqli= new MySQLi("localhost","root","","gip");
                             if(mysqli_connect_errno()){
                                 trigger_error('Fout bij verbinding: '.$mysqli->error); 
                             }
                             else{
-
-                                if($_POST["acc"]=="user"){
-                                    $sql = "SELECT userEmail, userPasw, userID FROM tblUser"; 
-                                }
-                                else if($_POST["acc"]=="aut"){
-                                    $sql = "SELECT auteurEmail, auteurPasw, auteurID FROM tblAuteur";
-                                }
+                                $sql = "INSERT INTO tblAuteur (auteurNm,auteurEmail,auteurPasw,auteurBesch,auteurFoto) VALUES (?,?,?,?,?)"; 
                                 if($stmt = $mysqli->prepare($sql)) {     
+                                    $stmt->bind_param('sssss',$naam,$email,$pw,$besch,$foto);
+                                    $naam = $mysqli->real_escape_string($_POST["naam"]) ;
+                                    $email = $mysqli->real_escape_string($_POST["email"]);
+                                    $pw = $mysqli->real_escape_string($_POST["pw"]) ;
+                                    $besch = $mysqli->real_escape_string($_POST["besch"]);
+                                    $foto = $mysqli->real_escape_string("ws.png");
                                     if(!$stmt->execute()){
-                                        echo 'het uitvoeren van de query is mislukt:'.$stmt->error."in qry";
+                                        echo 'het uitvoeren van de query is mislukt:';
                                     }
                                     else{  
-                                        $stmt->bind_result($emailCheck,$pwCheck,$ID);
-                                        while($stmt->fetch()){
-                                            if($emailCheck == $_POST["email"] && $pwCheck == $_POST["pw"]){
-                                                $klopt = true;
-                                            }
-                                        }
+                                        echo 'Account aangemaakt';
                                     }
                                     $stmt->close();
-                                    if($klopt){
-                                        if($_POST["acc"]=="user"){
-                                            $sql = "SELECT userID FROM tblUser WHERE '".$_POST["email"]."' = userEmail AND '".$_POST["pw"]."' = userPasw";
-                                            $_SESSION["ID"] = $ID;                                        }   
-                                        else if($_POST["acc"]=="aut"){
-                                            $sql = "SELECT auteurID FROM tblAuteur  WHERE '".$_POST["email"]."' = auteurEmail AND '".$_POST["pw"]."' = auteurPasw";
-                                        }
-                                        if($stmt = $mysqli->prepare($sql)) {     
-                                            if(!$stmt->execute()){
-                                                echo 'het uitvoeren van de query is mislukt:'.$stmt->error."in qry";
-                                            }
-                                            else{  
-                                                $stmt->bind_result($_SESSION["loginID"]);
-                                                $stmt->fetch();
-                                                $_SESSION["login"] = true;
-                                                if($_POST["acc"]=="user"){
-                                                    $_SESSION["loginType"] = "user";
-                                                }   
-                                                else if($_POST["acc"]=="aut"){
-                                                    $_SESSION["loginType"] = "aut";
-                                                }
-                                                header("location:index.php");
-                                                }
-                                            $stmt->close();  
-                                        }
-                                        else{
-                                            echo 'Er zit een fout in de query ' .$mysqli->error; 
-                                        } 
-                                    }
-                                    else{
-                                        echo"<h5 id=\"error\">Paswoord of email niet gekend.</h5>";
-                                    }
                                 }
                                 else{
-                                    echo 'Er zit een fout in de query ' .$mysqli->error; 
+                                    echo 'Er zit een fout in de query'; 
                                 }
                             }
                         }
-                
                 ?> 
-                <form id="form1" name="form1" method="post" action="inloggen.php">
-                    <h2>Inloggen</h2>
-                    <p>
-                        <input type="radio" name="acc" id="user" value="user" <?php
-                               if(isset($_POST["acc"])){
-                                   if($_POST["acc"]=="user"){
-                                       echo"checked";
-                                   } 
-                               }
-                               else{
-                                   echo"checked";
-                               }
-                               ?>>
-                        <label for="user">Gebruiker</label> &nbsp;
-                        <input type="radio" name="acc" id="aut" value="aut" <?php
-                               if(isset($_POST["acc"])){
-                                   if($_POST["acc"]=="aut"){
-                                       echo"checked";
-                                   } 
-                               }
-                               ?>>
-                        <label for="aut">Auteur</label>
+                <form id="form1" name="form1" method="post" action="aanmakenAut.php">
+                    <h2>Workshop aanmaken</h2>
+                    <p>Naam:  &nbsp;
+                        <input type="text" name="naam" id="naam" placeholder="naam" required value="<?php
+                                                                                           if(isset($_POST["naam"])){
+                                                                                               echo($_POST["naam"]);
+                                                                                           }?>">
                     </p>
-                    <p>E-mail:  &nbsp;
+                    <p> &nbsp;
                         <input type="email" name="email" id="email" placeholder="e-mail" required value="<?php
                                                                                            if(isset($_POST["email"])){
                                                                                                echo($_POST["email"]);
                                                                                            }?>">
                     </p>
-                    <p>Paswoord: &nbsp;
-                        <input type="password" name="pw" id="pw" placeholder="paswoord" required>
+                     <p>
+                        Paswoord: &nbsp;
+                        <input type="password" name="pw" id="pw" placeholder="Paswoord" required>
+                    </p>
+                    <p>
+                        Paswoord bevestigen: &nbsp;
+                        <input type="password" name="pwCheck" id="pwCheck" placeholder="Paswoord bevestigen" required>
+                        <?php
+                        if(isset($_POST["pw"])&& isset($_POST["pwCheck"])){
+                            if($_POST["pw"]!=$_POST["pwCheck"]){
+                                echo"<br><a id=\"error\">Paswoord in het eerste veld komt niet overeen met paswoord in het tweede veld!</a>";
+                            }
+                        }    
+                        ?>
+                    </p>
+                    <p>Beschrijving: &nbsp;
+                        <input type="text" name="besch" id="besch" placeholder="besch" required value="<?php
+                                                                                                       if(isset($_POST["besch"])){
+                                                                                                           echo($_POST["besch"]);
+                                                                                                       }?>">
                     </p>
                     <p>
                         &nbsp;
                     </p>
                     <p>
-                        <input type="submit" name="verzenden" id="verzenden" value="Inloggen">
+                        <input type="submit" name="verzenden" id="verzenden" value="Aanmaken">
                     </p>
                     <p>
                         &nbsp;
@@ -195,7 +159,53 @@ session_start();
 
   <!-- ======= Footer ======= -->
   <footer id="footer">
+
+    <div class="footer-newsletter">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6">
+            <h4>Onze nieuwsbrief</h4>
+            <p>Om updates te rapporteren hebben we een nieuwsbrief. Vul hier uw email in en druk op abonneer om te abonneren.</p>
+          </div>
+          <div class="col-lg-6">
+            <form action="" method="post">
+              <input type="email" name="email"><input type="submit" value="Abonneer">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="footer-top">
+      <div class="container">
+        <div class="row">
+
+          <div class="col-lg-3 col-md-6 footer-links">
+            <h4>Useful Links</h4>
+            <ul>
+              <li><i class="bx bx-chevron-right"></i> <a href="index.php">Home</a></li>
+              <li><i class="bx bx-chevron-right"></i> <a href="about.php">Over</a></li>
+                <li><i class="bx bx-chevron-right"></i> <a href="contact.php">Contact</a></li>
+            </ul>
+          </div>
+
+            <div class="col-lg-3 col-md-6 footer-contact">
+            <h4>Contacteer ons</h4>
+            <p>
+              Damaststraat 56<br>
+              Mariakereke, 9030 Gent<br>
+              Belgi&euml;<br><br>
+              <strong>Telefoon:</strong> +32 499 98 75 34<br>
+              <strong>Email:</strong> kieron.parmentier@telenet.be<br>
+                
+            </p>
+                <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+                <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
+                <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+                <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
+                <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+        </div>
+      </div>
+    </div>
       </div>
     <div class="container">
       <div class="copyright">

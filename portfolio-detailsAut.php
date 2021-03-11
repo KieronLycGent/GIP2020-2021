@@ -1,7 +1,16 @@
+<?php
+session_start();
+if(isset($_GET["end"])){
+    if($_GET["end"]){
+        session_destroy();
+        header("location:".$_SERVER["PHP_SELF"]);
+    }
+}
+?>
 <!DOCTYPE html>
 <?php
     
-if(!isset($_COOKIE["autID"])){
+if(!isset($_SESSION["ID"])){
     header("location:portfolioAut.php");
 }
 ?>
@@ -45,16 +54,29 @@ if(!isset($_COOKIE["autID"])){
   <!-- ======= Top Bar ======= -->
   <section id="topbar" class="d-none d-lg-block">
     <div class="container d-flex">
-      <div class="contact-info mr-auto">
-        <i class="icofont-envelope"></i><a href="mailto:contact@example.com">kieron.parmentier@telenet.be</a>
-        <i class="icofont-phone"></i> +32 499 75 98 34
-      </div>
       <div class="social-links">
-        <a href="#" class="twitter"><i class="icofont-twitter"></i></a>
-        <a href="#" class="facebook"><i class="icofont-facebook"></i></a>
-        <a href="#" class="instagram"><i class="icofont-instagram"></i></a>
-        <a href="#" class="skype"><i class="icofont-skype"></i></a>
-        <a href="#" class="linkedin"><i class="icofont-linkedin"></i></a>
+          <?php
+          if(isset($_SESSION["login"])){
+              if(!($_SESSION["login"])){
+                  echo"<a href=\"inloggen.php\">Inloggen</a>";
+                  echo"<a href=\"registreer.php\">Registreren</a>";
+              }
+              else{
+                  echo"<a href=\"".$_SERVER["PHP_SELF"]."?end=true\">Uitloggen</a>";
+                  if($_SESSION["loginType"] == "user"){
+                      
+                      echo"<a href=\"wijzigenUser.php\">Profiel</a>";
+                  }
+                  else{
+                      echo"<a href=\"wijzigenAut.php\">Profiel</a>";
+                  }
+              }
+          }
+          else{
+              echo"<a href=\"inloggen.php\">Inloggen</a>";
+              echo"<a href=\"registreer.php\">Registreren</a>";
+          }
+          ?>
       </div>
     </div>
   </section>
@@ -75,7 +97,8 @@ if(!isset($_COOKIE["autID"])){
 
             <li><a href="about.php">Over</a></li>
           <li><a href="contact.php">Contact</a></li>
-              <li class="active"><a href="portfolio.php">Auteurs</a></li>
+              <li class="active"><a href="portfolioAut.php">Auteurs</a></li>
+            <li><a href="portfolioUser.php">Gebruikers</a></li>
 
         </ul>
       </nav><!-- .nav-menu -->
@@ -105,7 +128,7 @@ if(!isset($_COOKIE["autID"])){
         trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
     else{
-        $sql = "select * from tblAuteur where auteurID=".$_COOKIE["ID"];
+        $sql = "select auteurID, auteurNm, auteurBesch, auteurFoto from tblAuteur where auteurID=".$_SESSION["ID"];
         if($stmt = $mysqli->prepare($sql)){
             if(!$stmt->execute()){
                 echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
@@ -115,14 +138,14 @@ if(!isset($_COOKIE["autID"])){
                 echo"
                 <section id=\"portfolio-details\" class=\"portfolio-details\">
                     <div class=\"container\">
-                            <a class=\"icofont-pencil-alt-5\" href=\"wijzigenAut.php\">Wijzigen</a>
+                            <a class=\"icofont-arrow-left\" href=\"portfolioAut.php\">Terug</a>
                         <div class=\"row\">
                         <div class=\"col-lg-8\">
                         
                 ";
                 while($stmt->fetch()){
                     echo"
-                     <img src=\"assets/img/auteurs/".$auteurFoto."\" class=\"img-fluid\" alt=\"\">";
+                     <img src=\"assets/img/uploads/".$auteurFoto."\" class=\"img-fluid\" alt=\"\">";
                 }
                 echo"
                 <div class=\"col-lg-4 portfolio-info\">

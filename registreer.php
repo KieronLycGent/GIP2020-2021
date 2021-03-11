@@ -1,12 +1,3 @@
-<?php
-session_start();
-if(isset($_GET["end"])){
-    if($_GET["end"]){
-        session_destroy();
-        header("location:".$_SERVER["PHP_SELF"]);
-    }
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -58,13 +49,6 @@ if(isset($_GET["end"])){
               }
               else{
                   echo"<a href=\"".$_SERVER["PHP_SELF"]."?end=true\">Uitloggen</a>";
-                  if($_SESSION["loginType"] == "user"){
-                      
-                      echo"<a href=\"wijzigenUser.php\">Profiel</a>";
-                  }
-                  else{
-                      echo"<a href=\"wijzigenAut.php\">Profiel</a>";
-                  }
               }
           }
           else{
@@ -89,22 +73,11 @@ if(isset($_GET["end"])){
       <nav class="nav-menu d-none d-lg-block">
         <ul>
           <li class="active"><a href="index.php">Home</a></li>
+
             <li><a href="about.php">Over</a></li>
           <li><a href="contact.php">Contact</a></li>
               <li><a href="portfolioAut.php">Auteurs</a></li>
             <li><a href="portfolioUser.php">Gebruikers</a></li>
-            <?php
-            if(isset($_SESSION["login"])){
-                if(($_SESSION["login"])){
-                    if($_SESSION["loginType"] == "aut"){
-                        echo"<li><a href=\"aanmakenWS.php\">Workshop aanmaken</a></li>";
-                    }
-                    else if($_SESSION["loginType"] == "user"){
-                        echo"<li><a href=\"portfolioWS.php\">Workshops</a></li>";
-                    }
-                }
-            }                
-            ?>
 
         </ul>
       </nav><!-- .nav-menu -->
@@ -112,120 +85,32 @@ if(isset($_GET["end"])){
     </div>
   </header><!-- End Header -->
 
-  <!-- ======= Hero Section ======= -->
-  <section id="hero">
-    <div class="hero-container">
-      <div id="heroCarousel" class="carousel slide carousel-fade" data-ride="carousel">
-
-        <ol class="carousel-indicators" id="hero-carousel-indicators"></ol>
-
-        <div class="carousel-inner" role="listbox">
-
-          <!-- Slide 1 -->
-          <div class="carousel-item active" style="background: url(assets/img/slide/slide-1.jpg)">
-            <div class="carousel-container">
-              <div class="carousel-content">
-                <h2 class="animate__animated animate__fadeInDown">Welkom bij <span>Workshopp.er</span></h2>
-                <p class="animate__animated animate__fadeInUp">Dé site voor workshops.</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Slide 2 -->
-          <div class="carousel-item" style="background: url(assets/img/slide/slide-2.jpg)">
-            <div class="carousel-container">
-              <div class="carousel-content">
-                <h2 class="animate__animated fanimate__adeInDown">Beleef <span> de beste activiteiten</span></h2>
-                <p class="animate__animated animate__fadeInUp">Onze community zorgt ervoor dat je vanalles kunt beleven met een glimlach.</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Slide 3 -->
-          <div class="carousel-item" style="background: url(assets/img/slide/slide-3.jpg)">
-            <div class="carousel-container">
-              <div class="carousel-content">
-                <h2 class="animate__animated animate__fadeInDown">Wordt deel van <span>onze community&#33;</span></h2>
-                <p class="animate__animated animate__fadeInUp">Wordt deel van de community en beleef alle activiteiten die ooit zou willen.</p>
-                <a href="" class="btn-get-started animate__animated animate__fadeInUp">Lees meer</a>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <a class="carousel-control-prev" href="#heroCarousel" role="button" data-slide="prev">
-          <span class="carousel-control-prev-icon icofont-rounded-left" aria-hidden="true"></span>
-          <span class="sr-only">Previous</span>
-        </a>
-
-        <a class="carousel-control-next" href="#heroCarousel" role="button" data-slide="next">
-          <span class="carousel-control-next-icon icofont-rounded-right" aria-hidden="true"></span>
-          <span class="sr-only">Next</span>
-        </a>
-
-      </div>
-    </div>
-  </section><!-- End Hero -->
-
+  
   <main id="main">
 
     <!-- ======= Featured Section ======= -->
     <section id="featured" class="featured">
       <div class="container">
-
         <div class="row">
-          <div class="col-lg-4">
-            <div class="icon-box">
-              <i class="icofont-computer"></i>
-              <h3><a href="">Online</a></h3>
-              <p>We zorgen voor de beste experiences online.</p>
+            <a href="aanmakenAut.php">
+          <div class="col-lg-4" href="aanmakenAut.php">
+            <div class="icon-box" href="aanmakenAut.php">
+                <h3><a href="aanmakenAut.php">Auteursaccount aanmaken</a></h3>
+              <p>U kunt evenmenten starten, maar niet aan meedoen.</p>
             </div>
           </div>
-          <div class="col-lg-4 mt-4 mt-lg-0">
-            <div class="icon-box">
-              <i class="icofont-image"></i>
-              <h3><a href="">Foto's en video's</a></h3>
-              <p>We zorgen voor genoeg mogelijkheden.</p>
+            </a>
+            <a href="aanmakenUser.php">
+          <div class="col-lg-4 mt-4 mt-lg-0" href="aanmakenUser.php">
+            <div class="icon-box" href="aanmakenUser.php">
+              <h3><a href="aanmakenUser.php">Gebruikersaccount aanmaken</a></h3>
+              <p>U kunt meedoen aan evenmenten, maar ze niet organiseren.</p>
             </div>
           </div>
-          <div class="col-lg-4 mt-4 mt-lg-0">
-            <div class="icon-box">
-              <i class="icofont-tasks-alt"></i>
-              <h3><a href="">Overzicht</a></h3>
-              <p>We zorgen voor overzicht via de agenda-functie.</p>
-            </div>
-          </div>
+            </a>
         </div>
-
       </div>
     </section><!-- End Featured Section -->
-
-    <!-- ======= About Section ======= -->
-    <section id="about" class="about">
-      <div class="container">
-
-        <div class="row">
-          <div class="col-lg-6">
-            <img src="assets/img/about.jpg" class="img-fluid" alt="">
-          </div>
-          <div class="col-lg-6 pt-4 pt-lg-0 content">
-            <h3>Dag &amp; nacht</h3>
-            <p class="font-italic">
-              We staan dag en nacht klaar om ervoor te zorgen dat we de beste ervaring op de website kunnen geven.
-            </p>
-            <ul>
-              <li><i class="icofont-check-circled"></i> Administrators die ervoor zorgen dat incorrecte dingen worden afgestraft.</li>
-              <li><i class="icofont-check-circled"></i> De website wordt om de zoveel tijd nagekeken om te zien of alles nog werkt.</li>
-            </ul>
-            <p>
-              Als er iets niet werkt of als je u nog vragen hebt, dan kunt u ons altijd contacteren via email.
-            </p>
-          </div>
-        </div>
-
-      </div>
-    </section><!-- End About Section -->
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
@@ -235,13 +120,8 @@ if(isset($_GET["end"])){
       <div class="container">
         <div class="row">
           <div class="col-lg-6">
-            <h4>Onze nieuwsbrief</h4>
-            <p>Om updates te rapporteren hebben we een nieuwsbrief. Vul hier uw email in en druk op abonneer om te abonneren.</p>
           </div>
           <div class="col-lg-6">
-            <form action="" method="post">
-              <input type="email" name="email"><input type="submit" value="Abonneer">
-            </form>
           </div>
         </div>
       </div>

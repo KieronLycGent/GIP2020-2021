@@ -1,7 +1,16 @@
+<?php
+session_start();
+if(isset($_GET["end"])){
+    if($_GET["end"]){
+        session_destroy();
+        header("location:".$_SERVER["PHP_SELF"]);
+    }
+}
+?>
 <!DOCTYPE html>
 <?php
     
-if(!isset($_COOKIE["uID"])){
+if(!isset($_SESSION["ID"])){
     header("location:portfolioUser.php");
 }
 ?>
@@ -43,18 +52,31 @@ if(!isset($_COOKIE["uID"])){
 
 <body>
   <!-- ======= Top Bar ======= -->
-  <section id="topbar" class="d-none d-lg-block">
+ <section id="topbar" class="d-none d-lg-block">
     <div class="container d-flex">
-      <div class="contact-info mr-auto">
-        <i class="icofont-envelope"></i><a href="mailto:contact@example.com">kieron.parmentier@telenet.be</a>
-        <i class="icofont-phone"></i> +32 499 75 98 34
-      </div>
       <div class="social-links">
-        <a href="#" class="twitter"><i class="icofont-twitter"></i></a>
-        <a href="#" class="facebook"><i class="icofont-facebook"></i></a>
-        <a href="#" class="instagram"><i class="icofont-instagram"></i></a>
-        <a href="#" class="skype"><i class="icofont-skype"></i></a>
-        <a href="#" class="linkedin"><i class="icofont-linkedin"></i></a>
+          <?php
+          if(isset($_SESSION["login"])){
+              if(!($_SESSION["login"])){
+                  echo"<a href=\"inloggen.php\">Inloggen</a>";
+                  echo"<a href=\"registreer.php\">Registreren</a>";
+              }
+              else{
+                  echo"<a href=\"".$_SERVER["PHP_SELF"]."?end=true\">Uitloggen</a>";
+                  if($_SESSION["loginType"] == "user"){
+                      
+                      echo"<a href=\"wijzigenUser.php\">Profiel</a>";
+                  }
+                  else{
+                      echo"<a href=\"wijzigenAut.php\">Profiel</a>";
+                  }
+              }
+          }
+          else{
+              echo"<a href=\"inloggen.php\">Inloggen</a>";
+              echo"<a href=\"registreer.php\">Registreren</a>";
+          }
+          ?>
       </div>
     </div>
   </section>
@@ -75,8 +97,8 @@ if(!isset($_COOKIE["uID"])){
 
             <li><a href="about.php">Over</a></li>
           <li><a href="contact.php">Contact</a></li>
-              <li><a href="portfolioUser.php">Auteurs</a></li>
-            <li class="active"><a href="portfolio-detailsUser.php">User</a></li>
+              <li><a href="portfolioAut.php">Auteurs</a></li>
+            <li class="active"><a href="portfolioUser.php">Gebruikers</a></li>
 
         </ul>
       </nav><!-- .nav-menu -->
@@ -106,7 +128,7 @@ if(!isset($_COOKIE["uID"])){
         trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
     else{
-        $sql = "SELECT u.userID, u.userNm, u.userFoto, u.userStraat, g.PCode, g.Gemeente FROM tblUser u, tblgemeente g WHERE u.userID=".$_COOKIE["uID"]." AND u.userPostcode = g.PostcodeID";
+        $sql = "SELECT u.userID, u.userNm, u.userFoto, u.userStraat, g.PCode, g.Gemeente FROM tblUser u, tblgemeente g WHERE u.userID=".$_SESSION["ID"]." AND u.userPostcode = g.PostcodeID";
         if($stmt = $mysqli->prepare($sql)){
             if(!$stmt->execute()){
                 echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
@@ -116,7 +138,7 @@ if(!isset($_COOKIE["uID"])){
                 echo"
                 <section id=\"portfolio-details\" class=\"portfolio-details\">
                     <div class=\"container\">
-                            <a class=\"icofont-pencil-alt-5\" href=\"wijzigenUser.php\">Wijzigen</a>
+                            <a class=\"icofont-arrow-left\" href=\"portfolioUser.php\">Terug</a>
                         <div class=\"row\">
                         <div class=\"col-lg-8\">
                 ";
@@ -130,7 +152,8 @@ if(!isset($_COOKIE["uID"])){
                     <ul>
                         <li><strong>Naam</strong>: ".$userNm."</li>
                         <li><strong>Adres</strong>:</li>
-                        <li>".$userStraat."<br>".$pcode." ".$gemeente."</li>";
+                        <li>".$userStraat."<br>".$pcode." ".$gemeente."</li>
+                        <li><strong>Interesses</strong>:</li>";
                 $stmt->close(); 
             }
         }
@@ -138,35 +161,74 @@ if(!isset($_COOKIE["uID"])){
             echo"Er zit een fout in de qry: ".$mysqli->error;
         }
     }
-    for($i=0; $i<3; $i++){
         $mysqli= new MySQLi("localhost","root","","gip");
-        $sql = "SELECT i.interesseNm FROM tblinteresse i, tblinteressesuser iu, tbluser u WHERE u.userID=".$_COOKIE["uID"]." AND iu.interessesID = u.interessesID";
+            $sql = "SELECT  i.interesseNm FROM tblinteresse i, tbluser u, tblinteressesuser iu WHERE u.userID=".$_SESSION["ID"]." AND u.interessesID = iu.interessesID AND iu.interesseID1 = i.interesseID";
+        
         if($stmt = $mysqli->prepare($sql)){
             if(!$stmt->execute()){
                 echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in qry";
             }  
             else{
-                if($i=1){
-                    $stmt->bind_result($int1);
+                $stmt->bind_result($int1);
+                while($stmt->fetch()){
+                    if($int1 == NULL){
+                        $int1 = "-";
+                    }
+                    echo"<li>".$int1."</li>";
                 }
-                if($i=2){
-                    $stmt->bind_result($int2);
-                }
-                if($i=3){
-                    $stmt->bind_result($int3);
-                }
-                $stmt->fetch();
             }
             $stmt->close();
         }
         else{
             echo"Er zit een fout in de qry: ".$mysqli->error;
         }
+    $mysqli= new MySQLi("localhost","root","","gip");
+    $sql = "SELECT  i.interesseNm FROM tblinteresse i, tbluser u, tblinteressesuser iu WHERE u.userID=".$_SESSION["ID"]." AND u.interessesID = iu.interessesID AND iu.interesseID2 = i.interesseID";
+        if($stmt = $mysqli->prepare($sql)){
+            if(!$stmt->execute()){
+                echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in qry";
+            }  
+            else{
+                $stmt->bind_result($int2);
+                while($stmt->fetch()){
+                    if($int2 == NULL){
+                        $int2 = "-";
+                    }
+                    echo"<li>".$int2."</li>";
+                }
+            }
+            $stmt->close();
+        }
+        else{
+            echo"Er zit een fout in de qry: ".$mysqli->error;
+        }     
+    $mysqli= new MySQLi("localhost","root","","gip");
+            $sql = "SELECT  i.interesseNm FROM tblinteresse i, tbluser u, tblinteressesuser iu WHERE  u.userID=".$_SESSION["ID"]." AND u.interessesID = iu.interessesID AND iu.interesseID3 = i.interesseID";
+        
+        if($stmt = $mysqli->prepare($sql)){
+            if(!$stmt->execute()){
+                echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in qry";
+            }  
+            else{
+                $stmt->bind_result($int3);
+                while($stmt->fetch()){
+                    if($int3 == NULL){
+                        $int3 = "-";
+                    }
+                    echo"<li>".$int3."</li>";
+                }
+            }
+            $stmt->close();
+        }
     }     
     echo"   <li><strong>Interesses</strong>:</li>
                         <li>".$int1."</li>
                         <li>".$int2."</li>
-                        <li>".$int3."</li>
+                        <li>".$int3."</li>"
+        else{
+            echo"Er zit een fout in de qry: ".$mysqli->error;
+        }     
+    echo"   
                     </ul>
                     <p>
                         

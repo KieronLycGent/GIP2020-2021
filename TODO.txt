@@ -1,3 +1,22 @@
-Een kleine TO-DO lijst:
+-Workshops
+	-logins mogelijk maken: DATABANKEN AANPASSEN!!!
+		-auteur V
+		-user V
+		-sql file updaten V
+		-Paswoord hexing X
+		-Registreren moet mogelijk gemaakt worden! user V aut V
+        -Login moet mogelijk zijn V
+        -Alle pagina's aanpassen cookie->session
+        -editing profile mag enkel door profiel zelf
+	-Workshop pagina aanmaken !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		-portfolio kopieren   !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	-Workshop zoeken aanmaken
+	-Workshops kunnen aanmaken als auteur
+		-Login moet eerst werken
+	-Workshops kunnen veranderen als auteur
+		-Hangt dus vast aan 1 auteur
+	-Joinen in workshops als user
+
+
 - !!! Zoekfucntie uitbreiden --> filters
 - Uploaden foto --> zie cursus html om dit te testen, print_r om te kijken hoe dit ontvangen wordt.

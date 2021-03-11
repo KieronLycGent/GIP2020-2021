@@ -1,78 +1,88 @@
+<?php
+session_start();
+if(isset($_GET["end"])){
+    if($_GET["end"]){
+        session_destroy();
+        header("location:".$_SERVER["PHP_SELF"]);
+    }
+}
+?>
 <!DOCTYPE html>
 <?php
     
-if(!isset($_COOKIE["uID"])){
+if(!isset($_SESSION["ID"])){
     header("location:portfolioUser.php");
 }
 $pcErr = false;
-if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postcode"] != "") &&isset($_POST["gemeente"]) && $_POST["gemeente"] !="" ){
-    $mysqli=new MySQLI("localhost","root","","gip");
-    if (mysqli_connect_errno()){
+//Postcode/gemeente check----------------------------------------------------------------------------
+if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postcode"] != "") &&isset($_POST["gemeente"]) && $_POST["gemeente"] !="" )
+{
+    $mysqli=new MySQLi("localhost","root","","gip");
+    if (mysqli_connect_errno())
+    {
         trigger_error('Fout bij verbinding: '.$mysqli->error);
     }
-    else{
-        $sql="SELECT COUNT(PostcodeId) FROM tblgemeente WHERE PCode=? AND Gemeente=?";
-        if ($stmt=$mysqli->prepare($sql)){
+    else
+    {
+        $sql="select count(PostcodeId) from tblgemeente where PCode=? and Gemeente=?";
+        if ($stmt=$mysqli->prepare($sql))
+        {
             $stmt->bind_param('ss',$PCode,$gemeente);
             $PCode= $_POST["postcode"];
             $gemeente = $_POST["gemeente"];
-           if(!$stmt->execute()){
+           if(!$stmt->execute())
+            {
                 echo 'Het uitvoeren van de query is mislukt: '.$stmt->error.'in query';
             }
-            else{  
+            else
+            {  
                 $stmt->bind_result($aantalPostcodeId);
                 $stmt->fetch();
                 $aantalPostcodeId1= $aantalPostcodeId;
-                if($aantalPostcodeId1 > 0){
-                        if((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postcode"] != "") && isset($_POST["gemeente"]) && $_POST["gemeente"]!=""){
-                            $mysqli=new MySQLI("localhost","root","","gip");
-                            if(mysqli_connect_errno()){
+                if ($aantalPostcodeId1 >0)
+                {
+                    ?>
+                    <?php
+                        if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postcode"] != "") &&isset($_POST["gemeente"]) && $_POST["gemeente"] !="" )
+                        {
+                            $mysqli=new MySQLi("localhost","root","","gip");
+
+                            if (mysqli_connect_errno())
+                            {
                                 trigger_error('Fout bij verbinding: '.$mysqli->error);
                             }
-                            else{
-                                $sql="SELECT PostcodeId FROM tblgemeente WHERE PCode=? AND Gemeente=?";
-                                if($stmt=$mysqli->prepare($sql)){
-                                    $stmt->bind_param('ss', $PCode, $gemeente);
+                            else
+                            {
+                                $sql="select PostcodeId from tblgemeente where PCode=? and Gemeente=?";
+                                if ($stmt=$mysqli->prepare($sql))
+                                {
+                                    $stmt->bind_param('ss',$PCode,$gemeente);
                                     $PCode= $_POST["postcode"];
                                     $gemeente = $_POST["gemeente"];
-                                   if(!$stmt->execute()){
+                                   if(!$stmt->execute())
+                                    {
                                         echo 'Het uitvoeren van de query is mislukt: '.$stmt->error.'in query';
                                     }
-                                    else{  
+                                    else
+                                    {  
                                         $stmt->bind_result($PostcodeId);
                                         $stmt->fetch();
                                         $PostcodeId1= $PostcodeId;
                                     }
                                     $stmt->close();
-                                    if(isset($_POST["naam"])&&$_POST["naam"]!=""&&(isset($_POST["foto"]))&&$_POST["foto"]!=""){
-                                        $mysqli = new MySQLi("localhost","root","","gip");
-                                        if(mysqli_connect_errno()){
-                                            trigger_error("fout bij de verbinding: ".$mysqli->error);
-                                        }
-                                        $sql = "UPDATE tblUser SET userNm = '".$_POST["naam"]."', userFoto = '".$_POST["foto"]."', postID = '".$PostcodeId1."' WHERE userID = ".$_COOKIE["uID"];
-                                        if($stmt = $mysqli->prepare($sql)){
-                                            if(!$stmt->execute()){
-                                                echo"het uitvoeren van de qry is mislukt";
-                                            }
-                                            $stmt->close();
-                                        }
-                                        else{
-                                            echo"Er zit een fout in de qry:" .$mysqli->error;
-                                        }
-                                    }
                                 }
-                                else{
-                                    echo 'Er zit een fout in de qry: '.$mysqli->error;
+                                else
+                                {
+                                    echo 'Er is een fout in de query: '.$mysqli->error;
                                 }
                             }
-                        } 
+                        }
                 }
                 else
                 {
                     $pcErr = true;
                 }
             }
-                
             @$stmt->close();
         }
         else
@@ -81,7 +91,185 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
         }
     }
 }
-?>
+//---------------------------------------------------------------------------------------einde PC en Gemeente check
+//Code interesse---------------------------------------------------------------------------------------------------
+if ((isset($_POST["verzenden"]))&& (isset($_POST["interesse1"]) && ($_POST["interesse1"] != "-")))
+{
+    $mysqli=new MySQLi("localhost","root","","gip");
+
+    if (mysqli_connect_errno())
+    {
+        trigger_error('Fout bij verbinding: '.$mysqli->error);
+    }
+    else
+    {
+        $sql="select  i.interesseID from tblInteresse i where i.interesseID=?";
+        if ($stmt=$mysqli->prepare($sql))
+        {
+            $stmt->bind_param('s',$intID);
+           
+            $intID= $_POST["interesse1"];
+            if(!$stmt->execute())
+            {
+                echo 'Het uitvoeren van de query is mislukt: '.$stmt->error.'in query';
+            }
+            else
+            {   
+                $stmt->bind_result($intID1);
+                $stmt->fetch();
+                $intID1= $intID;
+            }
+            $stmt->close();
+        }
+        else
+        {
+            echo 'Er is een fout in de query: '.$mysqli->error;
+        }
+    }
+}
+if ((isset($_POST["verzenden"]))&& (isset($_POST["interesse2"]) && ($_POST["interesse2"] != "-")))
+{
+    $mysqli=new MySQLi("localhost","root","","gip");
+
+    if (mysqli_connect_errno())
+    {
+        trigger_error('Fout bij verbinding: '.$mysqli->error);
+    }
+    else
+    {
+        $sql="select  i.interesseID from tblInteresse i where i.interesseID=?";
+        if ($stmt=$mysqli->prepare($sql))
+        {
+            $stmt->bind_param('s',$intID);
+           
+            $intID= $_POST["interesse2"];
+            if(!$stmt->execute())
+            {
+                echo 'Het uitvoeren van de query is mislukt: '.$stmt->error.'in query';
+            }
+            else
+            {   
+                $stmt->bind_result($intID2);
+                $stmt->fetch();
+                $intID2= $intID;
+            }
+            $stmt->close();
+        }
+        else
+        {
+            echo 'Er is een fout in de query: '.$mysqli->error;
+        }
+    }
+}
+if ((isset($_POST["verzenden"]))&& (isset($_POST["interesse3"]) && ($_POST["interesse3"] != "-")))
+{
+    $mysqli=new MySQLi("localhost","root","","gip");
+
+    if (mysqli_connect_errno())
+    {
+        trigger_error('Fout bij verbinding: '.$mysqli->error);
+    }
+    else
+    {
+        $sql="select  i.interesseID from tblInteresse i where i.interesseID=?";
+        if ($stmt=$mysqli->prepare($sql))
+        {
+            $stmt->bind_param('s',$intID);
+           
+            $intID= $_POST["interesse3"];
+            if(!$stmt->execute())
+            {
+                echo 'Het uitvoeren van de query is mislukt: '.$stmt->error.'in query';
+            }
+            else
+            {   
+                $stmt->bind_result($intID3);
+                $stmt->fetch();
+                $intID3= $intID;
+            }
+            $stmt->close();
+        }
+        else
+        {
+            echo 'Er is een fout in de query: '.$mysqli->error;
+        }
+    }
+}
+//------------------------------------------------------------------------------------------Einde code interesse
+//interesses invoegen-------------------------------------------------------------------------------------------
+if ((isset($_POST["verzenden"]))&&isset($_POST["interesse1"])&&($_POST["interesse1"] != "")&&isset($_POST["interesse2"])&&($_POST["interesse2"] != "")&&isset($_POST["interesse3"])&&($_POST["interesse3"] != "")&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&(isset($_POST["email"]))&&($_POST["email"]!="")&&(isset($_POST["straat"]))&&($_POST["straat"]!=""))
+{
+    $mysqli=new MySQLi("localhost","root","","gip");
+
+    if (mysqli_connect_errno())
+    {
+        trigger_error('Fout bij verbinding: '.$mysqli->error);
+    }
+    else
+    {
+        $sql = "INSERT INTO tblInteressesuser (interesseID1, interesseID2, interesseID3) VALUES (?,?,?)"; 
+        if($stmt = $mysqli->prepare($sql)) {     
+            $stmt->bind_param('iii', $intID1, $intID2, $intID3);
+            if(!$stmt->execute()){
+                echo 'het uitvoeren van de query is mislukt:';
+            }
+            else{  
+                echo 'interesses ingevoegd'.$mysqli->error;
+            }
+            $stmt->close();
+        }
+        else{
+            echo 'Er zit een fout in de query' .$mysqli->error; 
+        }
+    }   
+}
+//------------------------------------------------------------------------------------------------Einde interesses invoegen
+//interessesID krijgen-----------------------------------------------------------------------------------------------------
+$intsID = 0;
+if ((isset($_POST["verzenden"]))&&isset($_POST["interesse1"])&&($_POST["interesse1"] != "")&&isset($_POST["interesse2"])&&($_POST["interesse2"] != "")&&isset($_POST["interesse3"])&&($_POST["interesse3"] != "")&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&(isset($_POST["email"]))&&($_POST["email"]!="")&&(isset($_POST["straat"]))&&($_POST["straat"]!="")){
+    $mysqli = new MySQLi("localhost","root","","gip");
+    if(mysqli_connect_errno()){
+        trigger_error("Fout bij verbinding: ".$mysqli->error);
+    }
+    else{
+        $sql = "SELECT COUNT(interessesID) FROM tblInteressesuser";
+        if($stmt = $mysqli->prepare($sql)){
+            if(!$stmt->execute()){
+                echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
+            }
+            else{                          
+                $stmt->bind_result($bindID);
+                while($stmt->fetch()){
+                    $intsID = $bindID+1;
+                }
+            }
+            $stmt->close();
+        }
+        else{   
+            echo"Er zit een fout in de qry: ".$mysqli->error;
+        }
+    }
+}
+//------------------------------------------------------------------------------------------------Einde interessesID krijgen -> $intsID
+//
+if ((isset($_POST["verzenden"]))&&isset($_POST["interesse1"])&&($_POST["interesse1"] != "")&&isset($_POST["interesse2"])&&($_POST["interesse2"] != "")&&isset($_POST["interesse3"])&&($_POST["interesse3"] != "")&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&(isset($_POST["email"]))&&($_POST["email"]!="")&&(isset($_POST["straat"]))&&($_POST["straat"]!="")){
+     
+    $mysqli = new MySQLi("localhost","root","","gip");
+        if(mysqli_connect_errno()){
+            trigger_error("fout bij de verbinding: ".$mysqli->error);
+        }
+        $sql = "UPDATE tblUser SET userNm = '".$_POST["naam"]."', userStraat = '".$_POST["straat"]."',userPostCode = '".$PostcodeId1."', userFoto = '".$_POST["foto"]."', userEmail = '".$_POST["email"]."'WHERE userID = ".$_SESSION["ID"];
+        if($stmt = $mysqli->prepare($sql)){
+            if(!$stmt->execute()){
+                echo"het uitvoeren van de qry is mislukt";
+            }
+            $stmt->close();
+        }
+        else{
+            echo"Er zit een fout in de qry" .$mysqli->error;
+        }
+}
+?>       
 <html lang="en">
 
 <head>
@@ -127,16 +315,10 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
   <!-- ======= Top Bar ======= -->
   <section id="topbar" class="d-none d-lg-block">
     <div class="container d-flex">
-      <div class="contact-info mr-auto">
-        <i class="icofont-envelope"></i><a href="mailto:contact@example.com">kieron.parmentier@telenet.be</a>
-        <i class="icofont-phone"></i> +32 499 75 98 34
-      </div>
       <div class="social-links">
-        <a href="#" class="twitter"><i class="icofont-twitter"></i></a>
-        <a href="#" class="facebook"><i class="icofont-facebook"></i></a>
-        <a href="#" class="instagram"><i class="icofont-instagram"></i></a>
-        <a href="#" class="skype"><i class="icofont-skype"></i></a>
-        <a href="#" class="linkedin"><i class="icofont-linkedin"></i></a>
+          <?php
+            //echo"<a href=\"inloggen.php\">Inloggen</a>";
+          ?>
       </div>
     </div>
   </section>
@@ -154,11 +336,10 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
       <nav class="nav-menu d-none d-lg-block">
         <ul>
           <li><a href="index.php">Home</a></li>
-
             <li><a href="about.php">Over</a></li>
           <li><a href="contact.php">Contact</a></li>
               <li><a href="portfolioAut.php">Auteurs</a></li>
-            <li class="active"><a href="portfolioUser.php">Users</a></li>
+            <li class="active"><a href="portfolioUser.php">Gebruikers</a></li>
 
         </ul>
       </nav><!-- .nav-menu -->
@@ -172,10 +353,10 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
 
         <ol>
           <li><a href="index.php">Home</a></li>
-          <li>Auteurs</li>
+          <li>Gebruikers</li>
           <li>Details</li>
         </ol>
-        <h2>Auteur Details</h2>
+        <h2>Gebruikersdetails</h2>
 
       </div>
     </section><!-- End Breadcrumbs -->
@@ -188,13 +369,13 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
         trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
     else{
-        $sql = "SELECT u.userID, u.userNm, u.userFoto, u.userStraat, g.PCode, g.Gemeente FROM tblUser u, tblgemeente g WHERE u.userID=".$_COOKIE["uID"]." AND u.postID = g.PostcodeId";
+        $sql = "SELECT u.userID, u.userNm, u.userFoto, u.userStraat, g.PCode, g.Gemeente, u.userEmail FROM tblUser u, tblgemeente g WHERE u.userID=".$_SESSION["ID"]." AND u.userPostcode = g.PostcodeId";
         if($stmt = $mysqli->prepare($sql)){
             if(!$stmt->execute()){
                 echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
             }
             else{
-                $stmt->bind_result($userID, $userNm, $userFoto, $userStraat, $pCode, $gemeente);
+                $stmt->bind_result($userID, $userNm, $userFoto, $userStraat, $pCode, $gemeente, $email);
                 echo"
                 <section id=\"portfolio-details\" class=\"portfolio-details\">
                     <div class=\"container\">
@@ -209,11 +390,45 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
                 <div class=\"col-lg-4 portfolio-info\">
                     <h3>Informatie User</h3>
                     <ul>
-                        <li><label>Naam: </label><input type=\"text\" id=\"naam\" name=\"naam\" value=\"".$userNm."\"></li>
-                        <li><label>Straat + Nr: </label><input type=\"text\" id\"straat\" name=\"straat\" value=\"".$userStraat."\"></li>";
+                        <li><label>Naam: </label><br><input type=\"text\" id=\"naam\" name=\"naam\" value=\"".$userNm."\"></li>
+                        <li><label>Email: </label><br><input type=\"email\" id=\"email\" name=\"email\" value=\"".$email."\"></li>
+                        <li><label>Straat + Nr: </label><br><input type=\"text\" id\"straat\" name=\"straat\" value=\"".$userStraat."\"></li>";
                 if($pcErr){echo"<li id=\"error\">De postcode komt niet overeen met de gemeente: Gelieve dit opnieuw in te vullen.</li>";}
-                echo"   <li><label>Gemeente: </label><input type=\"text\" id\"gemeente\" name=\"gemeente\" value=\"".$gemeente."\"></li>
-                        <li><label>Postcode: </label><input type=\"text\" id\"postcode\" name=\"postcode\" value=\"".$pCode."\"></li>
+                echo"   <li><label>Gemeente: </label><br><input type=\"text\" id\"gemeente\" name=\"gemeente\" value=\"".$gemeente."\"></li>
+                        <li><label>Postcode: </label><br><input type=\"text\" id\"postcode\" name=\"postcode\" value=\"".$pCode."\"></li>
+                        <li><label>Interesses: </label><br></li>";
+                    //------------------------------
+                    for($i=0; $i<3; $i++){
+                        $mysqli= new MySQLi("localhost","root","","gip");
+                        if(mysqli_connect_errno()){
+                            trigger_error("Fout bij verbinding: ".$mysqli->error);
+                        }
+                        else{
+                            $sql = "select interesseID, interesseNm from tblInteresse";
+                            if($stmt = $mysqli->prepare($sql)){
+                                if(!$stmt->execute()){
+                                    echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
+                                }
+                                else{                          
+                                    echo"&nbsp; <li><select name=\"interesse".($i+1)."\" id=\"interesse".($i+1)."\"><option value=\"-\">-</option>";
+                                    $stmt->bind_result($ID, $interesse);
+                                    while($stmt->fetch()){
+                                        echo"<option value=\"$ID\">".$interesse."</option>";
+                                    }
+                                }
+                                echo"</select></li>
+                                <br>
+                                &nbsp;
+                                ";
+                                $stmt->close();
+                            }
+                            else{
+                                echo"Er zit een fout in de qry: ".$mysqli->error;
+                            }
+                        }
+                    }
+                    //-------------------------------------
+                    echo"
                     </ul>
                 </div>
                 <input type=\"submit\" name =\"verzenden\" value=\"Wijzigen\">
@@ -223,7 +438,7 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
                 </section>
                 ";
             }
-            $stmt->close();
+            @$stmt->close();
         }
         else{
             echo"Er zit een fout in de qry: ".$mysqli->error;

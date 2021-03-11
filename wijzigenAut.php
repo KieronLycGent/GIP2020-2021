@@ -1,7 +1,16 @@
+<?php
+session_start();
+if(isset($_GET["end"])){
+    if($_GET["end"]){
+        session_destroy();
+        header("location:".$_SERVER["PHP_SELF"]);
+    }
+}
+?>
 <!DOCTYPE html>
 <?php
     
-if(!isset($_COOKIE["autID"])){
+if(!isset($_SESSION["ID"])){
     header("location:portfolioAut.php");
 }
 if(isset($_POST["naam"])&&$_POST["naam"]!=""&&(isset($_POST["besch"]))&&$_POST["besch"]!=""&&(isset($_POST["foto"]))&&$_POST["foto"]!=""){
@@ -10,7 +19,7 @@ if(isset($_POST["naam"])&&$_POST["naam"]!=""&&(isset($_POST["besch"]))&&$_POST["
         if(mysqli_connect_errno()){
             trigger_error("fout bij de verbinding: ".$mysqli->error);
         }
-        $sql = "UPDATE tblAuteur SET auteurNm = '".$_POST["naam"]."', auteurBesch = '".$_POST["besch"]."', auteurFoto = '".$_POST["foto"]."' WHERE auteurID = ".$_COOKIE["ID"];;
+        $sql = "UPDATE tblAuteur SET auteurNm = '".$_POST["naam"]."', auteurBesch = '".$_POST["besch"]."', auteurFoto = '".$_POST["foto"]."' WHERE auteurID = ".$_SESSION["ID"];;
         if($stmt = $mysqli->prepare($sql)){
             if(!$stmt->execute()){
                 echo"het uitvoeren van de qry is mislukt";
@@ -61,23 +70,6 @@ if(isset($_POST["naam"])&&$_POST["naam"]!=""&&(isset($_POST["besch"]))&&$_POST["
 
 <body>
   <!-- ======= Top Bar ======= -->
-  <section id="topbar" class="d-none d-lg-block">
-    <div class="container d-flex">
-      <div class="contact-info mr-auto">
-        <i class="icofont-envelope"></i><a href="mailto:contact@example.com">kieron.parmentier@telenet.be</a>
-        <i class="icofont-phone"></i> +32 499 75 98 34
-      </div>
-      <div class="social-links">
-        <a href="#" class="twitter"><i class="icofont-twitter"></i></a>
-        <a href="#" class="facebook"><i class="icofont-facebook"></i></a>
-        <a href="#" class="instagram"><i class="icofont-instagram"></i></a>
-        <a href="#" class="skype"><i class="icofont-skype"></i></a>
-        <a href="#" class="linkedin"><i class="icofont-linkedin"></i></a>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======= Header ======= -->
   <header id="header">
     <div class="container d-flex">
 
@@ -89,12 +81,12 @@ if(isset($_POST["naam"])&&$_POST["naam"]!=""&&(isset($_POST["besch"]))&&$_POST["
 
       <nav class="nav-menu d-none d-lg-block">
         <ul>
-          <li><a href="index.php">Home</a></li>
+          <li class="active"><a href="index.php">Home</a></li>
 
             <li><a href="about.php">Over</a></li>
           <li><a href="contact.php">Contact</a></li>
               <li class="active"><a href="portfolioAut.php">Auteurs</a></li>
-            <li><a href="portfolioUser.php">Users</a></li>
+            <li><a href="portfolioUser.php">Gebruikers</a></li>
 
         </ul>
       </nav><!-- .nav-menu -->
