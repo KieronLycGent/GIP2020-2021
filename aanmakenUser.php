@@ -145,107 +145,88 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
  Dus: deze code moet herschreven worden. Liefst geen strings opvragen in de dropdownboxes maar ints waarbij de optie er UITZIET als een string.
  Deze int gaan we dan elk apart met dezelfde NIEUWE userID (aanmakenUser, duh) in tblInteressesUser steken.
 -----------------------------------------------------------------------------------------------------------------------------------------------------------*/
-                        //Kijken ofdat verzenden en straat zijn ingevuld.
+                       //Kijkt of naam, straat, paswoord (en zijn check) zijn ingevuld
                         if((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&(isset($_POST["straat"]))&&($_POST["straat"]!="")&&isset($_POST["pw"])&&($_POST["pw"]!="")&&isset($_POST["pwCheck"])&&isset($_POST["email"])&&($_POST["email"]!="")){
-                            //Kijken ofdat interesses bestaan
+                            
+                            //Kijkt of paswoordCheck wel correct is
                             if($_POST["pw"]== $_POST["pwCheck"]){
-                            if((isset($_POST["interesse1"]))&&(isset($_POST["interesse2"]))&&(isset($_POST["interesse3"]))){
-                                //Kijken ofdat er dubbele zijn binnenin de interesses behalve als deze leeggelaten worden.
-                                if((($_POST["interesse1"]==$_POST["interesse2"])&&($_POST["interesse1"]!="-")) || (($_POST["interesse1"] == $_POST["interesse3"])&&($_POST["interesse3"]!="-")) || (($_POST["interesse2"] == $_POST["interesse3"])&&($_POST["interesse2"]!="-"))){
-                                    echo"U hebt een interesse 2 of meerdere keren aangeduid, u kunt een keuze ook openlaten";
-                                }
-                                $mysqli= new MySQLi("localhost","root","","gip");
-                                if(mysqli_connect_errno()){
-                                    trigger_error("Fout bij verbinding: ".$mysqli->error);
-                                }
-                                else{
-                                    $sql = "select COUNT(interessesID) from tblInteressesuser";
-                                    if($stmt = $mysqli->prepare($sql)){
-                                        if(!$stmt->execute()){
-                                            echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
-                                        }
-                                        else{                          
-                                            $stmt->bind_result($bindID);
-                                            while($stmt->fetch()){
-                                                $bindID = $bindID+1;
-                                            }
-                                        }
-                                        $stmt->close();
-                                    }
-                                    else{
-                                        echo"Er zit een fout in de qry: ".$mysqli->error;
-                                    }
-                                    $mysqli= new MySQLi("localhost","root","","gip");
-                                    if(mysqli_connect_errno()){
-                                        trigger_error('Fout bij verbinding: '.$mysqli->error); 
-                                    }
-                                    else{
-                                        $sql = "INSERT INTO tblUser (userNm, userEmail, userPasw, userFoto, userPostcode, userStraat, interessesID) VALUES (?,?,?,?,?,?,?)"; 
-                                        if($stmt = $mysqli->prepare($sql)) {     
-                                            $stmt->bind_param('ssssisi',$naam,$email,$pw,$foto,$post,$straat,$bindID);
-                                            $email = $mysqli->real_escape_string($_POST["email"]);
-                                            $pw = $mysqli->real_escape_string($_POST["pw"]);
-                                            $naam = $mysqli->real_escape_string($_POST["naam"]) ;
-                                            $foto = $mysqli->real_escape_string("ws.png");
-                                            $post = $PostcodeId1;
-                                            $straat = $mysqli->real_escape_string($_POST["straat"]);
-                                            
-                                            if(!$stmt->execute()){
-                                                //MAAK UW ERROR MESSAGES AF GIJ MINKUKEL!!!!!!!! 2 UUR VERLOREN AAN DEZE SHIT!!!!
-                                                echo 'Het uitvoeren van de qry is mislukt:'.$mysqli->error;
-                                            }
-                                            else{  
-                                                header("location:inloggen.php");
-                                            }
-                                            $stmt->close();
-                                        }
-                                        else{
-                                            echo 'Er zit een fout in de query'.$mysqli->error; 
-                                        } 
-                                    }
                                 
-                                    //----------Einde van insert 1 (alles behalve interesses)-------------------
-                                    //----------Begin van insert 2 (interesses)---------------------------------
+                                //Kijkt of interesses bestaan. (exceptionhandeling)
+                                if((isset($_POST["interesse1"]))&&(isset($_POST["interesse2"]))&&(isset($_POST["interesse3"]))){
+                                    
+                                    //Kijkt ofdat er dubbele zijn binnenin de interesses behalve als deze leeggelaten worden.
+                                    if((($_POST["interesse1"]==$_POST["interesse2"])&&($_POST["interesse1"]!="-")) || (($_POST["interesse1"] == $_POST["interesse3"])&&($_POST["interesse3"]!="-")) || (($_POST["interesse2"] == $_POST["interesse3"])&&($_POST["interesse2"]!="-"))){
+                                        echo"U hebt een interesse 2 of meerdere keren aangeduid, u kunt een keuze ook openlaten";
+                                    }
                                     $mysqli= new MySQLi("localhost","root","","gip");
                                     if(mysqli_connect_errno()){
                                         trigger_error("Fout bij verbinding: ".$mysqli->error);
                                     }
-                                    //Zorgt ervoor dat als er een interesse als "-" wordt geselecteerd dat deze worden weggelaten.
                                     else{
-                                        if($_POST["interesse1"] == "-"){
-                                            $i1 = NULL;
+                                        //heb hier een hele qry verwijderd: removed
+                                        $mysqli= new MySQLi("localhost","root","","gip");
+                                        if(mysqli_connect_errno()){
+                                            trigger_error('Fout bij verbinding: '.$mysqli->error); 
                                         }
-                                        else{
-                                            $i1 = $_POST["interesse1"];
-                                        }
-                                        if($_POST["interesse2"] == "-"){
-                                            $i2 = NULL;
-                                        }
-                                        else{
-                                            $i2 = $_POST["interesse2"];
-                                        }
-                                        if($_POST["interesse3"] == "-"){
-                                            $i3 = NULL;
-                                        }
-                                        else{
-                                            $i3 = $_POST["interesse3"];
-                                        }
-
-                                        $sql = "INSERT INTO `tblinteressesuser` (`interessesID`, `interesseID1`, `interesseID2`, `interesseID3`) VALUES (NULL,?,?,?) ";
-                                        if($stmt = $mysqli->prepare($sql)) {     
-                                            $stmt->bind_param('sss',$i1,$i2,$i3);
-                                            if(!$stmt->execute()){
-                                                echo 'het uitvoeren van de query is mislukt:';
+                                        else{ //Heb hier oude variabelen verwijderd: removed
+                                            $sql = "INSERT INTO tblUser (userNm, userEmail, userPasw, userFoto, userPostcode, userStraat) VALUES  (?,?,?,?,?,?)"; 
+                                            if($stmt = $mysqli->prepare($sql)) {     
+                                                $stmt->bind_param('ssssis',$naam,$email,$pw,$foto,$post,$straat);
+                                                $email = $mysqli->real_escape_string($_POST["email"]);
+                                                $pw = $mysqli->real_escape_string($_POST["pw"]);
+                                                $naam = $mysqli->real_escape_string($_POST["naam"]) ;
+                                                $foto = $mysqli->real_escape_string("ws.png");
+                                                $post = $PostcodeId1;
+                                                $straat = $mysqli->real_escape_string($_POST["straat"]);
+                                                if(!$stmt->execute()){
+                                                    echo 'Het uitvoeren van de qry is mislukt:'.$mysqli->error;
+                                                }
+                                                else{  
+                                                    header("location:inloggen.php");
+                                                }
+                                                $stmt->close();
                                             }
-                                            $stmt->close();
+                                            else{
+                                                echo 'Er zit een fout in de query'.$mysqli->error; 
+                                            } 
                                         }
+                                
+                                        //----------Einde van insert 1 (alles behalve interesses)-------------------
+                                        //----------Begin van insert 2 (interesses)---------------------------------
+                                        $mysqli= new MySQLi("localhost","root","","gip");
+                                        if(mysqli_connect_errno()){
+                                            trigger_error("Fout bij verbinding: ".$mysqli->error);
+                                        }
+                                        //Zorgt ervoor dat als er een interesse als "-" wordt geselecteerd dat deze worden weggelaten.
                                         else{
-                                            echo"Er zit een fout in de qry: ".$mysqli->error;
+                                            //code pak userID
+                                            if($_POST["interesse1"] != "-"){
+                                                //<code insert int1//
+                                            }
+                                            //------------------------------
+                                            if($_POST["interesse2"] != "-"){
+                                                //<code insert int2//
+                                            }
+                                            //-----------------------------
+                                            if($_POST["interesse3"] != "-"){
+                                                //<code insert int3//
+                                            }
+
+                                            $sql = "INSERT INTO `tblinteressesuser` (`interessesID`, `interesseID1`, `interesseID2`, `interesseID3`) VALUES     (NULL,?,?,?) ";
+                                            if($stmt = $mysqli->prepare($sql)) {     
+                                                $stmt->bind_param('sss',$int1,$int2,$int3);
+                                                if(!$stmt->execute()){
+                                                    echo 'het uitvoeren van de query is mislukt:';
+                                                }
+                                                $stmt->close();
+                                            }
+                                            else{
+                                                echo"Er zit een fout in de qry: ".$mysqli->error;
+                                            }
                                         }
-                                    }
                                     //-------------Einde insert 2(interesses)----------------------------
+                                    }
                                 }
-                            }
                             }
                         }
                 ?> 
