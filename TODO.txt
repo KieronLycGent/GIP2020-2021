@@ -3,7 +3,7 @@ tblInteressesUser aanpassen:
 	-2 kolommen				V | 2021-03-11
 	-SQL file aanpassen 			V | 2021-03-11
 	-structuren van opslaan veranderen
-		-aanmakenUser.php 		X |
+		-aanmakenUser.php 		V | 2021-04-18
 		-wijzigenUser.php 		X |
 Registratie:
 	-password hashing 			X |

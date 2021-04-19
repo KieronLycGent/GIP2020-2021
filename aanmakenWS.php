@@ -1,5 +1,14 @@
 <?php
 session_start();
+if(isset($_SESSION["login"])&&$_SESSION["login"])
+{
+  if($_SESSION["loginType"]!="aut"){
+    header("location:index.php");
+  }
+}
+else{
+  header("location:index.php");
+}
 ?>
 <!DOCTYPE html>
 
@@ -175,6 +184,9 @@ session_start();
                                   $stmt->close();
                                 }
                               }
+                            }
+                            else{
+                              echo"<br>";
                             }
                             echo"<br>
                             &nbsp;
