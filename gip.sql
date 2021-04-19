@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 11, 2021 at 11:45 AM
+-- Generation Time: Apr 19, 2021 at 01:06 AM
 -- Server version: 5.7.17
 -- PHP Version: 5.6.30
 
@@ -35,7 +35,7 @@ CREATE TABLE `tblactiviteit` (
   `actNm` tinytext NOT NULL,
   `actTypeID` int(11) NOT NULL,
   `persAantal` int(11) NOT NULL,
-  `persLeeftijdMax` int(11) NOT NULL,
+  `persLeeftijdMax` int(11) DEFAULT NULL,
   `persLeeftijdMin` int(11) NOT NULL,
   `actBesch` mediumtext NOT NULL,
   `tijdID` int(11) NOT NULL,
@@ -54,8 +54,10 @@ CREATE TABLE `tblauteur` (
   `auteurID` int(11) NOT NULL,
   `auteurNm` tinytext NOT NULL,
   `auteurBesch` mediumtext NOT NULL,
-  `auteurFoto` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `auteurFoto` text NOT NULL,
+  `auteurEmail` text NOT NULL,
+  `auteurPasw` tinytext NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 
 -- --------------------------------------------------------
 
@@ -3049,6 +3051,14 @@ CREATE TABLE `tbltypes` (
   `actType` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `tbltypes`
+--
+
+INSERT INTO `tbltypes` (`actTypeID`, `actType`) VALUES
+(1, 'Naaien'),
+(2, 'Muziek');
+
 -- --------------------------------------------------------
 
 --
@@ -3060,8 +3070,10 @@ CREATE TABLE `tbluser` (
   `userNm` tinytext NOT NULL,
   `userStraat` text NOT NULL,
   `userPostcode` int(11) NOT NULL,
-  `userFoto` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `userFoto` text NOT NULL,
+  `userEmail` tinytext NOT NULL,
+  `userPasw` tinytext NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 
 -- --------------------------------------------------------
 
@@ -3147,7 +3159,7 @@ ALTER TABLE `tblactiviteit`
 -- AUTO_INCREMENT for table `tblauteur`
 --
 ALTER TABLE `tblauteur`
-  MODIFY `auteurID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `auteurID` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `tblauteursperact`
 --
@@ -3172,7 +3184,7 @@ ALTER TABLE `tblinteresse`
 -- AUTO_INCREMENT for table `tbltypes`
 --
 ALTER TABLE `tbltypes`
-  MODIFY `actTypeID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `actTypeID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `tbluser`
 --

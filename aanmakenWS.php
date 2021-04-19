@@ -79,7 +79,8 @@ session_start();
     <!-- ======= Portfolio Details Section ======= -->
         <section>
             <div class="container">
-                    <?php 
+                    <?php
+                    /* 
                         if((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&isset($_POST["besch"])&&$_POST["besch"]!=""&&isset($_POST["email"])&&$_POST["email"]!=""&&isset($_POST["pw"])&&isset($_POST["pwCheck"])&&$_POST["pwCheck"]==$_POST["pw"]){
                             $mysqli= new MySQLi("localhost","root","","gip");
                             if(mysqli_connect_errno()){
@@ -106,43 +107,88 @@ session_start();
                                     echo 'Er zit een fout in de query'; 
                                 }
                             }
-                        }
+                        }*/
                 ?> 
-                <form id="form1" name="form1" method="post" action="aanmakenAut.php">
+                <form id="form1" name="form1" method="post" action="aanmakenWS.php">
                     <h2>Workshop aanmaken</h2>
-                    <p>Naam:  &nbsp;
-                        <input type="text" name="naam" id="naam" placeholder="naam" required value="<?php
-                                                                                           if(isset($_POST["naam"])){
-                                                                                               echo($_POST["naam"]);
+                    <p>Titel: <br>&nbsp;
+                        <input type="text" name="titel" id="titel" placeholder="Titel" required value="<?php
+                                                                                           if(isset($_POST["titel"])){
+                                                                                               echo($_POST["titel"]);
                                                                                            }?>">
                     </p>
-                    <p> &nbsp;
-                        <input type="email" name="email" id="email" placeholder="e-mail" required value="<?php
-                                                                                           if(isset($_POST["email"])){
-                                                                                               echo($_POST["email"]);
-                                                                                           }?>">
-                    </p>
-                     <p>
-                        Paswoord: &nbsp;
-                        <input type="password" name="pw" id="pw" placeholder="Paswoord" required>
-                    </p>
-                    <p>
-                        Paswoord bevestigen: &nbsp;
-                        <input type="password" name="pwCheck" id="pwCheck" placeholder="Paswoord bevestigen" required>
-                        <?php
-                        if(isset($_POST["pw"])&& isset($_POST["pwCheck"])){
-                            if($_POST["pw"]!=$_POST["pwCheck"]){
-                                echo"<br><a id=\"error\">Paswoord in het eerste veld komt niet overeen met paswoord in het tweede veld!</a>";
-                            }
-                        }    
+                    <p>Beschrijving: <br>&nbsp;
+                    <textarea id="besch" name="besch" rows="4" cols="50">
+                       <?php
+                        if(isset($_POST["besch"])){
+                          echo($_POST["besch"]);
+                        }
                         ?>
+                    </textarea>
+                        
                     </p>
-                    <p>Beschrijving: &nbsp;
-                        <input type="text" name="besch" id="besch" placeholder="besch" required value="<?php
-                                                                                                       if(isset($_POST["besch"])){
-                                                                                                           echo($_POST["besch"]);
-                                                                                                       }?>">
+                    <p>Aantal personen: <br>&nbsp;
+                      <input type="number" id="pers" name="pers" min="1" required>
                     </p>
+                    <p>Min. leeftijd: <br>&nbsp;
+                      <input type="number" id="ageMin" name="ageMin" min="0" required>
+                    </p>
+                    <p>Max. leeftijd: (openlaten indien geen) <br>&nbsp;
+                      <input type="number" id="ageMax" name="ageMax" min="0">
+                    </p>
+                    <p>Type: &nbsp;
+                    <?php
+                    $mysqli= new MySQLi("localhost","root","","gip");
+                    if(mysqli_connect_errno()){
+                        trigger_error("Fout bij verbinding: ".$mysqli->error);
+                    }
+                    else{
+                        $sql = "select actTypeID, actType from tblTypes";
+                        if($stmt = $mysqli->prepare($sql)){
+                            if(!$stmt->execute()){
+                                echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
+                            }
+                            else{                          
+                                echo"&nbsp; <select name=\"type\" id=\"type\"><option value=\"-\">-Selecteer type-</option>";
+                                $stmt->bind_result($ID, $type);
+                                while($stmt->fetch()){
+                                    echo"<option value=\"$ID\">".$type."</option>";
+                                }
+                            }
+                            echo"</select>";
+                            if(isset($_POST["type"])&&$_POST["type"]!="-"){
+                              $mysqli = new MySQLi("localhost","root","","gip");
+                              if(mysqli_connect_errno()){
+                                trigger_error("Fout bij verbinding: ".$mysqli->error);
+                              }
+                              else{
+                                $sql = "SELECT actType FROM tblTypes WHERE actTypeID = ".$_POST["type"];
+                                if($stmt = $mysqli->prepare($sql)){
+                                  if(!$stmt->execute()){
+                                    echo"Het uitvoeren van qry 'POST' is mislukt: ".$stmt->error." in qry";
+                                  }
+                                  else{
+                                    $stmt->bind_result($postID);
+                                    $stmt->fetch();
+                                    echo "<br>Vorige keuze was: ".$postID;
+                                  }
+                                  $stmt->close();
+                                }
+                              }
+                            }
+                            echo"<br>
+                            &nbsp;
+                            <br>
+                            ";
+                            @$stmt->close();
+                        }
+                        else{
+                            echo"Er zit een fout in de qry: ".$mysqli->error;
+                        }
+                    }
+                    ?>
+                    </p>
+                    
                     <p>
                         &nbsp;
                     </p>
