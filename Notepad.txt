@@ -3,3 +3,19 @@
 |    .txt for cleaner code     |
 |                              |
 \*----------------------------*/                                        
+voor portfolio-detailsWS.php
+$sql = "SELECT ac.actID, au.auteurNm, ac.actFoto, ac.actNm, ty.actType, ac.persAantal, ac.persLeeftijdMax, ac.persLeeftijdMin, ac.actBesch, dt.actDatum, dt.actTijd, ac.benNodig, ac.benOpsomming, ac.actPrijs 
+        FROM tblActiviteit ac, tblAuteur au, tblTypes ty, tblDatumTijd dt WHERE ac.actAuteursID = au.auteurID AND ac.actTypeID = ty.actTypeID AND ac.tijdID = dt.tijdID";
+        if($stmt = $mysqli->prepare($sql)){
+          if(!$stmt->execute()){
+            echo("Het uitvoeren van qry noSearch is mislukt: ".$stmt->error."<br>");
+          }
+          else{
+            $stmt->bind_result($actID,$autNm,$actFoto,$actNm,$actType,$persAantal,$persAgeMax,$persAgeMin,$actBesch,$actDatum,$actTijd,$benNodig,$benOpsomming,$actPrijs);
+            while($stmt->fetch()){}
+        }
+          $stmt->close();
+        }
+        else{
+          echo("Er zit een fout in qry noSearch: ".$mysqli->error);
+        }

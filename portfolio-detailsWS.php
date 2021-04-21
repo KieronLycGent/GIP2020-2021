@@ -9,10 +9,10 @@ if(isset($_GET["end"])){
 ?>
 <!DOCTYPE html>
 <?php
-if(isset($_GET["item"])){
-    $_SESSION["ID"] = $_GET["item"];
-    header("location:portfolio-detailsWS.php");
-}    
+    
+if(!isset($_SESSION["ID"])){
+    header("location:portfolioWS.php");
+}
 ?>
 <html lang="en">
 
@@ -20,12 +20,12 @@ if(isset($_GET["item"])){
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Workshops - Workshopp.er</title>
+  <title>Details auteur - Workshopp.er</title>
   <meta content="" name="descriptison">
   <meta content="" name="keywords">
 
   <!-- Favicons -->
- <link href="assets/img/ws.png" rel="icon">
+  <link href="assets/img/ws.png" rel="icon">
   <link href="assets/img/ws.png" rel="apple-touch-icon">
 
   <!-- Google Fonts -->
@@ -51,7 +51,6 @@ if(isset($_GET["item"])){
 </head>
 
 <body>
-
   <!-- ======= Top Bar ======= -->
   <section id="topbar" class="d-none d-lg-block">
     <div class="container d-flex">
@@ -106,156 +105,101 @@ if(isset($_GET["item"])){
 
     </div>
   </header><!-- End Header -->
-
-
-  <main id="main">
-
+<main id="main">
     <!-- ======= Breadcrumbs ======= -->
     <section id="breadcrumbs" class="breadcrumbs">
       <div class="container">
+
         <ol>
           <li><a href="index.php">Home</a></li>
           <li>Auteurs</li>
+          <li>Details</li>
         </ol>
-        <h2>Auteurs</h2>
-      </div>
-    </section>
-    <!-- End Breadcrumbs -->
-    
-    <!-- ======== Search ======== -->  
-    <section id="search" class="search">
-        <div class = "container">
-            <form method="post" action="<?php $_SERVER['PHP_SELF'] ?>">
-            <?php
-            if(isset($_POST["cancel"])){
-              $_POST["search"] = NULL;
-            }
-            ?>
-                <input type="text" name="search" id="search" value="<?php
-                                                                    if(isset($_POST["search"])){
-                                                                      echo($_POST["search"]);
-                                                                    }
-                                                                    ?>">
-                <button name="btnSearch" type="submit"><i class="icofont-search"></i></button>
-                <?php
-                if(isset($_POST["btnSearch"])){
-                  if(isset($_POST["search"])&&$_POST["search"]!=""){
-                    echo("<button name=\"cancel\" type=\"submit\">X</button>");
-                  }
-                }
-                ?>
-            </form>  
-        </div>
-    </section>
-    <!-- End Search -->
+        <h2>Auteur Details</h2>
 
-    <!-- ======= Portfolio Section ======= -->
-    <section id="portfolio" class="portfolio">
-      <div class="container">
-          <div class="container">
-              <div class="row portfolio-container">
-                  <?php
-    if(!isset($_POST["search"])){
-      $mysqli = new mysqli("localhost","root","","gip");
-      if(mysqli_connect_errno()){
-        trigger_error("Fout bij verbinding: ".$mysqli->error."<br>");
-      }
-      else{
-        $sql = "SELECT ac.actID, au.auteurNm, ac.actFoto, ac.actNm, ac.actBesch, ac.actPrijs 
-        FROM tblActiviteit ac, tblAuteur au WHERE ac.actAuteursID = au.auteurID ORDER BY ac.actNm";
-        if($stmt = $mysqli->prepare($sql)){
-          if(!$stmt->execute()){
-            echo("Het uitvoeren van qry noSearch is mislukt: ".$stmt->error."<br>");
-          }
-          else{
-            $stmt->bind_result($actID,$autNm,$actFoto,$actNm,$actBesch,$actPrijs);
-            while($stmt->fetch()){
-              echo("
-              <div class=\"col-lg-4 col-md-6 portfolio-item filter-app\">
-                <div class=\"portfolio-wrap\">
-                  <img src=\"assets/img/uploads/".$actFoto."\" width=\"800\" class=\"img-fluid\" alt=\"\">
-                    <div class=\"portfolio-info\">
-                      <h4>".$actNm."</h4>
-                      <p>".$actBesch."</p>
-                      <p>".$actPrijs."</p>
-                      <p>Door: ".$autNm."</p>
-                    <div class=\"portfolio-links\">
-                      <a href=\"portfolioWS.php?item=".$actID."\" title=\"More Details\"><i class=\"bx bx-link\"></i></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ");
-           }
-          }
-          $stmt->close();
-        }
-        else{
-          echo("Er zit een fout in qry noSearch: ".$mysqli->error);
-        }
-      }
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Portfolio Details Section ======= -->
+
+    <?php
+    $mysqli= new mysqli("localhost","root","","gip");
+    if(mysqli_connect_errno()){
+      trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
     else{
-      $term = "%".$_POST["search"]."%";
-      $mysqli = new mysqli("localhost","root","","gip");
-      if(mysqli_connect_errno()){
-        trigger_error("Fout bij verbinding: ".$mysqli->error."<br>");
-      }
-      else{
-        $sql = "SELECT ac.actID, au.auteurNm, ac.actFoto, ac.actNm, ac.actBesch, ac.actPrijs 
-        FROM tblActiviteit ac, tblAuteur au WHERE ac.actAuteursID = au.auteurID AND ac.actNm LIKE ? ORDER BY ac.actNm";
-        if($stmt = $mysqli->prepare($sql)){
-          $stmt->bind_param("s",$zoek);
-          $zoek = $term;
-          if(!$stmt->execute()){
-            echo("Het uitvoeren van qry search is mislukt: ".$stmt->error."<br>");
-          }
-          else{
-            $stmt->bind_result($actID,$autNm,$actFoto,$actNm,$actBesch,$actPrijs);
-            while($stmt->fetch()){
-              echo("
-              <div class=\"col-lg-4 col-md-6 portfolio-item filter-app\">
-                <div class=\"portfolio-wrap\">
-                  <img src=\"assets/img/uploads/".$actFoto."\" width=\"800\" class=\"img-fluid\" alt=\"\">
-                  <div class=\"portfolio-info\">
-                    <h4>".$actNm."</h4>
-                    <p>".$actBesch."</p>
-                    <p>Prijs: &euro;".$actPrijs."</p>
-                    <p>Door: ".$autNm."</p>
-                    <div class=\"portfolio-links\">
-                      <a href=\"portfolioWS.php?item=".$actID."\" title=\"More Details\"><i class=\"bx bx-link\"></i></a>
-                    </div>
+      $sql = "SELECT ac.actID, au.auteurNm, au.auteurID, ac.actFoto, ac.actNm, ty.actType, ac.persAantal, ac.persLeeftijdMax, ac.persLeeftijdMin, ac.actBesch, dt.actDatum, TIME_FORMAT(dt.actTijd, '%k:%i'), ac.benNodig, ac.benOpsomming, ac.actPrijs 
+      FROM tblActiviteit ac, tblAuteur au, tblTypes ty, tblDatumTijd dt WHERE ac.actAuteursID = au.auteurID AND ac.actTypeID = ty.actTypeID AND ac.tijdID = dt.tijdID AND ac.actID = ".$_SESSION["ID"];
+      if($stmt = $mysqli->prepare($sql)){
+        if(!$stmt->execute()){
+          echo("Het uitvoeren van de qry is mislukt: ".$stmt->error."<br>");
+        }
+        else{
+          $stmt->bind_result($actID,$autNm,$autID,$actFoto,$actNm,$actType,$persAantal,$persAgeMax,$persAgeMin,$actBesch,$actDatum,$actTijd,$benNodig,$benOpsomming,$actPrijs);
+          $stmt->fetch();
+          echo"
+          <section id\"portfolio-details\" class=\"portfolio-details\">
+            <div class=\"container\">
+              <a class=\"icofont-arrow-left\" href=\"portfolioWS.php\">Terug</a>
+              <div class=\"row\">
+                <div class=\"col-lg-8\">
+                  <img src=\"assets/img/uploads/".$actFoto."\" class=\"img-fluid\" alt=\"\">
+                  <div class=\"col-lg-4 portfolio-info\">
+                    <h3>Informatie activiteit</h3>
+                    <ul>
+                      <li><strong>Titel</strong>:</li>
+                      <li>&nbsp;".$actNm."</li>
+                      <li><strong>Beschrijving</strong>:</li>
+                      <li>&nbsp;".$actBesch."</li>
+                      <li><strong>Auteur</strong>:</li>
+                      <li>&nbsp;".$autNm."</li>
+                      <li><strong>Activiteitstype</strong>:</li>
+                      <li>&nbsp;".$actType."</li>
+                      <li><strong>Leeftijd</strong>:</li>
+                      <li>&nbsp;".$persAgeMin."-".$persAgeMax."</li>
+                      <li><strong>Datum en tijdstip</strong>:</li>
+                      <li>&nbsp;".$actDatum." om ".$actTijd."</li>
+                      <li><strong>Benodigdheden</strong>:</li>
+                      <li>&nbsp;";
+                      if($benOpsomming == ""){
+                        echo"Er zijn geen specifieke benodigdheden.";
+                        $blancoOpsomming = true;
+                      }
+                      echo"</li>";
+                      if($benNodig != 0){
+                        echo"<li>&nbsp;&nbsp;De bovenstaande benodigdheden zijn<strong>verplicht</strong> mee te nemen!</li>";
+                      }
+                      else{
+                        if(!$blancoOpsomming){
+                          echo"<li>&nbsp;&nbsp;De bovenstaande benodigdheden zijn niet verplicht mee te nemen.</li>";
+                        }
+                      }
+                      echo"
+                      <li><strong>Prijs</strong>:</li>
+                      <li>&nbsp;
+                      ";
+                      if($actPrijs == 0){
+                        echo"Deze activiteit is gratis";
+                      }
+                      else{
+                        echo($actPrijs." per persoon");
+                      }
+                      echo"
+                      </li>
+                    </ul>
                   </div>
                 </div>
               </div>
-            ");
-           }
-          }
-          $stmt->close();
+            </div>
+          </section>";
         }
-        else{
-          echo("Er zit een fout in qry search: ".$mysqli->error);
-        }
+        $stmt->close();
+      }
+      else{
+      echo("Er zit een fout in qry: ".$mysqli->error);
       }
     }
-                  ?>
-                  <br>
-              </div>
-          </div>
-        </div>
-      </section><!-- End Portfolio Section -->
-<!-- ====== Auteurs ====== -->
-      
-    <!-- ======= Clients Section ======= -->
-    <section id="clients" class="clients">
-      
-        <div class="section-title">
-          <h2>Auteurs</h2>
-          <p>Dit is een lijst van al onze auteurs. Hier kunt u naar bepaalde auteurs op naam.</p>
-        </div>
-        
-       
-    </section><!-- End Clients Section -->
+    ?>
 
   </main><!-- End #main -->
 
@@ -322,7 +266,6 @@ if(isset($_GET["item"])){
       </div>
     </div>
   </footer><!-- End Footer -->
-
   <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
 
   <!-- Vendor JS Files -->

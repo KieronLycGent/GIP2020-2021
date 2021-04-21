@@ -8,17 +8,19 @@ tblInteressesUser aanpassen:
 
 Registratie:
 	-password hashing 			X |
-	-dubbele emails niet toelaten 		X |
+	-dubbele emails niet toelaten bij zelfde soort account		X |
+(Ik wil liefst ervoor zorgen dat een email zowel een auteur als een user kan aanmaken)
 
 Workshops:
-	-Workshop pagina aanmaken 		X |
+	-Workshop pagina aanmaken 		V | 2021-04-21
 		-portfolio kopieren
 	-Workshop zoeken aanmaken --> filters	X |
 (misschien ook filters aanmaken bij de rest?) 	
-	-Workshops kunnen aanmaken als auteur 	X |
+	-Workshops kunnen aanmaken als auteur 	V | 2021-04-21
 	-Workshops kunnen veranderen als auteur X |
 		-Hangt dus vast aan 1 auteur
 	-Joinen in workshops als user 		X |
+	-Betaling voor premium workshops	X |
 
 - Uploaden foto 				X |
 --> zie cursus html om dit te testen,
