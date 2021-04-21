@@ -139,8 +139,47 @@ if(isset($_GET["item"])){
           <div class="container">
               <div class="row portfolio-container">
                   <?php
-    
-
+    if(!isset($_POST["search"])){
+      $mysqli = new mysqli("localhost","root","","gip");
+      if(mysqli_connect_errno()){
+        trigger_error("Fout bij verbinding: ".$mysqli->error."<br>");
+      }
+      else{
+        $sql = "SELECT ac.actID, au.auteurNm, ac.actFoto, ac.actNm, ty.actType, ac.persAantal, ac.persLeeftijdMax, ac.persLeeftijdMin, ac.actBesch, dt.actDatum, dt.actTijd, ac.benNodig, ac.benOpsomming, ac.actPrijs 
+        FROM tblActiviteit ac, tblAuteur au, tblTypes ty, tblDatumTijd dt WHERE ac.actAuteursID = au.auteurID AND ac.actTypeID = ty.actTypeID AND ac.tijdID = dt.tijdID";
+        if($stmt = $mysqli->prepare($sql)){
+          if(!$stmt->execute()){
+            echo("Het uitvoeren van qry noSearch is mislukt: ".$stmt->error."<br>");
+          }
+          else{
+            $stmt->bind_result($actID,$autNm,$actFoto,$actNm,$actType,$persAantal,$persAgeMax,$persAgeMin,$actBesch,$actDatum,$actTijd,$benNodig,$benOpsomming,$actPrijs);
+            while($stmt->fetch()){
+              echo("
+              <div class=\"col-lg-4 col-md-6 portfolio-item filter-app\">
+                <div class=\"portfolio-wrap\">
+                  <img src=\"assets/img/uploads/".$actFoto."\" width=\"800\" class=\"img-fluid\" alt=\"\">
+                    <div class=\"portfolio-info\">
+                      <h4>".$actNm."</h4>
+                      <p>".$actBesch."</p>
+                      <p>Door: ".$auteurNm."</p>
+                    <div class=\"portfolio-links\">
+                      <a href=\"assets/img/uploads/".$actFoto."\" data-gall=\"portfolioGallery\" class=\"venobox\"><i class=\"bx bx-plus\"></i></a>
+                      <a href=\"portfolioAut.php?item=".$actID."\" title=\"More Details\"><i class=\"bx bx-link\"></i></a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ");
+           }
+          }
+          $stmt->close();
+        }
+        else{
+          echo("Er zit een fout in qry noSearch: ".$mysqli->error);
+        }
+      }
+    }
+/*
     if(!isset($_POST["search"])){
         $mysqli= new MySQLi("localhost","root","","gip");
                   if(mysqli_connect_errno()){
@@ -225,7 +264,7 @@ if(isset($_GET["item"])){
                 echo"Er zit een fout in de qry: ".$mysqli->error;
             }
         }   
-    }           
+    }           */
                   ?>
                   <br>
               </div>

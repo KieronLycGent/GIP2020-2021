@@ -5,23 +5,10 @@ tblInteressesUser aanpassen:
 	-structuren van opslaan veranderen
 		-aanmakenUser.php 		V | 2021-04-18
 		-wijzigenUser.php 		X |
+
 Registratie:
 	-password hashing 			X |
 	-dubbele emails niet toelaten 		X |
-
-Code pagina's despaghettiën(have fun) 		X |
-	-aanmakenAut 				X |
-	-aanmakenUser 				X | (WIP 2021-03-11)
-	-aanmakenWS 				X |
-	-inloggen 				X |
-	-portfolio-detailsAut 			X |
-	-portfolio-detailsUser 			X |
-	-portfolioAut 				X |
-	-portfolioUser 				X |
-	-portfolioWS 				X |
-	-registreer 				X |
-	-wijzigenAut 				X |
-	-wijzigenUser 				X |
 
 Workshops:
 	-Workshop pagina aanmaken 		X |

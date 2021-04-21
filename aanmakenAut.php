@@ -96,6 +96,7 @@
                                     }
                                     else{  
                                         echo 'Account aangemaakt';
+                                        header("location:index.php");
                                     }
                                     $stmt->close();
                                 }
