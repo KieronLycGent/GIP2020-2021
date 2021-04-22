@@ -163,9 +163,9 @@ if((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&
                 else{
                     $sql = "INSERT INTO tblUser (userNm, userEmail, userPasw, userFoto, userPostcode, userStraat) VALUES  (?,?,?,?,?,?)"; 
                     if($stmt = $mysqli->prepare($sql)) {     
-                    $stmt->bind_param('ssssis',$naam,$email,$pw,$foto,$post,$straat);
+                    $stmt->bind_param('ssssis',$naam,$email,$hashedPw,$foto,$post,$straat);
                     $email = $mysqli->real_escape_string($_POST["email"]);
-                    $pw = $mysqli->real_escape_string($_POST["pw"]);
+                    $hashedPw = $hashedPassword = password_hash($mysqli->real_escape_string($_POST["pw"]), PASSWORD_DEFAULT);
                     $naam = $mysqli->real_escape_string($_POST["naam"]) ;
                     $foto = $mysqli->real_escape_string("ws.png");
                     $post = $PostcodeId1;

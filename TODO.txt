@@ -1,8 +1,8 @@
 Database:
-	-admin user aanmaken
-	-admin auteur aanmaken
-	-SQL-injection voorkomen
-	-deactivated veld toevoegen
+	-admin user aanmaken						X |
+	-admin auteur aanmaken						X |
+	-SQL-injection voorkomen					X |
+	-deactivated veld toevoegen					X |
 VERGEET NIET DE .SQL TE UPDATEN!!!
 
 	-structuren van opslaan veranderen
@@ -10,7 +10,8 @@ VERGEET NIET DE .SQL TE UPDATEN!!!
 		-wijzigenUser.php 		X |
 
 Registratie:
-	-password hashing 			X |
+	-password hashing 											X |
+	https://stackoverflow.com/questions/35782911/hashing-passwords-php-mysqli
 	-dubbele emails niet toelaten bij zelfde soort account		X |
 (Ik wil liefst ervoor zorgen dat een email zowel een auteur als een user kan aanmaken)
 
@@ -25,6 +26,7 @@ Workshops:
 	-Joinen in workshops als user 		X |
 	-Betaling voor premium workshops	X |
 
-- Uploaden foto 				X |
+- Uploaden foto 										X |
 --> zie cursus html om dit te testen,
  print_r om te kijken hoe dit ontvangen wordt. 
+ - Footer verwijderen: deze heeft zo goed als geen nut 	X | 

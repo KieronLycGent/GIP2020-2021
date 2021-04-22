@@ -10,6 +10,8 @@ if(isset($_POST["verzenden"])){
     <input type="submit" name="verzenden" id="verzenden">
 </form>
 
-
+<?php?>
+<form id="login" name="login" method="post" action="test.php">
+</form>
 
 

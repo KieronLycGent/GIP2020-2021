@@ -85,10 +85,10 @@
                             else{
                                 $sql = "INSERT INTO tblAuteur (auteurNm,auteurEmail,auteurPasw,auteurBesch,auteurFoto) VALUES (?,?,?,?,?)"; 
                                 if($stmt = $mysqli->prepare($sql)) {     
-                                    $stmt->bind_param('sssss',$naam,$email,$pw,$besch,$foto);
+                                    $stmt->bind_param('sssss',$naam,$email,$hashedPw,$besch,$foto);
                                     $naam = $mysqli->real_escape_string($_POST["naam"]) ;
                                     $email = $mysqli->real_escape_string($_POST["email"]);
-                                    $pw = $mysqli->real_escape_string($_POST["pw"]) ;
+                                    $hashedPw = password_hash($mysqli->real_escape_string($_POST["pw"]), PASSWORD_DEFAULT);
                                     $besch = $mysqli->real_escape_string($_POST["besch"]);
                                     $foto = $mysqli->real_escape_string("ws.png");
                                     if(!$stmt->execute()){
