@@ -2,6 +2,7 @@ tblInteressesUser aanpassen:
 	-samengestelde sleutel 			V | 2021-03-11
 	-2 kolommen				V | 2021-03-11
 	-SQL file aanpassen 			V | 2021-03-11
+									X |
 	-structuren van opslaan veranderen
 		-aanmakenUser.php 		V | 2021-04-18
 		-wijzigenUser.php 		X |

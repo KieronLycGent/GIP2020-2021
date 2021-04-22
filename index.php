@@ -92,7 +92,7 @@ if(isset($_GET["end"])){
             <li><a href="about.php">Over</a></li>
           <li><a href="contact.php">Contact</a></li>
               <li><a href="portfolioAut.php">Auteurs</a></li>
-            <li><a href="portfolioUser.php">Gebruikers</a></li>
+            <li><a href="portfolioWS.php">Workshops</a></li>
             <?php
             if(isset($_SESSION["login"])){
                 if(($_SESSION["login"])){
