@@ -129,6 +129,7 @@ if(isset($_GET["item"])){
             <?php
             if(isset($_POST["cancel"])){
               $_POST["search"] = NULL;
+              $_POST["filter"] = NULL;
             }
             ?>
                 <input type="text" name="search" id="search" value="<?php
@@ -140,10 +141,36 @@ if(isset($_GET["item"])){
                 <?php
                 if(isset($_POST["btnSearch"])){
                   if(isset($_POST["search"])&&$_POST["search"]!=""){
-                    echo("<button name=\"cancel\" type=\"submit\">X</button>");
+                    echo("<button name=\"cancel\" type=\"submit\"><i class=\"icofont-ui-close\"></i></button>");
                   }
                 }
                 ?>
+                <br>
+                <h4>Zoeken op:</h4>
+                <input type="radio" name="filter" id="naam" value="naam" <?php
+                  if(isset($_POST["filter"])&&$_POST["filter"] == "naam"){
+                    echo"checked";
+                  }
+                  else if(!isset($_POST["filter"])){
+                    echo"checked";
+                  }
+                ?>>Titel<br>
+                <input type="radio" name="filter" id="prijs" value="prijs" <?php
+                  if(isset($_POST["filter"])&&$_POST["filter"] == "prijs"){
+                    echo"checked";
+                  }
+                ?>>Prijs<br>
+                <input type="radio" name="filter" id="auteur" value="auteur" <?php
+                  if(isset($_POST["filter"])&&$_POST["filter"] == "auteur"){
+                    echo"checked";
+                  }
+                ?>>Auteur<br>
+                <input type="radio" name="filter" id="type" value="type" <?php
+                  if(isset($_POST["filter"])&&$_POST["filter"] == "type"){
+                    echo"checked";
+                  }
+                ?>>Type
+
             </form>  
         </div>
     </section>
@@ -202,18 +229,38 @@ if(isset($_GET["item"])){
         trigger_error("Fout bij verbinding: ".$mysqli->error."<br>");
       }
       else{
-        $sql = "SELECT ac.actID, au.auteurNm, ac.actFoto, ac.actNm, ac.actBesch, ac.actPrijs 
-        FROM tblActiviteit ac, tblAuteur au WHERE ac.actAuteursID = au.auteurID AND ac.actNm LIKE ? ORDER BY ac.actNm";
+        if($_POST["filter"]=="naam"){
+          $sql = "SELECT ac.actID, au.auteurNm, ac.actFoto, ac.actNm, ac.actBesch, ac.actPrijs 
+          FROM tblActiviteit ac, tblAuteur au WHERE ac.actAuteursID = au.auteurID AND ac.actNm LIKE ? ORDER BY ac.actNm";
+        }
+        elseif($_POST["filter"]=="prijs"){
+          $sql = "SELECT ac.actID, au.auteurNm, ac.actFoto, ac.actNm, ac.actBesch, ac.actPrijs
+          FROM tblActiviteit ac, tblAuteur au WHERE ac.actAuteursID = au.auteurID AND ac.actPrijs LIKE ? ORDER BY ac.actNm";
+        }
+        elseif($_POST["filter"]=="auteur"){
+          $sql = "SELECT ac.actID, au.auteurNm, ac.actFoto, ac.actNm, ac.actBesch, ac.actPrijs
+          FROM tblActiviteit ac, tblAuteur au WHERE ac.actAuteursID = au.auteurID AND au.auteurNm LIKE ? ORDER BY ac.actNm";
+        }
+        elseif($_POST["filter"]=="type"){
+          $sql = "SELECT ac.actID, au.auteurNm, ac.actFoto, ac.actNm, ac.actBesch, ac.actPrijs, ty.actType
+          FROM tblActiviteit ac, tblAuteur au, tblTypes ty WHERE ac.actAuteursID = au.auteurID AND ac.actTypeID = ty.actTypeID AND ty.actType LIKE ? ORDER BY ac.actNm";
+        }
         if($stmt = $mysqli->prepare($sql)){
           $stmt->bind_param("s",$zoek);
+          //Voor prijs nog iets veranderen!!!
           $zoek = $term;
           if(!$stmt->execute()){
             echo("Het uitvoeren van qry search is mislukt: ".$stmt->error."<br>");
           }
           else{
-            $stmt->bind_result($actID,$autNm,$actFoto,$actNm,$actBesch,$actPrijs);
+            if($_POST["filter"]=="type"){
+              $stmt->bind_result($actID,$autNm,$actFoto,$actNm,$actBesch,$actPrijs,$actType);
+            }
+            else{
+              $stmt->bind_result($actID,$autNm,$actFoto,$actNm,$actBesch,$actPrijs);
+            }
             while($stmt->fetch()){
-              echo("
+              echo"
               <div class=\"col-lg-4 col-md-6 portfolio-item filter-app\">
                 <div class=\"portfolio-wrap\">
                   <img src=\"assets/img/uploads/".$actFoto."\" width=\"800\" class=\"img-fluid\" alt=\"\">
@@ -221,14 +268,17 @@ if(isset($_GET["item"])){
                     <h4>".$actNm."</h4>
                     <p>".$actBesch."</p>
                     <p>Prijs: &euro;".$actPrijs."</p>
-                    <p>Door: ".$autNm."</p>
-                    <div class=\"portfolio-links\">
+                    <p>Door: ".$autNm."</p>";
+              if($_POST["filter"] == "type"){
+                echo"<p>Type: ".$actType;
+              }
+              echo "<div class=\"portfolio-links\">
                       <a href=\"portfolioWS.php?item=".$actID."\" title=\"More Details\"><i class=\"bx bx-link\"></i></a>
                     </div>
                   </div>
                 </div>
               </div>
-            ");
+            ";
            }
           }
           $stmt->close();

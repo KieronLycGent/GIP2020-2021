@@ -53,11 +53,11 @@ if(isset($_GET["end"])){
           <?php
           if(isset($_SESSION["login"])){
               if(!($_SESSION["login"])){
-                  echo"<a href=\"inloggen.php\">Inloggen</a>";
+                  echo"<a href=\"inloggen.php\"><i class=\"icofont-sign-in\">Inloggen</i></a>";
                   echo"<a href=\"registreer.php\">Registreren</a>";
               }
               else{
-                  echo"<a href=\"".$_SERVER["PHP_SELF"]."?end=true\">Uitloggen</a>";
+                  echo"<a href=\"".$_SERVER["PHP_SELF"]."?end=true\"><i class=\"icofont-sign-out\"></i>Uitloggen</a>";
                   if($_SESSION["admin"]!=0){
                     echo"<a href=\"admin.php\">Admin</a>";
                   }
@@ -73,7 +73,7 @@ if(isset($_GET["end"])){
               }
           }
           else{
-              echo"<a href=\"inloggen.php\">Inloggen</a>";
+              echo"<a href=\"inloggen.php\"><i class=\"icofont-sign-in\"></i>Inloggen</a>";
               echo"<a href=\"registreer.php\">Registreren</a>";
           }
           ?>
