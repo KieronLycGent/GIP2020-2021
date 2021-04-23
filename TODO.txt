@@ -3,7 +3,7 @@ Database:
 	-admin auteur aanmaken						V | 2021-04-23
 	-admin inloggen mogelijk maken				V | 2021-04-23 --> heb ook git push gedaan
 	-admin page mogelijk maken					X |
-		-profiel btn -> admin btn				X |
+		-profiel btn -> admin btn				V | 2021-04-23
 	-SQL-injection voorkomen					X |
 	-deactivated veld toevoegen					X |
 VERGEET NIET DE .SQL TE UPDATEN!!!

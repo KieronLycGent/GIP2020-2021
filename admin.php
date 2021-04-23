@@ -6,6 +6,9 @@ if(isset($_GET["end"])){
         header("location:".$_SERVER["PHP_SELF"]);
     }
 }
+if(!$_SESSION["admin"]){
+  header("location:index.php");
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +17,7 @@ if(isset($_GET["end"])){
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Home - Workshopp.er</title>
+  <title>Over - Workshopp.er</title>
   <meta content="" name="descriptison">
   <meta content="" name="keywords">
 
@@ -47,7 +50,7 @@ if(isset($_GET["end"])){
 <body>
 
   <!-- ======= Top Bar ======= -->
-  <section id="topbar" class="d-none d-lg-block">
+ <section id="topbar" class="d-none d-lg-block">
     <div class="container d-flex">
       <div class="social-links">
           <?php
@@ -58,17 +61,12 @@ if(isset($_GET["end"])){
               }
               else{
                   echo"<a href=\"".$_SERVER["PHP_SELF"]."?end=true\">Uitloggen</a>";
-                  if($_SESSION["admin"]!=0){
-                    echo"<a href=\"admin.php\">Admin</a>";
-                  }
-                  else{
-                    if($_SESSION["loginType"] == "user"){
+                  if($_SESSION["loginType"] == "user"){
                       
                       echo"<a href=\"wijzigenUser.php\">Profiel</a>";
                   }
                   else{
                       echo"<a href=\"wijzigenAut.php\">Profiel</a>";
-                  }
                   }
               }
           }
@@ -80,7 +78,6 @@ if(isset($_GET["end"])){
       </div>
     </div>
   </section>
-
   <!-- ======= Header ======= -->
   <header id="header">
     <div class="container d-flex">
@@ -93,25 +90,12 @@ if(isset($_GET["end"])){
 
       <nav class="nav-menu d-none d-lg-block">
         <ul>
-          <li class="active"><a href="index.php">Home</a></li>
-            <li><a href="about.php">Over</a></li>
+          <li><a href="index.php">Home</a></li>
+
+            <li class="active"><a href="about.php">Over</a></li>
           <li><a href="contact.php">Contact</a></li>
               <li><a href="portfolioAut.php">Auteurs</a></li>
-            <?php
-            if(isset($_SESSION["login"])){
-              if(($_SESSION["login"])){
-                if($_SESSION["loginType"] == "aut"){
-                    echo"<li><a href=\"aanmakenWS.php\">Workshop aanmaken</a></li>";
-                }
-                else if($_SESSION["loginType"] == "user"){
-                    echo"<li><a href=\"portfolioWS.php\">Workshops</a></li>";
-                }
-              }
-            }
-            else{
-              echo"<li><a href=\"portfolioWS.php\">Workshops</a></li>";
-            }                
-            ?>
+            <li><a href="portfolioUser.php">Gebruikers</a></li>
 
         </ul>
       </nav><!-- .nav-menu -->
@@ -119,121 +103,38 @@ if(isset($_GET["end"])){
     </div>
   </header><!-- End Header -->
 
-  <!-- ======= Hero Section ======= -->
-  <section id="hero">
-    <div class="hero-container">
-      <div id="heroCarousel" class="carousel slide carousel-fade" data-ride="carousel">
-
-        <ol class="carousel-indicators" id="hero-carousel-indicators"></ol>
-
-        <div class="carousel-inner" role="listbox">
-
-          <!-- Slide 1 -->
-          <div class="carousel-item active" style="background: url(assets/img/slide/slide-1.jpg)">
-            <div class="carousel-container">
-              <div class="carousel-content">
-                <h2 class="animate__animated animate__fadeInDown">Welkom bij <span>Workshopp.er</span></h2>
-                <p class="animate__animated animate__fadeInUp">Dé site voor workshops.</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Slide 2 -->
-          <div class="carousel-item" style="background: url(assets/img/slide/slide-2.jpg)">
-            <div class="carousel-container">
-              <div class="carousel-content">
-                <h2 class="animate__animated fanimate__adeInDown">Beleef <span> de beste activiteiten</span></h2>
-                <p class="animate__animated animate__fadeInUp">Onze community zorgt ervoor dat je vanalles kunt beleven met een glimlach.</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Slide 3 -->
-          <div class="carousel-item" style="background: url(assets/img/slide/slide-3.jpg)">
-            <div class="carousel-container">
-              <div class="carousel-content">
-                <h2 class="animate__animated animate__fadeInDown">Wordt deel van <span>onze community&#33;</span></h2>
-                <p class="animate__animated animate__fadeInUp">Wordt deel van de community en beleef alle activiteiten die ooit zou willen.</p>
-                <a href="" class="btn-get-started animate__animated animate__fadeInUp">Lees meer</a>
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-        <a class="carousel-control-prev" href="#heroCarousel" role="button" data-slide="prev">
-          <span class="carousel-control-prev-icon icofont-rounded-left" aria-hidden="true"></span>
-          <span class="sr-only">Previous</span>
-        </a>
-
-        <a class="carousel-control-next" href="#heroCarousel" role="button" data-slide="next">
-          <span class="carousel-control-next-icon icofont-rounded-right" aria-hidden="true"></span>
-          <span class="sr-only">Next</span>
-        </a>
-
-      </div>
-    </div>
-  </section><!-- End Hero -->
-
   <main id="main">
 
-    <!-- ======= Featured Section ======= -->
-    <section id="featured" class="featured">
-      <div class="container">
-
-        <div class="row">
-          <div class="col-lg-4">
-            <div class="icon-box">
-              <i class="icofont-computer"></i>
-              <h3><a href="">Online</a></h3>
-              <p>We zorgen voor de beste experiences online.</p>
-            </div>
-          </div>
-          <div class="col-lg-4 mt-4 mt-lg-0">
-            <div class="icon-box">
-              <i class="icofont-image"></i>
-              <h3><a href="">Foto's en video's</a></h3>
-              <p>We zorgen voor genoeg mogelijkheden.</p>
-            </div>
-          </div>
-          <div class="col-lg-4 mt-4 mt-lg-0">
-            <div class="icon-box">
-              <i class="icofont-tasks-alt"></i>
-              <h3><a href="">Overzicht</a></h3>
-              <p>We zorgen voor overzicht via de agenda-functie.</p>
-            </div>
+<!-- ======= Featured Section ======= -->
+<section id="featured" class="featured">
+<h3>&nbsp;</h3>
+  <div class="container">
+    <div class="row">
+      <a href="">
+        <div class="col-lg-4">
+          <div class="icon-box">
+            <h3><a href="">Gebruikers aanpassen/deactiveren</a></h3>
           </div>
         </div>
-
-      </div>
-    </section><!-- End Featured Section -->
-
-    <!-- ======= About Section ======= -->
-    <section id="about" class="about">
-      <div class="container">
-
-        <div class="row">
-          <div class="col-lg-6">
-            <img src="assets/img/about.jpg" class="img-fluid" alt="">
-          </div>
-          <div class="col-lg-6 pt-4 pt-lg-0 content">
-            <h3>Dag &amp; nacht</h3>
-            <p class="font-italic">
-              We staan dag en nacht klaar om ervoor te zorgen dat we de beste ervaring op de website kunnen geven.
-            </p>
-            <ul>
-              <li><i class="icofont-check-circled"></i> Administrators die ervoor zorgen dat incorrecte dingen worden afgestraft.</li>
-              <li><i class="icofont-check-circled"></i> De website wordt om de zoveel tijd nagekeken om te zien of alles nog werkt.</li>
-            </ul>
-            <p>
-              Als er iets niet werkt of als je u nog vragen hebt, dan kunt u ons altijd contacteren via email.
-            </p>
+      </a>
+      <a href="">
+        <div class="col-lg-4">
+          <div class="icon-box">
+            <h3><a href="">Auteurs aanpassen/deactiveren</a></h3>
           </div>
         </div>
-
-      </div>
-    </section><!-- End About Section -->
-  </main><!-- End #main -->
+      </a>
+      <a href="">
+        <div class="col-lg-4">
+          <div class="icon-box">
+            <h3><a href="">Workshops aanpassen/deactiveren</a></h3>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section><!-- End Featured Section -->
+</main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
   <footer id="footer">

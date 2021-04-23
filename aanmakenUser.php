@@ -93,7 +93,7 @@ if(isset($_POST["verzenden"])&&isset($_POST["email"])&&$_POST["email"]!=""){
             else{
                 $stmt->bind_result($emailCount);
                 $stmt->fetch();
-                if($emailCount > 1){
+                if($emailCount >= 1){
                     $emailCheck = false;
                 }
                 else{
