@@ -1,6 +1,9 @@
 Database:
-	-admin user aanmaken						X |
-	-admin auteur aanmaken						X |
+	-admin user aanmaken						V | 2021-04-23 
+	-admin auteur aanmaken						V | 2021-04-23
+	-admin inloggen mogelijk maken				V | 2021-04-23 --> heb ook git push gedaan
+	-admin page mogelijk maken					X |
+		-profiel btn -> admin btn				X |
 	-SQL-injection voorkomen					X |
 	-deactivated veld toevoegen					X |
 VERGEET NIET DE .SQL TE UPDATEN!!!
@@ -10,7 +13,7 @@ VERGEET NIET DE .SQL TE UPDATEN!!!
 		-wijzigenUser.php 		X |
 
 Registratie:
-	-password hashing 											X |
+	-password hashing 											V | 2021-04-23
 	https://stackoverflow.com/questions/35782911/hashing-passwords-php-mysqli
 	-dubbele emails niet toelaten bij zelfde soort account		X |
 (Ik wil liefst ervoor zorgen dat een email zowel een auteur als een user kan aanmaken)
@@ -22,6 +25,7 @@ Workshops:
 (misschien ook filters aanmaken bij de rest?) 	
 	-Workshops kunnen aanmaken als auteur 	V | 2021-04-21
 	-Workshops kunnen veranderen als auteur X |
+		-Verwijderen niet mogelijk --> scams voorkomen
 		-Hangt dus vast aan 1 auteur
 	-Joinen in workshops als user 		X |
 	-Betaling voor premium workshops	X |

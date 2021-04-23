@@ -42,10 +42,7 @@ session_start();
   <section id="topbar" class="d-none d-lg-block">
     <div class="container d-flex">
       <div class="social-links">
-          <?php
-            //echo"<a href=\"inloggen.php\">Inloggen</a>";
-          ?>
-      </div>
+        </div>
     </div>
   </section>
 
@@ -87,32 +84,34 @@ session_start();
                                 trigger_error('Fout bij verbinding: '.$mysqli->error); 
                             }
                             else{
-
                                 if($_POST["acc"]=="user"){
-                                    $sql = "SELECT userEmail, userPasw, userID FROM tblUser"; 
+                                    $sql = "SELECT userEmail, userPasw, userID, deactivated, isAdmin FROM tblUser WHERE userEmail = '".$_POST["email"]."'"; 
                                 }
                                 else if($_POST["acc"]=="aut"){
-                                    $sql = "SELECT auteurEmail, auteurPasw, auteurID FROM tblAuteur";
+                                    $sql = "SELECT auteurEmail, auteurPasw, auteurID, deactivated, isAdmin FROM tblAuteur WHERE auteurEmail = '".$_POST["email"]."'";
                                 }
                                 if($stmt = $mysqli->prepare($sql)) {     
                                     if(!$stmt->execute()){
                                         echo 'het uitvoeren van de query is mislukt:'.$stmt->error."in qry";
                                     }
                                     else{  
-                                        $stmt->bind_result($emailCheck,$pwCheck,$ID);
+                                        $stmt->bind_result($emailCheck,$pwCheck,$ID, $deactivated, $admin);
                                         while($stmt->fetch()){
-                                            if($emailCheck == $_POST["email"] && $pwCheck == $_POST["pw"]){
+                                            if(password_verify($_POST["pw"], $pwCheck)){
                                                 $klopt = true;
+                                            }
+                                            if($deactivated == 1){
+                                                $klopt = false;
                                             }
                                         }
                                     }
                                     $stmt->close();
                                     if($klopt){
                                         if($_POST["acc"]=="user"){
-                                            $sql = "SELECT userID FROM tblUser WHERE '".$_POST["email"]."' = userEmail AND '".$_POST["pw"]."' = userPasw";
+                                            $sql = "SELECT userID FROM tblUser WHERE userEmail ='".$_POST["email"]."'";
                                             $_SESSION["ID"] = $ID;                                        }   
                                         else if($_POST["acc"]=="aut"){
-                                            $sql = "SELECT auteurID FROM tblAuteur  WHERE '".$_POST["email"]."' = auteurEmail AND '".$_POST["pw"]."' = auteurPasw";
+                                            $sql = "SELECT auteurID FROM tblAuteur WHERE auteurEmail = '".$_POST["email"]."'";
                                         }
                                         if($stmt = $mysqli->prepare($sql)) {     
                                             if(!$stmt->execute()){
@@ -128,6 +127,13 @@ session_start();
                                                 else if($_POST["acc"]=="aut"){
                                                     $_SESSION["loginType"] = "aut";
                                                 }
+                                                if($admin != 0){
+                                                    $_SESSION["admin"] = true;
+                                                }
+                                                else{
+                                                    $_SESSION["admin"] = false;
+                                                }
+
                                                 header("location:index.php");
                                                 }
                                             $stmt->close();  
@@ -149,6 +155,7 @@ session_start();
                 ?> 
                 <form id="form1" name="form1" method="post" action="inloggen.php">
                     <h2>Inloggen</h2>
+                    <a href="registreer.php">Hebt u nog geen account? Maak er dan hier een aan.</a>
                     <p>
                         <input type="radio" name="acc" id="user" value="user" <?php
                                if(isset($_POST["acc"])){
@@ -194,7 +201,7 @@ session_start();
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
-  <footer id="footer">
+  <!--<footer id="footer">
     <div class="footer-top">
       </div>
     <div class="container">
@@ -206,7 +213,7 @@ session_start();
         <!-- You can delete the links only if you purchased the pro version. -->
         <!-- Licensing information: https://bootstrapmade.com/license/ -->
         <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/eterna-free-multipurpose-bootstrap-template/ -->
-        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        <!--Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
       </div>
     </div>
   </footer><!-- End Footer -->

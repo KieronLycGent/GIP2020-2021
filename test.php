@@ -23,7 +23,8 @@ if(isset($_POST["login"])&&isset($_POST["email"])&&$_POST["email"]!=""&&isset($_
             trigger_error('Fout bij verbinding: '.$mysqli->error); 
         }
         else{
-            $sql = "SELECT userEmail, userPasw, userID FROM tblUser WHERE userEmail = '".$_POST["email"]."'"; //De reden voor de "'" is omdat SQL de @anders niet ziet als deel van een string.
+            $sql = "SELECT userEmail, userPasw, userID FROM tblUser WHERE userEmail = '".$_POST["email"]."'"; 
+            //De reden voor de "'" is omdat SQL de @ anders niet ziet als deel van een string.
             if($stmt = $mysqli->prepare($sql)) {     
                 if(!$stmt->execute()){
                     echo 'het uitvoeren van de query is mislukt:'.$stmt->error."in qry";

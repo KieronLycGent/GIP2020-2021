@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 19, 2021 at 01:06 AM
+-- Generation Time: Apr 23, 2021 at 09:46 AM
 -- Server version: 5.7.17
 -- PHP Version: 5.6.30
 
@@ -40,9 +40,9 @@ CREATE TABLE `tblactiviteit` (
   `actBesch` mediumtext NOT NULL,
   `tijdID` int(11) NOT NULL,
   `benNodig` tinyint(1) NOT NULL,
-  `benOpsomming` longtext NOT NULL,
-  `actPrijs` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `benOpsomming` longtext,
+  `actPrijs` double NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 
 -- --------------------------------------------------------
 
@@ -56,8 +56,17 @@ CREATE TABLE `tblauteur` (
   `auteurBesch` mediumtext NOT NULL,
   `auteurFoto` text NOT NULL,
   `auteurEmail` text NOT NULL,
-  `auteurPasw` tinytext NOT NULL
+  `auteurPasw` tinytext NOT NULL,
+  `isAdmin` tinyint(1) NOT NULL DEFAULT '0',
+  `deactivated` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
+
+--
+-- Dumping data for table `tblauteur`
+--
+
+INSERT INTO `tblauteur` (`auteurID`, `auteurNm`, `auteurBesch`, `auteurFoto`, `auteurEmail`, `auteurPasw`, `isAdmin`, `deactivated`) VALUES
+(1, 'Admin', 'Administrator', 'ws.png', 'boerestink1@gmail.com', '$2y$10$vTOmjcfbU0X.7rd3LfWKxOO5OpOS3O1KYtuqhqeCUyrf2I3clCsxG', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -80,7 +89,7 @@ CREATE TABLE `tbldatumtijd` (
   `tijdID` int(11) NOT NULL,
   `actDatum` date NOT NULL,
   `actTijd` time NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 
 -- --------------------------------------------------------
 
@@ -3016,7 +3025,7 @@ CREATE TABLE `tblinteresse` (
   `interesseID` int(11) NOT NULL,
   `interesseNm` tinytext NOT NULL,
   `interesseBesch` mediumtext NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 
 --
 -- Dumping data for table `tblinteresse`
@@ -3072,8 +3081,17 @@ CREATE TABLE `tbluser` (
   `userPostcode` int(11) NOT NULL,
   `userFoto` text NOT NULL,
   `userEmail` tinytext NOT NULL,
-  `userPasw` tinytext NOT NULL
+  `userPasw` tinytext NOT NULL,
+  `isAdmin` tinyint(1) NOT NULL DEFAULT '0',
+  `deactivated` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
+
+--
+-- Dumping data for table `tbluser`
+--
+
+INSERT INTO `tbluser` (`userID`, `userNm`, `userStraat`, `userPostcode`, `userFoto`, `userEmail`, `userPasw`, `isAdmin`, `deactivated`) VALUES
+(1, 'Admin', 'Geen', 861, 'ws.png', 'boerestink1@gmail.com', '$2y$10$oMEmVbdRrg.yIy44av5aBOE1k3Ch.EX5DJ6000VYzN8ZzyWv/9unG', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -3159,7 +3177,7 @@ ALTER TABLE `tblactiviteit`
 -- AUTO_INCREMENT for table `tblauteur`
 --
 ALTER TABLE `tblauteur`
-  MODIFY `auteurID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `auteurID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `tblauteursperact`
 --
@@ -3189,7 +3207,7 @@ ALTER TABLE `tbltypes`
 -- AUTO_INCREMENT for table `tbluser`
 --
 ALTER TABLE `tbluser`
-  MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;COMMIT;
+  MODIFY `userID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

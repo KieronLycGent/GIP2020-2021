@@ -96,7 +96,7 @@
                                     }
                                     else{  
                                         echo 'Account aangemaakt';
-                                        header("location:index.php");
+                                        header("location:inloggen.php");
                                     }
                                     $stmt->close();
                                 }
@@ -108,6 +108,7 @@
                 ?> 
                 <form id="form1" name="form1" method="post" action="aanmakenAut.php">
                     <h2>Auteur aanmaken</h2>
+                    <a href="registreer.php">Toch al een account? Log hier dan in.</a>
                     <p>Naam:  &nbsp;
                         <input type="text" name="naam" id="naam" placeholder="naam" required value="<?php
                                                                                            if(isset($_POST["naam"])){

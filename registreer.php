@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Home - Workshopp.er</title>
+  <title>Registreren - Workshopp.er</title>
   <meta content="" name="descriptison">
   <meta content="" name="keywords">
 
@@ -41,21 +41,7 @@
   <section id="topbar" class="d-none d-lg-block">
     <div class="container d-flex">
       <div class="social-links">
-          <?php
-          if(isset($_SESSION["login"])){
-              if(!($_SESSION["login"])){
-                  echo"<a href=\"inloggen.php\">Inloggen</a>";
-                  echo"<a href=\"registreer.php\">Registreren</a>";
-              }
-              else{
-                  echo"<a href=\"".$_SERVER["PHP_SELF"]."?end=true\">Uitloggen</a>";
-              }
-          }
-          else{
-              echo"<a href=\"inloggen.php\">Inloggen</a>";
-              echo"<a href=\"registreer.php\">Registreren</a>";
-          }
-          ?>
+        <a href="inloggen.php">Hebt u al een account? Log dan hier in.</a>
       </div>
     </div>
   </section>
@@ -90,21 +76,22 @@
 
     <!-- ======= Featured Section ======= -->
     <section id="featured" class="featured">
+    <h3>&nbsp;</h3>
       <div class="container">
         <div class="row">
             <a href="aanmakenAut.php">
           <div class="col-lg-4" href="aanmakenAut.php">
             <div class="icon-box" href="aanmakenAut.php">
-                <h3><a href="aanmakenAut.php">Auteursaccount aanmaken</a></h3>
-              <p>U kunt evenmenten starten, maar niet aan meedoen.</p>
+              <h2><a href="aanmakenAut.php">Auteursaccount aanmaken</a></h2>
+              <h3><a href="aanmakenAut.php">U kunt evenmenten starten, maar niet aan meedoen.</a></h3>
             </div>
           </div>
             </a>
             <a href="aanmakenUser.php">
           <div class="col-lg-4 mt-4 mt-lg-0" href="aanmakenUser.php">
             <div class="icon-box" href="aanmakenUser.php">
-              <h3><a href="aanmakenUser.php">Gebruikersaccount aanmaken</a></h3>
-              <p>U kunt meedoen aan evenmenten, maar ze niet organiseren.</p>
+              <h2><a href="aanmakenUser.php">Gebruikersaccount aanmaken</a></h2>
+              <h3><a href="aanmakenUser.php">U kunt meedoen aan evenmenten, maar ze niet organiseren.</a></h3>
             </div>
           </div>
             </a>
@@ -114,7 +101,7 @@
   </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
-  <footer id="footer">
+  <!--<footer id="footer">
 
     <div class="footer-newsletter">
       <div class="container">
@@ -167,7 +154,7 @@
         <!-- You can delete the links only if you purchased the pro version. -->
         <!-- Licensing information: https://bootstrapmade.com/license/ -->
         <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/eterna-free-multipurpose-bootstrap-template/ -->
-        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+        <!--Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
       </div>
     </div>
   </footer><!-- End Footer -->

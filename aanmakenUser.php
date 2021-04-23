@@ -279,6 +279,7 @@ if((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&
                 
                 <form id="form1" name="form1" method="post" action="aanmakenUser.php">
                     <h2>User aanmaken</h2>
+                    <a href="registreer.php">Toch al een account? Log hier dan in.</a>
                     <p>naam:  &nbsp;
                         <input type="text" name="naam" id="naam" placeholder="naam" required value="<?php
                                                                                            if(isset($_POST["naam"])){
