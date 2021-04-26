@@ -145,6 +145,7 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
                                         $stmt->bind_result($PostcodeId);
                                         $stmt->fetch();
                                         $PostcodeId1= $PostcodeId;
+                                        $postCheck = true;
                                     }
                                     $stmt->close();
                                 }
@@ -156,7 +157,7 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
                 }
                 else
                 {
-                    echo "De postcode komt niet overeen met de gemeente";
+                    $postCheck = false;
                 }
             }
             @$stmt->close();
@@ -170,7 +171,7 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
 //================================================================================================================================================================//
 ?>  
 <?php 
-if($emailCheck){
+if(isset($emailCheck)&&$emailCheck){
     //Kijkt of naam, straat, paswoord (en zijn check) zijn ingevuld
     if((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&(isset($_POST["straat"]))&&($_POST["straat"]!="")&&isset($_POST["pw"])&&($_POST["pw"]!="")&&isset($_POST["pwCheck"])&&isset($_POST["email"])&&($_POST["email"]!="")){                           
         //Kijkt of paswoordCheck wel correct is
@@ -326,7 +327,7 @@ if($emailCheck){
                                                                                                          ?>">
                         <?php
                         if(isset($emailCheck)&&!$emailCheck){
-                            echo"<br><a id\"error\">Deze email is al in gebruik bij een andere gebruiker.</a>";
+                            echo"<br><a id=\"error\">Deze email is al in gebruik bij een andere gebruiker.</a>";
                         }
                         ?>
                     </p>
@@ -359,6 +360,11 @@ if($emailCheck){
                                                                                                                 if(isset($_POST["postcode"])){
                                                                                                                     echo($_POST["postcode"]);
                                                                                                                 }?>">
+                        <?php
+                            if(isset($postCheck)&&!$postCheck){
+                                echo "<br><a id=\"error\">De postcode komt niet overeen met de gemeente.</a>";
+                            }
+                        ?>
                     </p>
                     <p>
                         Straat + Nr: &nbsp;
@@ -387,7 +393,36 @@ if($emailCheck){
                                     echo"&nbsp; <select name=\"interesse".($i+1)."\" id=\"interesse".($i+1)."\"><option value=\"-\">-</option>";
                                     $stmt->bind_result($ID, $interesse);
                                     while($stmt->fetch()){
-                                        echo"<option value=\"$ID\">".$interesse."</option>";
+                                        if(isset($_POST["verzenden"])&&isset($_POST["interesse1"])&&isset($_POST["interesse2"])&&isset($_POST["interesse3"])){
+                                            if($i == 0){
+                                                if($_POST["interesse1"]== $ID){
+                                                    echo"<option value=\"$ID\" selected>".$interesse."</option>";    
+                                                }
+                                                else{
+                                                    echo"<option value=\"$ID\">".$interesse."</option>";
+                                                }
+                                            }
+                                            elseif($i == 1){
+                                                if($_POST["interesse2"]== $ID){
+                                                    echo"<option value=\"$ID\" selected>".$interesse."</option>";    
+                                                }
+                                                else{
+                                                    echo"<option value=\"$ID\">".$interesse."</option>";
+                                                }
+                                            }
+                                            elseif($i == 2){
+                                                if($_POST["interesse3"]== $ID){
+                                                    echo"<option value=\"$ID\" selected>".$interesse."</option>";    
+                                                }
+                                                else{
+                                                    echo"<option value=\"$ID\">".$interesse."</option>";
+                                                }
+                                            }
+                                        }
+                                        else{
+                                            echo"<option value=\"$ID\">".$interesse."</option>";
+                                        }
+                                        
                                     }
                                 }
                                 echo"</select>

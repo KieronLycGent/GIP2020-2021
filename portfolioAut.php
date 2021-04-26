@@ -167,7 +167,6 @@ if(isset($_GET["item"])){
                                         <h4>".$auteurNm."</h4>
                                         <p>".$auteurBesch."</p>
                                         <div class=\"portfolio-links\">
-                                          <a href=\"assets/img/uploads/".$auteurFoto."\" data-gall=\"portfolioGallery\" class=\"venobox\"><i class=\"bx bx-plus\"></i></a>
                                           <a href=\"portfolioAut.php?item=".$auteurID."\" title=\"More Details\"><i class=\"bx bx-link\"></i></a>
                                         </div>
                                       </div>

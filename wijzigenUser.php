@@ -92,166 +92,89 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
     }
 }
 //---------------------------------------------------------------------------------------einde PC en Gemeente check
-//Code interesse---------------------------------------------------------------------------------------------------
-if ((isset($_POST["verzenden"]))&& (isset($_POST["interesse1"]) && ($_POST["interesse1"] != "-")))
-{
-    $mysqli=new MySQLi("localhost","root","","gip");
-
-    if (mysqli_connect_errno())
-    {
-        trigger_error('Fout bij verbinding: '.$mysqli->error);
-    }
-    else
-    {
-        $sql="select  i.interesseID from tblInteresse i where i.interesseID=?";
-        if ($stmt=$mysqli->prepare($sql))
-        {
-            $stmt->bind_param('s',$intID);
-           
-            $intID= $_POST["interesse1"];
-            if(!$stmt->execute())
-            {
-                echo 'Het uitvoeren van de query is mislukt: '.$stmt->error.'in query';
-            }
-            else
-            {   
-                $stmt->bind_result($intID1);
-                $stmt->fetch();
-                $intID1= $intID;
-            }
-            $stmt->close();
-        }
-        else
-        {
-            echo 'Er is een fout in de query: '.$mysqli->error;
-        }
-    }
-}
-if ((isset($_POST["verzenden"]))&& (isset($_POST["interesse2"]) && ($_POST["interesse2"] != "-")))
-{
-    $mysqli=new MySQLi("localhost","root","","gip");
-
-    if (mysqli_connect_errno())
-    {
-        trigger_error('Fout bij verbinding: '.$mysqli->error);
-    }
-    else
-    {
-        $sql="select  i.interesseID from tblInteresse i where i.interesseID=?";
-        if ($stmt=$mysqli->prepare($sql))
-        {
-            $stmt->bind_param('s',$intID);
-           
-            $intID= $_POST["interesse2"];
-            if(!$stmt->execute())
-            {
-                echo 'Het uitvoeren van de query is mislukt: '.$stmt->error.'in query';
-            }
-            else
-            {   
-                $stmt->bind_result($intID2);
-                $stmt->fetch();
-                $intID2= $intID;
-            }
-            $stmt->close();
-        }
-        else
-        {
-            echo 'Er is een fout in de query: '.$mysqli->error;
-        }
-    }
-}
-if ((isset($_POST["verzenden"]))&& (isset($_POST["interesse3"]) && ($_POST["interesse3"] != "-")))
-{
-    $mysqli=new MySQLi("localhost","root","","gip");
-
-    if (mysqli_connect_errno())
-    {
-        trigger_error('Fout bij verbinding: '.$mysqli->error);
-    }
-    else
-    {
-        $sql="select  i.interesseID from tblInteresse i where i.interesseID=?";
-        if ($stmt=$mysqli->prepare($sql))
-        {
-            $stmt->bind_param('s',$intID);
-           
-            $intID= $_POST["interesse3"];
-            if(!$stmt->execute())
-            {
-                echo 'Het uitvoeren van de query is mislukt: '.$stmt->error.'in query';
-            }
-            else
-            {   
-                $stmt->bind_result($intID3);
-                $stmt->fetch();
-                $intID3= $intID;
-            }
-            $stmt->close();
-        }
-        else
-        {
-            echo 'Er is een fout in de query: '.$mysqli->error;
-        }
-    }
-}
-//------------------------------------------------------------------------------------------Einde code interesse
-//interesses invoegen-------------------------------------------------------------------------------------------
-if ((isset($_POST["verzenden"]))&&isset($_POST["interesse1"])&&($_POST["interesse1"] != "")&&isset($_POST["interesse2"])&&($_POST["interesse2"] != "")&&isset($_POST["interesse3"])&&($_POST["interesse3"] != "")&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&(isset($_POST["email"]))&&($_POST["email"]!="")&&(isset($_POST["straat"]))&&($_POST["straat"]!=""))
-{
-    $mysqli=new MySQLi("localhost","root","","gip");
-
-    if (mysqli_connect_errno())
-    {
-        trigger_error('Fout bij verbinding: '.$mysqli->error);
-    }
-    else
-    {
-        $sql = "INSERT INTO tblInteressesuser (interesseID1, interesseID2, interesseID3) VALUES (?,?,?)"; 
-        if($stmt = $mysqli->prepare($sql)) {     
-            $stmt->bind_param('iii', $intID1, $intID2, $intID3);
-            if(!$stmt->execute()){
-                echo 'het uitvoeren van de query is mislukt:';
-            }
-            else{  
-                echo 'interesses ingevoegd'.$mysqli->error;
-            }
-            $stmt->close();
-        }
-        else{
-            echo 'Er zit een fout in de query' .$mysqli->error; 
-        }
-    }   
-}
-//------------------------------------------------------------------------------------------------Einde interesses invoegen
-//interessesID krijgen-----------------------------------------------------------------------------------------------------
-$intsID = 0;
 if ((isset($_POST["verzenden"]))&&isset($_POST["interesse1"])&&($_POST["interesse1"] != "")&&isset($_POST["interesse2"])&&($_POST["interesse2"] != "")&&isset($_POST["interesse3"])&&($_POST["interesse3"] != "")&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&(isset($_POST["email"]))&&($_POST["email"]!="")&&(isset($_POST["straat"]))&&($_POST["straat"]!="")){
-    $mysqli = new MySQLi("localhost","root","","gip");
+    //Het deleten van de oude interesses
+    $mysqli = new mysqli("localhost","root","","gip");
     if(mysqli_connect_errno()){
         trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
     else{
-        $sql = "SELECT COUNT(interessesID) FROM tblInteressesuser";
+        $sql = "DELETE FROM tblInteressesUser WHERE userID = ".$_SESSION["ID"];
         if($stmt = $mysqli->prepare($sql)){
             if(!$stmt->execute()){
-                echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
+                echo"Het uitvoeren van qry delOldInt is mislukt: ".$stmt->error."<br>";
             }
-            else{                          
-                $stmt->bind_result($bindID);
-                while($stmt->fetch()){
-                    $intsID = $bindID+1;
-                }
+            else{
+                echo"delSuccess";
             }
             $stmt->close();
         }
-        else{   
-            echo"Er zit een fout in de qry: ".$mysqli->error;
+        else{
+            echo"Er zit een fout in qry delOldInt: ".$mysqli->error."<br>";
         }
     }
+    //Het inserten van de 3 interesses
+    //int1
+    if($_POST["interesse1"] != "-"){
+        $mysqli= new MySQLI("localhost","root","","gip");
+        if(mysqli_connect_errno()){
+            trigger_error("Fout bij verbinding 'Int1': ".$mysqli->error);
+        }
+        else{
+            $sql = "INSERT INTO tblinteressesuser (userID, interesseID) VALUES (?,?)";
+            if($stmt = $mysqli->prepare($sql)){
+                $stmt->bind_param('ii', $_SESSION["ID"], $_POST["interesse1"]);
+                if(!$stmt->execute()){
+                    echo "Het uitvoeren van qry Int1 is mislukt: ".$mysqli->error;
+                }
+                $stmt->close();
+            }
+            else{
+                echo"Er zit een fout in qry Int1".$mysqli->error;
+            }
+        }
+    }
+    //int2
+    if($_POST["interesse2"] != "-"){
+        $mysqli= new MySQLI("localhost","root","","gip");
+            if(mysqli_connect_errno()){
+                trigger_error("Fout bij verbinding 'Int2': ".$mysqli->error);
+            }
+            else{
+                $sql = "INSERT INTO tblinteressesuser (userID, interesseID) VALUES (?,?)";
+                if($stmt = $mysqli->prepare($sql)){
+                    $stmt->bind_param('ii', $uID, $_POST["interesse2"]);
+                    if(!$stmt->execute()){
+                        echo "Het uitvoeren van qry Int2 is mislukt: ".$mysqli->error;
+                    }
+                    $stmt->close();
+                }
+                else{
+                    echo"Er zit een fout in qry Int2".$mysqli->error;
+                }
+            }                   
+        }
+        //int3
+        if($_POST["interesse3"] != "-"){
+            $mysqli= new MySQLI("localhost","root","","gip");
+            if(mysqli_connect_errno()){
+                trigger_error("Fout bij verbinding 'Int3': ".$mysqli->error);
+            }
+            else{
+                $sql = "INSERT INTO tblinteressesuser (userID, interesseID) VALUES (?,?)";
+                if($stmt = $mysqli->prepare($sql)){
+                    $stmt->bind_param('ii', $uID, $_POST["interesse3"]);
+                    if(!$stmt->execute()){
+                        echo "Het uitvoeren van qry Int3 is mislukt: ".$mysqli->error;
+                    }
+                    $stmt->close();
+                }
+                else{
+                    echo"Er zit een fout in qry Int3".$mysqli->error;
+                }
+            }
+        }
 }
-//------------------------------------------------------------------------------------------------Einde interessesID krijgen -> $intsID
-//
 if ((isset($_POST["verzenden"]))&&isset($_POST["interesse1"])&&($_POST["interesse1"] != "")&&isset($_POST["interesse2"])&&($_POST["interesse2"] != "")&&isset($_POST["interesse3"])&&($_POST["interesse3"] != "")&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&(isset($_POST["email"]))&&($_POST["email"]!="")&&(isset($_POST["straat"]))&&($_POST["straat"]!="")){
      
     $mysqli = new MySQLi("localhost","root","","gip");

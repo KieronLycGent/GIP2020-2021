@@ -122,107 +122,62 @@ if(!isset($_SESSION["ID"])){
 
     <!-- ======= Portfolio Details Section ======= -->
 
-    <?php
-    $mysqli= new MySQLi("localhost","root","","gip");
-    if(mysqli_connect_errno()){
-        trigger_error("Fout bij verbinding: ".$mysqli->error);
-    }
-    else{
-        $sql = "SELECT u.userID, u.userNm, u.userFoto, u.userStraat, g.PCode, g.Gemeente FROM tblUser u, tblgemeente g WHERE u.userID=".$_SESSION["ID"]." AND u.userPostcode = g.PostcodeID";
-        if($stmt = $mysqli->prepare($sql)){
-            if(!$stmt->execute()){
-                echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
-            }
-            else{
-                $stmt->bind_result($userID, $userNm, $userFoto, $userStraat, $pcode, $gemeente);
-                echo"
-                <section id=\"portfolio-details\" class=\"portfolio-details\">
-                    <div class=\"container\">
-                            <a class=\"icofont-arrow-left\" href=\"portfolioUser.php\">Terug</a>
-                        <div class=\"row\">
-                        <div class=\"col-lg-8\">
-                ";
-                while($stmt->fetch()){
-                    echo"
-                     <img src=\"assets/img/uploads/".$userFoto."\" class=\"img-fluid\" alt=\"\">";
-                }
-                echo"
-                <div class=\"col-lg-4 portfolio-info\">
-                    <h3>Informatie user</h3>
-                    <ul>
-                        <li><strong>Naam</strong>: ".$userNm."</li>
-                        <li><strong>Adres</strong>:</li>
-                        <li>".$userStraat."<br>".$pcode." ".$gemeente."</li>
-                        <li><strong>Interesses</strong>:</li>";
-                $stmt->close(); 
-            }
-        }
-        else{
-            echo"Er zit een fout in de qry: ".$mysqli->error;
-        }
-    }
-        $mysqli= new MySQLi("localhost","root","","gip");
-            $sql = "SELECT  i.interesseNm FROM tblinteresse i, tbluser u, tblinteressesuser iu WHERE u.userID=".$_SESSION["ID"]." AND u.interessesID = iu.interessesID AND iu.interesseID1 = i.interesseID";
-        
-        if($stmt = $mysqli->prepare($sql)){
-            if(!$stmt->execute()){
-                echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in qry";
-            }  
-            else{
-                $stmt->bind_result($int1);
-                while($stmt->fetch()){
-                    if($int1 == NULL){
-                        $int1 = "-";
-                    }
-                    echo"<li>".$int1."</li>";
-                }
-            }
-            $stmt->close();
-        }
-        else{
-            echo"Er zit een fout in de qry: ".$mysqli->error;
-        }
-    $mysqli= new MySQLi("localhost","root","","gip");
-    $sql = "SELECT  i.interesseNm FROM tblinteresse i, tbluser u, tblinteressesuser iu WHERE u.userID=".$_SESSION["ID"]." AND u.interessesID = iu.interessesID AND iu.interesseID2 = i.interesseID";
-        if($stmt = $mysqli->prepare($sql)){
-            if(!$stmt->execute()){
-                echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in qry";
-            }  
-            else{
-                $stmt->bind_result($int2);
-                while($stmt->fetch()){
-                    if($int2 == NULL){
-                        $int2 = "-";
-                    }
-                    echo"<li>".$int2."</li>";
-                }
-            }
-            $stmt->close();
-        }
-        else{
-            echo"Er zit een fout in de qry: ".$mysqli->error;
-        }     
-    $mysqli= new MySQLi("localhost","root","","gip");
-    $sql = "SELECT  i.interesseNm FROM tblinteresse i, tbluser u, tblinteressesuser iu WHERE  u.userID=".$_SESSION["ID"]." AND u.interessesID = iu.interessesID AND iu.interesseID3 = i.interesseID";
-        
+<?php
+$mysqli= new MySQLi("localhost","root","","gip");
+if(mysqli_connect_errno()){
+    trigger_error("Fout bij verbinding: ".$mysqli->error);
+}
+else{
+    $sql = "SELECT u.userID, u.userNm, u.userFoto, u.userStraat, g.PCode, g.Gemeente FROM tblUser u, tblgemeente g WHERE u.userID=".$_SESSION["ID"]." AND u.userPostcode = g.PostcodeID";
     if($stmt = $mysqli->prepare($sql)){
         if(!$stmt->execute()){
-            echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in qry";
-        }  
-        else{
-            $stmt->bind_result($int3);
-            while($stmt->fetch()){
-                if($int3 == NULL){
-                    $int3 = "-";
-                }
-                echo"<li>".$int3."</li>";
-            }
+            echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
         }
-            $stmt->close();
-    }     
+        else{
+            $stmt->bind_result($userID, $userNm, $userFoto, $userStraat, $pcode, $gemeente);
+            echo"
+            <section id=\"portfolio-details\" class=\"portfolio-details\">
+                <div class=\"container\">
+                        <a class=\"icofont-arrow-left\" href=\"portfolioUser.php\">Terug</a>
+                      <div class=\"row\">
+                    <div class=\"col-lg-8\">
+            ";
+            while($stmt->fetch()){
+                echo"
+                  <img src=\"assets/img/uploads/".$userFoto."\" class=\"img-fluid\" alt=\"\">";
+            }
+            echo"
+            <div class=\"col-lg-4 portfolio-info\">
+                <h3>Informatie user</h3>
+                <ul>
+                    <li><strong>Naam</strong>: ".$userNm."</li>
+                    <li><strong>Adres</strong>:</li>
+                    <li>".$userStraat."<br>".$pcode." ".$gemeente."</li>
+                    <li><strong>Interesses</strong>:</li>";
+            $stmt->close(); 
+        }
+    }
     else{
-            echo"Er zit een fout in de qry: ".$mysqli->error;
-        }     
+        echo"Er zit een fout in de qry: ".$mysqli->error;
+    }
+}
+$mysqli = new mysqli("localhost","root","","gip");
+$sql = "SELECT i.interesseNm FROM tblInteresse i, tblInteressesuser iu WHERE iu.userID = ".$_SESSION["ID"]." AND iu.interesseID = i.interesseID";
+if($stmt = $mysqli->prepare($sql)){
+  if(!$stmt->execute()){
+    echo"Het uitvoeren van qry interesses is mislukt: ".$stmt->error."in qry<br>";
+  }
+  else{
+    $stmt->bind_result($int);
+    while($stmt->fetch()){
+        echo"<li>".$int."</li>";
+    }
+  }
+  $stmt->close();
+}
+else{
+  echo"Er zit in fout in qry interesses: ".$mysqli->error;"<br>";
+}
     echo"            </ul>
                     <p>
                         

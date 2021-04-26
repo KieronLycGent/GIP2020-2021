@@ -14,7 +14,8 @@ VERGEET NIET DE .SQL TE UPDATEN!!!
 
 
 Admin:
-	-Users editen								X |
+	-Users editen								X | 							note: heb nu al een stuk of 200 lijnen verwijderd. Wtf was ik aan het denken?!? - 2021-04-26
+		-User details -> interesses error fixen V | 2021-04-26
 	-Auteurs editen								X |
 	-Workshops editen							X |
 	-Users deactiveren							X |
@@ -30,7 +31,7 @@ Admin:
 Registratie:
 	-password hashing 											V | 2021-04-23
 	https://stackoverflow.com/questions/35782911/hashing-passwords-php-mysqli
-	-dubbele emails niet toelaten bij zelfde soort account		X |
+	-dubbele emails niet toelaten bij zelfde soort account		V | 2021-04-23
 (Ik wil liefst ervoor zorgen dat een email zowel een auteur als een user kan aanmaken)
 
 Workshops:
