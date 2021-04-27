@@ -77,6 +77,7 @@ if(!isset($_SESSION["ID"])){
               echo"<a href=\"registreer.php\">Registreren</a>";
           }
           ?>
+          <a href="wijzigenUser.php">ADMIN_Wijzigen</a>
       </div>
     </div>
   </section>

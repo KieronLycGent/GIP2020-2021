@@ -10,7 +10,6 @@ if(isset($_POST["verzenden"])){
     <input type="submit" name="verzenden" id="verzenden">
 </form>
 
-<?php?>
 <form id="login" name="login" method="post" action="test.php">
     <input type="text" name="email" id="email" required>
     <input type="password" name="pw" id="pw" required>
@@ -38,6 +37,53 @@ if(isset($_POST["login"])&&isset($_POST["email"])&&$_POST["email"]!=""&&isset($_
                     }
                 }
                 $stmt->close();
+            }
+        }
+    }
+?>
+<?php
+for($i=0;$i<3;$i++){
+    echo"&nbsp; <li><select name=\"interesse".($i+1)."\" id=\"interesse".($i+1)."\"><option value=\"-\">-</option>";
+        $mysqli = new mysqli("localhost","root","","gip");
+        if(mysqli_connect_errno()){
+            trigger_error("Fout bij verbinding: ".$mysqli->error);
+        }
+        else{
+            $sql = "SELECT interesseID, interesseNm FROM tblInteresse";
+            if($stmt->prepare($sql)){
+                if(!$stmt->execute()){
+                    echo"Het uitvoeren van qry getAllInts is mislukt: ".$stmt->error."<br>";       
+                }
+                else{
+                    $stmt->bind_result($ID, $interesse);
+                    while($stmt->fetch()){
+                        /*$j++;
+                        echo"<option value=\"$ID\"";
+                        switch($j){
+                            case 1:
+                                if($ID == $selInt1){
+                                    echo"selected";
+                                }
+                                break;
+                            case 2:
+                                if($ID == $selInt2){
+                                    echo"selected";
+                                }
+                                break;
+                            case 3:
+                                if($ID == $selInt3){
+                                    echo"selected";
+                                }
+                                break;
+                        }
+                        echo"> ".$interesse."</option>";*/
+                        echo"<option value=\"".$ID."\">".$interesse."</option>";
+                    }
+                    $stmt->close();
+                }
+            }
+            else{
+                echo"Er zit een fout in qry getAllInts: ".$mysqli->error."<br>";
             }
         }
     }

@@ -1,4 +1,7 @@
 <?php
+
+use function PHPSTORM_META\elementType;
+
 session_start();
 if(isset($_GET["end"])){
     if($_GET["end"]){
@@ -286,90 +289,141 @@ if ((isset($_POST["verzenden"]))&&isset($_POST["interesse1"])&&($_POST["interess
 
     <!-- ======= Portfolio Details Section ======= -->
     <form action="<?php $_SERVER["PHP_SELF"]?>" method="post">
+        <section id="portfolio-details" class="portfolio-details">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8">
     <?php
-    $mysqli= new MySQLi("localhost","root","","gip");
+    // Deze hele code moet van scratch herschreven worden: CHAOS!!!
+//-----------------------------------------------qry baseInfo------------------------------------------
+$mysqli = new mysqli("localhost","root","","gip");
+if(mysqli_connect_errno()){
+    trigger_error("Fout bij verbinding: ".$mysqli->error);
+}
+else{
+    $sql = "SELECT u.userID, u.userNm, u.userStraat, u.userStraat, g.PCode, g.Gemeente, u.userEmail
+    FROM tblUser u, tblGemeente g WHERE u.userID=".$_SESSION["ID"]." AND u.userPostcode = g.PostcodeId";
+    if($stmt = $mysqli->prepare($sql)){
+        if(!$stmt->execute()){
+            echo"Het uitvoeren van qry baseInfo is mislukt: ".$stmt->error."<br>";
+        }
+        else{
+            $stmt->bind_result($userID,$userNm,$userFoto,$userStraat,$pCode,$gemeente,$email);
+            $stmt->fetch();
+        }
+        $stmt->close();
+    }
+    else{
+        echo"Er zit een fout in qry baseInfo: ".$mysqli->error."<br>";
+    }
+}
+//----------------------------------------------------------------------------------------------------
+                    echo"<a href=\"portfolio-detailsUser.php\">Terug</a>
+                        <img src=\"assets/img/uploads/".$userFoto."\" class=\"img-fluid\" alt=\"\"><br>
+                                                                                                    <input type=\"text\" name=\"foto\" value=\"".$userFoto."\">
+                        <div class=\"col-lg-4 portfolio-info\">
+                            <h3>Informatie Gebruiker</h3>
+                            <ul>
+                            <li><label>Naam: </label><br><input type=\"text\" id=\"naam\" name=\"naam\" value=\"".$userNm."\"></li>
+                            <li><label>Email: </label><br><input type=\"email\" id=\"email\" name=\"email\" value=\"".$email."\"></li>
+                            <li><label>Straat + Nr: </label><br><input type=\"text\" id\"straat\" name=\"straat\" value=\"".$userStraat."\"></li>";
+            if($pcErr){echo"<li id=\"error\">De postcode komt niet overeen met de gemeente: Gelieve dit opnieuw in te vullen.</li>";}
+                    echo"   <li><label>Gemeente: </label><br><input type=\"text\" id\"gemeente\" name=\"gemeente\" value=\"".$gemeente."\"></li>
+                            <li><label>Postcode: </label><br><input type=\"text\" id\"postcode\" name=\"postcode\" value=\"".$pCode."\"></li>
+                            <li><label>Interesses: </label><br></li>";
+//-------------------------------------------------------qry getUserInts-----------------------------
+$i = 0;
+$mysqli = new mysqli("localhost","root","","gip");
+if(mysqli_connect_errno()){
+    trigger_error("Fout bij verbinding: ".$mysqli->error);
+}
+else{
+    $sql = "SELECT interesseID FROM tblInteressesuser WHERE userID=".$_SESSION["ID"];
+    if($stmt = $mysqli->prepare($sql)){
+        if(!$stmt->execute()){
+            echo"Het uitvoeren van qry getUserInts is mislukt: ".$stmt->error."<br>";
+        }
+        else{
+            $stmt->bind_result($selectedInt);
+            while($stmt->fetch()){
+                $i++;
+                switch($i){
+                    case 1:
+                        $selInt1 = $selectedInt;
+                        break;
+                    case 2:
+                        $selInt2 = $selectedInt;
+                        break;
+                    case 3:
+                        $selInt3 = $selectedInt;
+                        break;
+                }
+            }
+            $stmt->close();
+        }
+    }
+    else{
+        echo"Er zit een fout in qry getUserInts".$mysqli->error."<br>";
+    }
+}
+$i = 0;
+$j = 0;
+//---------------------------------------------qry getAllInts-------------------------------------
+//for($i=0;$i<3;$i++){
+echo"&nbsp; <li><select name=\"interesse".($i+1)."\" id=\"interesse".($i+1)."\"><option value=\"-\">-</option>";
+    $mysqli = new mysqli("localhost","root","","gip");
     if(mysqli_connect_errno()){
         trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
     else{
-        $sql = "SELECT u.userID, u.userNm, u.userFoto, u.userStraat, g.PCode, g.Gemeente, u.userEmail FROM tblUser u, tblgemeente g WHERE u.userID=".$_SESSION["ID"]." AND u.userPostcode = g.PostcodeId";
-        if($stmt = $mysqli->prepare($sql)){
+        $sql = "SELECT interesseID, interesseNm FROM tblInteresse";
+        if($stmt->prepare($sql)){
             if(!$stmt->execute()){
-                echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
+                echo"Het uitvoeren van qry getAllInts is mislukt: ".$stmt->error."<br>";       
             }
             else{
-                $stmt->bind_result($userID, $userNm, $userFoto, $userStraat, $pCode, $gemeente, $email);
-                echo"
-                <section id=\"portfolio-details\" class=\"portfolio-details\">
-                    <div class=\"container\">
-                        <div class=\"row\">
-                        <div class=\"col-lg-8\">
-                ";
+                $stmt->bind_result($ID, $interesse);
                 while($stmt->fetch()){
-                }
-                echo"<a href=\"portfolio-detailsUser.php\">terug</a><br>
-                <img src=\"assets/img/uploads/".$userFoto."\" class=\"img-fluid\" alt=\"\"><br>
-                     <input type=\"text\" name=\"foto\" id=\"foto\" value=".$userFoto.">
-                <div class=\"col-lg-4 portfolio-info\">
-                    <h3>Informatie User</h3>
-                    <ul>
-                        <li><label>Naam: </label><br><input type=\"text\" id=\"naam\" name=\"naam\" value=\"".$userNm."\"></li>
-                        <li><label>Email: </label><br><input type=\"email\" id=\"email\" name=\"email\" value=\"".$email."\"></li>
-                        <li><label>Straat + Nr: </label><br><input type=\"text\" id\"straat\" name=\"straat\" value=\"".$userStraat."\"></li>";
-                if($pcErr){echo"<li id=\"error\">De postcode komt niet overeen met de gemeente: Gelieve dit opnieuw in te vullen.</li>";}
-                echo"   <li><label>Gemeente: </label><br><input type=\"text\" id\"gemeente\" name=\"gemeente\" value=\"".$gemeente."\"></li>
-                        <li><label>Postcode: </label><br><input type=\"text\" id\"postcode\" name=\"postcode\" value=\"".$pCode."\"></li>
-                        <li><label>Interesses: </label><br></li>";
-                    //------------------------------
-                    for($i=0; $i<3; $i++){
-                        $mysqli= new MySQLi("localhost","root","","gip");
-                        if(mysqli_connect_errno()){
-                            trigger_error("Fout bij verbinding: ".$mysqli->error);
-                        }
-                        else{
-                            $sql = "select interesseID, interesseNm from tblInteresse";
-                            if($stmt = $mysqli->prepare($sql)){
-                                if(!$stmt->execute()){
-                                    echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
-                                }
-                                else{                          
-                                    echo"&nbsp; <li><select name=\"interesse".($i+1)."\" id=\"interesse".($i+1)."\"><option value=\"-\">-</option>";
-                                    $stmt->bind_result($ID, $interesse);
-                                    while($stmt->fetch()){
-                                        echo"<option value=\"$ID\">".$interesse."</option>";
-                                    }
-                                }
-                                echo"</select></li>
-                                <br>
-                                &nbsp;
-                                ";
-                                $stmt->close();
+                    /*$j++;
+                    echo"<option value=\"$ID\"";
+                    switch($j){
+                        case 1:
+                            if($ID == $selInt1){
+                                echo"selected";
                             }
-                            else{
-                                echo"Er zit een fout in de qry: ".$mysqli->error;
+                            break;
+                        case 2:
+                            if($ID == $selInt2){
+                                echo"selected";
                             }
-                        }
+                            break;
+                        case 3:
+                            if($ID == $selInt3){
+                                echo"selected";
+                            }
+                            break;
                     }
-                    //-------------------------------------
-                    echo"
-                    </ul>
-                </div>
-                <input type=\"submit\" name =\"verzenden\" value=\"Wijzigen\">
-                </div>
-                </div>
-                </div>
-                </section>
-                ";
+                    echo"> ".$interesse."</option>";*/
+                    echo"<option value=\"".$ID."\">".$interesse."</option>";
+                }
+                $stmt->close();
             }
-            @$stmt->close();
         }
         else{
-            echo"Er zit een fout in de qry: ".$mysqli->error;
+            echo"Er zit een fout in qry getAllInts: ".$mysqli->error."<br>";
         }
     }
-
-    ?>
-        
+//}
+echo"</select></li>
+    <br>&nbsp;
+    </ul>
+    </div>
+    <input type=\"submit\" name =\"verzenden\" value=\"Wijzigen\">
+    </div>
+    </div>
+    </div>
+    </section>";
+?>    
     </form>
   </main><!-- End #main -->
 

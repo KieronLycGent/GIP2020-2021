@@ -19,3 +19,29 @@ $sql = "SELECT ac.actID, au.auteurNm, ac.actFoto, ac.actNm, ty.actType, ac.persA
         else{
           echo("Er zit een fout in qry noSearch: ".$mysqli->error);
         }
+
+
+
+
+Voor wijzigenUser.php
+echo"<a href=\"portfolio-detailsUser.php\">terug</a><br>
+                <img src=\"assets/img/uploads/".$userFoto."\" class=\"img-fluid\" alt=\"\"><br>
+                     <input type=\"text\" name=\"foto\" id=\"foto\" value=".$userFoto.">
+                <div class=\"col-lg-4 portfolio-info\">
+                    <h3>Informatie User</h3>
+                    <ul>
+                        <li><label>Naam: </label><br><input type=\"text\" id=\"naam\" name=\"naam\" value=\"".$userNm."\"></li>
+                        <li><label>Email: </label><br><input type=\"email\" id=\"email\" name=\"email\" value=\"".$email."\"></li>
+                        <li><label>Straat + Nr: </label><br><input type=\"text\" id\"straat\" name=\"straat\" value=\"".$userStraat."\"></li>";
+                if($pcErr){echo"<li id=\"error\">De postcode komt niet overeen met de gemeente: Gelieve dit opnieuw in te vullen.</li>";}
+                echo"   <li><label>Gemeente: </label><br><input type=\"text\" id\"gemeente\" name=\"gemeente\" value=\"".$gemeente."\"></li>
+                        <li><label>Postcode: </label><br><input type=\"text\" id\"postcode\" name=\"postcode\" value=\"".$pCode."\"></li>
+                        <li><label>Interesses: </label><br></li>";
+                echo"&nbsp; <li><select name=\"interesse".($i+1)."\" id=\"interesse".($i+1)."\"><option value=\"-\">-</option>";
+                while($stmt->fetch())
+                echo"<option value=\"$ID\">".$interesse."</option>";
+                echo"</select></li>
+                                <br>
+                                &nbsp;
+                                ";
+
