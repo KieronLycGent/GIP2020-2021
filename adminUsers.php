@@ -7,8 +7,9 @@ if(isset($_GET["end"])){
     }
 }
 if(!$_SESSION["admin"]){
-  header("location:index.php");
-}
+    header("location:index.php");
+  }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,7 +18,7 @@ if(!$_SESSION["admin"]){
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Over - Workshopp.er</title>
+  <title>Contact - Workshopp.er</title>
   <meta content="" name="descriptison">
   <meta content="" name="keywords">
 
@@ -38,6 +39,11 @@ if(!$_SESSION["admin"]){
 
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
+<style type="txt/css">
+table{
+  border: #FF0000 solid 1px;
+}
+</style>
 
   <!-- =======================================================
   * Template Name: Eterna - v2.1.0
@@ -50,7 +56,7 @@ if(!$_SESSION["admin"]){
 <body>
 
   <!-- ======= Top Bar ======= -->
- <section id="topbar" class="d-none d-lg-block">
+  <section id="topbar" class="d-none d-lg-block">
     <div class="container d-flex">
       <div class="social-links">
           <?php
@@ -79,7 +85,7 @@ if(!$_SESSION["admin"]){
     </div>
   </section>
   <!-- ======= Header ======= -->
-  <header id="header">
+ <header id="header">
     <div class="container d-flex">
 
       <div class="logo mr-auto">
@@ -92,8 +98,8 @@ if(!$_SESSION["admin"]){
         <ul>
           <li><a href="index.php">Home</a></li>
 
-            <li class="active"><a href="about.php">Over</a></li>
-          <li><a href="contact.php">Contact</a></li>
+            <li><a href="about.php">Over</a></li>
+          <li class="active"><a href="contact.php">Contact</a></li>
               <li><a href="portfolioAut.php">Auteurs</a></li>
             <li><a href="portfolioUser.php">Gebruikers</a></li>
 
@@ -105,36 +111,83 @@ if(!$_SESSION["admin"]){
 
   <main id="main">
 
-<!-- ======= Featured Section ======= -->
-<section id="featured" class="featured">
-<h3>&nbsp;</h3>
-  <div class="container">
-    <div class="row">
-      <a href="">
-        <div class="col-lg-4">
-          <div class="icon-box">
-            <h3><a href="adminUsers.php">Gebruikers aanpassen/deactiveren</a></h3>
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+
+        <ol>
+          <li><a href="index.php">Home</a></li>
+          <li><a href="admin.php">Admin</a></li>
+          <li>Gebruikers</li>
+        </ol>
+        <h2>Gebruikers</h2>
+
+      </div>
+    </section><!-- End Breadcrumbs -->
+
+    <!-- ======= Content Section ======= -->
+    <section id="content" class="content">
+          <div class="container">
+            <div class="row">
+                <table id="tblUsers" class="admin">
+                    <tr>
+                        <th width = 20px>ID</th>
+                        <th width = 150px>Naam</th>
+                        <th width = 200px>Straat</th>
+                        <th width = 100px>Postcode</th>
+                        <th width = 120px>Gemeente</th>
+                        <th width = 200px>Email</th>
+                        <th width = 20px>Gedeactiveerd?</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <?php
+$mysqli = new mysqli("localhost","root","","gip");
+if(mysqli_connect_errno()){
+    trigger_error("Fout bij verbinding: ".$mysqli->error);
+}
+else{
+    $sql = "SELECT u.userID, u.userNm, u.userStraat, g.PCode, g.Gemeente, u.userEmail, u.deactivated
+    FROM tblUser u, tblGemeente g 
+    WHERE g.PostcodeId = u.userPostcode";
+    if($stmt = $mysqli->prepare($sql)){
+        if(!$stmt->execute()){
+            echo"Het uitvoeren van qry getUsers is mislukt: ".$stmt->error."in query";
+        }
+        else{
+            $stmt->bind_result($uID, $uNm, $uStraat, $uPC, $uGem, $uEmail, $uDeact);
+            while($stmt->fetch()){
+                echo"
+                <tr>
+                    <td>".$uID."</td>
+                    <td>".$uNm."</td>
+                    <td>".$uStraat."</td>
+                    <td>".$uPC."</td>
+                    <td>".$uGem."</td>
+                    <td>".$uEmail."</td>";
+                    switch($uDeact){
+                        case 0:
+                            echo"<td>Nee</td>";
+                            break;
+                        default:
+                            echo"<td>Ja</td>";
+                            break;
+                    }
+                echo"
+                    <td><a href=\"adminUsers.php?item=".$uID."&option=edit\"><i class=\"icofont-pencil-alt-5\"></i></a>
+                    <td><a href=\"adminUsers.php?item=".$uID."&option=deact\"><i class=\"icofont-not-allowed\"></i></a>
+                </tr>";
+            }
+        }
+    }
+}
+                    ?>
+                </table>
+            </div>
           </div>
-        </div>
-      </a>
-      <a href="">
-        <div class="col-lg-4">
-          <div class="icon-box">
-            <h3><a href="adminAuteurs.php">Auteurs aanpassen/deactiveren</a></h3>
-          </div>
-        </div>
-      </a>
-      <a href="">
-        <div class="col-lg-4">
-          <div class="icon-box">
-            <h3><a href="">Workshops aanpassen/deactiveren</a></h3>
-          </div>
-        </div>
-      </a>
-    </div>
-  </div>
-</section><!-- End Featured Section -->
-</main><!-- End #main -->
+    </section>
+
+    </main><!-- End #main -->
 
   <!-- ======= Footer ======= -->
   <footer id="footer">
