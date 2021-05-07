@@ -1,8 +1,14 @@
 <?php
-
-use function PHPSTORM_META\elementType;
-
 session_start();
+//print_r($_POST);
+//print_r($_FILES);print_r($_SESSION);
+
+//use function PHPSTORM_META\elementType;
+
+
+ $intevoegennaamfoto= "";
+
+
 if(isset($_GET["end"])){
     if($_GET["end"]){
         session_destroy();
@@ -18,6 +24,7 @@ if(!isset($_SESSION["ID"])){
 }
 $pcErr = false;
 //Postcode/gemeente check----------------------------------------------------------------------------
+
 if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postcode"] != "") &&isset($_POST["gemeente"]) && $_POST["gemeente"] !="" )
 {
     $mysqli=new MySQLi("localhost","root","","gip");
@@ -46,6 +53,7 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
                 {
                     ?>
                     <?php
+					 $pcErr = false;
                         if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postcode"] != "") &&isset($_POST["gemeente"]) && $_POST["gemeente"] !="" )
                         {
                             $mysqli=new MySQLi("localhost","root","","gip");
@@ -95,7 +103,80 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
     }
 }
 //---------------------------------------------------------------------------------------einde PC en Gemeente check
-if ((isset($_POST["verzenden"]))&&isset($_POST["interesse1"])&&($_POST["interesse1"] != "")&&isset($_POST["interesse2"])&&($_POST["interesse2"] != "")&&isset($_POST["interesse3"])&&($_POST["interesse3"] != "")&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&(isset($_POST["email"]))&&($_POST["email"]!="")&&(isset($_POST["straat"]))&&($_POST["straat"]!="")){
+if ((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&(isset($_POST["email"]))&&($_POST["email"]!="")&&(isset($_POST["straat"]))&&($_POST["straat"]!="") && $pcErr == false){
+    
+  
+    
+        
+}
+$uploadOk = 0; //Moet hier staan --> anders error bij geen geuploadde foto
+if ((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&(isset($_POST["email"]))&&($_POST["email"]!="")&&(isset($_POST["straat"]))&&($_POST["straat"]!="") && $pcErr == false){
+	
+  if (isset($_POST["verzenden"]) && $_FILES["fileToUpload"]["name"] !=""){
+	
+    if (!$_FILES["fileToUpload"]["name"] == ""){
+      $target_dir = "assets/img/uploads/";
+      $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+      $uploadOk = 1;
+      $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+      // Check if image file is a actual image or fake image
+      if(isset($_POST["verzenden"])) {
+        $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
+        $foto_ok = "goed";
+        if($check !== false) {
+          echo "File is an image - " . $check["mime"] . ".";
+          $uploadOk = 1;
+        } 
+        else{
+          echo "File is not an image.";
+	        $boodschapfoto= "File is not an image.";
+	        $foto_ok = "fout";
+          $uploadOk = 0;
+        }
+      }
+
+      if (file_exists($target_file)) {
+        echo "Sorry, file already exists.";
+        $foto_ok = "fout";
+        $uploadOk = 0;
+      }
+
+      // Check file size
+      if ($_FILES["fileToUpload"]["size"] > 500000) {
+        echo "Sorry, your file is too large.";
+        $boodschapfoto= "Sorry, your file is too large.";
+        $foto_ok = "fout";
+        $uploadOk = 0;
+      }
+
+      // Allow certain file formats
+      if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
+      && $imageFileType != "gif" ) {
+        echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+        $boodschapfoto= "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
+        $foto_ok = "fout";
+        $uploadOk = 0;
+      }
+
+      // Check if $uploadOk is set to 0 by an error
+      if ($uploadOk == 0) {
+        echo "Sorry, your file was not uploaded.";
+        // if everything is ok, try to upload file
+      }
+      else {
+        if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+          echo "The file ". htmlspecialchars( basename( $_FILES["fileToUpload"]["name"])). " has been uploaded.";
+        }
+        else {
+          echo "Sorry, there was an error uploading your file.";
+        }
+        echo "De naam van het bestand, nodig voor up te daten in tabel user is : " . $_FILES["fileToUpload"]["name"];
+        $intevoegennaamfoto= $_FILES["fileToUpload"]["name"];
+      }
+    }
+  }
+	if ($intevoegennaamfoto== ""){ $intevoegennaamfoto= $_POST["foto"];	};
+  if ($uploadOk == 1){    
     //Het deleten van de oude interesses
     $mysqli = new mysqli("localhost","root","","gip");
     if(mysqli_connect_errno()){
@@ -116,9 +197,9 @@ if ((isset($_POST["verzenden"]))&&isset($_POST["interesse1"])&&($_POST["interess
             echo"Er zit een fout in qry delOldInt: ".$mysqli->error."<br>";
         }
     }
-    //Het inserten van de 3 interesses
+    //Het inserten van alle interesses
     //int1
-    if($_POST["interesse1"] != "-"){
+    foreach ( $_POST["interesse"] as $interes){
         $mysqli= new MySQLI("localhost","root","","gip");
         if(mysqli_connect_errno()){
             trigger_error("Fout bij verbinding 'Int1': ".$mysqli->error);
@@ -126,7 +207,7 @@ if ((isset($_POST["verzenden"]))&&isset($_POST["interesse1"])&&($_POST["interess
         else{
             $sql = "INSERT INTO tblinteressesuser (userID, interesseID) VALUES (?,?)";
             if($stmt = $mysqli->prepare($sql)){
-                $stmt->bind_param('ii', $_SESSION["ID"], $_POST["interesse1"]);
+                $stmt->bind_param('ii', $_SESSION["ID"], $interes);
                 if(!$stmt->execute()){
                     echo "Het uitvoeren van qry Int1 is mislukt: ".$mysqli->error;
                 }
@@ -137,63 +218,24 @@ if ((isset($_POST["verzenden"]))&&isset($_POST["interesse1"])&&($_POST["interess
             }
         }
     }
-    //int2
-    if($_POST["interesse2"] != "-"){
-        $mysqli= new MySQLI("localhost","root","","gip");
-            if(mysqli_connect_errno()){
-                trigger_error("Fout bij verbinding 'Int2': ".$mysqli->error);
-            }
-            else{
-                $sql = "INSERT INTO tblinteressesuser (userID, interesseID) VALUES (?,?)";
-                if($stmt = $mysqli->prepare($sql)){
-                    $stmt->bind_param('ii', $uID, $_POST["interesse2"]);
-                    if(!$stmt->execute()){
-                        echo "Het uitvoeren van qry Int2 is mislukt: ".$mysqli->error;
-                    }
-                    $stmt->close();
-                }
-                else{
-                    echo"Er zit een fout in qry Int2".$mysqli->error;
-                }
-            }                   
-        }
-        //int3
-        if($_POST["interesse3"] != "-"){
-            $mysqli= new MySQLI("localhost","root","","gip");
-            if(mysqli_connect_errno()){
-                trigger_error("Fout bij verbinding 'Int3': ".$mysqli->error);
-            }
-            else{
-                $sql = "INSERT INTO tblinteressesuser (userID, interesseID) VALUES (?,?)";
-                if($stmt = $mysqli->prepare($sql)){
-                    $stmt->bind_param('ii', $uID, $_POST["interesse3"]);
-                    if(!$stmt->execute()){
-                        echo "Het uitvoeren van qry Int3 is mislukt: ".$mysqli->error;
-                    }
-                    $stmt->close();
-                }
-                else{
-                    echo"Er zit een fout in qry Int3".$mysqli->error;
-                }
-            }
-        }
-}
-if ((isset($_POST["verzenden"]))&&isset($_POST["interesse1"])&&($_POST["interesse1"] != "")&&isset($_POST["interesse2"])&&($_POST["interesse2"] != "")&&isset($_POST["interesse3"])&&($_POST["interesse3"] != "")&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&(isset($_POST["email"]))&&($_POST["email"]!="")&&(isset($_POST["straat"]))&&($_POST["straat"]!="")){
-     
     $mysqli = new MySQLi("localhost","root","","gip");
-        if(mysqli_connect_errno()){
-            trigger_error("fout bij de verbinding: ".$mysqli->error);
-        }
-        $sql = "UPDATE tblUser SET userNm = '".$_POST["naam"]."', userStraat = '".$_POST["straat"]."',userPostCode = '".$PostcodeId1."', userFoto = '".$_POST["foto"]."', userEmail = '".$_POST["email"]."'WHERE userID = ".$_SESSION["ID"];
-        if($stmt = $mysqli->prepare($sql)){
-            if(!$stmt->execute()){
-                echo"het uitvoeren van de qry is mislukt";
-            }
+    if(mysqli_connect_errno()){
+      trigger_error("fout bij de verbinding: ".$mysqli->error);
+    }
+    $sql = "UPDATE tblUser SET userNm = '".$_POST["naam"]."', userStraat = '".$_POST["straat"]."',userPostCode = '".$PostcodeId1."', userFoto = '".$intevoegennaamfoto."', userEmail = '".$_POST["email"]."'WHERE userID = ".$_SESSION["ID"];
+    if($stmt = $mysqli->prepare($sql)){
+      if(!$stmt->execute()){
+        echo"het uitvoeren van de qry is mislukt";
+      }
+			else{
+				header("location:portfolio-detailsUser.php");
+				}
             $stmt->close();
-        }
-        else{
-            echo"Er zit een fout in de qry" .$mysqli->error;
-        }
+      }
+    else{
+      echo"Er zit een fout in de qry" .$mysqli->error;
+    }
+  }
 }
 ?>       
 <html lang="en">
@@ -288,7 +330,7 @@ if ((isset($_POST["verzenden"]))&&isset($_POST["interesse1"])&&($_POST["interess
     </section><!-- End Breadcrumbs -->
 
     <!-- ======= Portfolio Details Section ======= -->
-    <form action="<?php $_SERVER["PHP_SELF"]?>" method="post">
+    <form action="<?php $_SERVER["PHP_SELF"]?>" method="post" enctype="multipart/form-data">
         <section id="portfolio-details" class="portfolio-details">
             <div class="container">
                 <div class="row">
@@ -296,12 +338,15 @@ if ((isset($_POST["verzenden"]))&&isset($_POST["interesse1"])&&($_POST["interess
     <?php
     // Deze hele code moet van scratch herschreven worden: CHAOS!!!
 //-----------------------------------------------qry baseInfo------------------------------------------
+
+if(!isset($_POST["verzenden"])){
+
 $mysqli = new mysqli("localhost","root","","gip");
 if(mysqli_connect_errno()){
     trigger_error("Fout bij verbinding: ".$mysqli->error);
 }
 else{
-    $sql = "SELECT u.userID, u.userNm, u.userStraat, u.userStraat, g.PCode, g.Gemeente, u.userEmail
+    $sql = "SELECT u.userID, u.userNm, u.userFoto, u.userStraat, g.PCode, g.Gemeente, u.userEmail
     FROM tblUser u, tblGemeente g WHERE u.userID=".$_SESSION["ID"]." AND u.userPostcode = g.PostcodeId";
     if($stmt = $mysqli->prepare($sql)){
         if(!$stmt->execute()){
@@ -310,6 +355,8 @@ else{
         else{
             $stmt->bind_result($userID,$userNm,$userFoto,$userStraat,$pCode,$gemeente,$email);
             $stmt->fetch();
+			$userFoto1 = $userFoto;
+			
         }
         $stmt->close();
     }
@@ -317,20 +364,42 @@ else{
         echo"Er zit een fout in qry baseInfo: ".$mysqli->error."<br>";
     }
 }
+}
+else {
+	
+	$userNm= $_POST["naam"];
+	$userFoto= $_POST["foto"];
+	$userStraat= $_POST["straat"];
+	$pCode= $_POST["postcode"];
+	$gemeente= $_POST["gemeente"];
+	$email= $_POST["email"];
+	
+	
+	}
 //----------------------------------------------------------------------------------------------------
-                    echo"<a href=\"portfolio-detailsUser.php\">Terug</a>
-                        <img src=\"assets/img/uploads/".$userFoto."\" class=\"img-fluid\" alt=\"\"><br>
-                                                                                                    <input type=\"text\" name=\"foto\" value=\"".$userFoto."\">
+                    echo"<a href=\"portfolio-detailsUser.php\">Terug</a>"
+					?>
+                        <img src="assets/img/uploads/<?php  echo $userFoto ?> " class=\"img-fluid\" ><br>
+                                                                                                    <input type="text" name="foto" hidden value="<?php echo $userFoto  ?>" >
+                                                                                                    
+<?php   if($pcErr ||  (isset($_POST["verzenden"]) && $uploadOk == 0)) { echo"  <label id=\"error\"> Selecteer de foto opnieuw ". $boodschapfoto . "</label><br>";}?>                                                                                                  
+                                                                                                    
+              <input type="file" name="fileToUpload" id="fileToUpload"       >         
+                      <?php echo "
                         <div class=\"col-lg-4 portfolio-info\">
                             <h3>Informatie Gebruiker</h3>
                             <ul>
-                            <li><label>Naam: </label><br><input type=\"text\" id=\"naam\" name=\"naam\" value=\"".$userNm."\"></li>
-                            <li><label>Email: </label><br><input type=\"email\" id=\"email\" name=\"email\" value=\"".$email."\"></li>
-                            <li><label>Straat + Nr: </label><br><input type=\"text\" id\"straat\" name=\"straat\" value=\"".$userStraat."\"></li>";
+                            <li><label>Naam: </label><br><input type=\"text\" id=\"naam\" name=\"naam\" required value=\"".$userNm."\"></li>
+                            <li><label>Email: </label><br><input type=\"email\" id=\"email\" name=\"email\" required value=\"".$email."\"></li>
+                            <li><label>Straat + Nr: </label><br><input type=\"text\" id\"straat\" name=\"straat\" required value=\"".$userStraat."\"></li>";
             if($pcErr){echo"<li id=\"error\">De postcode komt niet overeen met de gemeente: Gelieve dit opnieuw in te vullen.</li>";}
-                    echo"   <li><label>Gemeente: </label><br><input type=\"text\" id\"gemeente\" name=\"gemeente\" value=\"".$gemeente."\"></li>
-                            <li><label>Postcode: </label><br><input type=\"text\" id\"postcode\" name=\"postcode\" value=\"".$pCode."\"></li>
-                            <li><label>Interesses: </label><br></li>";
+                    echo"   <li><label>Postcode: </label><br><input type=\"text\" id\"postcode\" name=\"postcode\" required value=\"".$pCode."\"></li>
+					<li><label>Gemeente: </label><br><input type=\"text\" id\"gemeente\" name=\"gemeente\" required value=\"".$gemeente."\"></li>   "            	
+							;
+            if($pcErr){echo"<li id=\"error\">Gelieve de interesses opnieuw aan te duiden aub.</li>";}
+			
+			
+                    echo"  <li><label>Interesses: (de gemarkeerde interesses zijn de interesses tot nu toe, iemand kan meerdere interesses hebben) bij verzenden ontstaat er een array interesse met indexen 0 tot een het aantal geselecteerd waarden -1 . Hou daar rekening bij wanneer je de update wil doen Meerdere selecties doe je met de controltoets</label><br></li>";
 //-------------------------------------------------------qry getUserInts-----------------------------
 $i = 0;
 $mysqli = new mysqli("localhost","root","","gip");
@@ -345,19 +414,11 @@ else{
         }
         else{
             $stmt->bind_result($selectedInt);
+			$aantalinteresses=0;
             while($stmt->fetch()){
-                $i++;
-                switch($i){
-                    case 1:
-                        $selInt1 = $selectedInt;
-                        break;
-                    case 2:
-                        $selInt2 = $selectedInt;
-                        break;
-                    case 3:
-                        $selInt3 = $selectedInt;
-                        break;
-                }
+                $aantalinteresses++;
+				 $selInt[$aantalinteresses] = $selectedInt;
+           
             }
             $stmt->close();
         }
@@ -365,46 +426,77 @@ else{
     else{
         echo"Er zit een fout in qry getUserInts".$mysqli->error."<br>";
     }
+	
+	 $sql = "SELECT count(*) FROM tblinteresse";
+    if($stmt1 = $mysqli->prepare($sql)){
+        if(!$stmt1->execute()){
+            echo"Het uitvoeren van qry aantal interesses is mislukt: ".$stmt->error."<br>";
+        }
+        else{
+            $stmt1->bind_result($aantalinteresses1);
+			
+            $stmt1->fetch();
+            $stmt1->close();
+        }
+    }
+    else{
+        echo"Er zit een fout in qry aantal interesses".$mysqli->error."<br>";
+    }
+	
+	
 }
 $i = 0;
 $j = 0;
 //---------------------------------------------qry getAllInts-------------------------------------
-//for($i=0;$i<3;$i++){
-echo"&nbsp; <li><select name=\"interesse".($i+1)."\" id=\"interesse".($i+1)."\"><option value=\"-\">-</option>";
+
+echo"&nbsp; <li><select  multiple size= ". $aantalinteresses1 ." name=\"interesse[] \" id=\"interesse".($i+1)."\" > " ;
+
+  
+
+
     $mysqli = new mysqli("localhost","root","","gip");
     if(mysqli_connect_errno()){
         trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
     else{
         $sql = "SELECT interesseID, interesseNm FROM tblInteresse";
-        if($stmt->prepare($sql)){
+        if($stmt = $mysqli->prepare($sql)){
             if(!$stmt->execute()){
                 echo"Het uitvoeren van qry getAllInts is mislukt: ".$stmt->error."<br>";       
             }
             else{
                 $stmt->bind_result($ID, $interesse);
                 while($stmt->fetch()){
-                    /*$j++;
-                    echo"<option value=\"$ID\"";
-                    switch($j){
-                        case 1:
-                            if($ID == $selInt1){
-                                echo"selected";
-                            }
-                            break;
-                        case 2:
-                            if($ID == $selInt2){
-                                echo"selected";
-                            }
-                            break;
-                        case 3:
-                            if($ID == $selInt3){
-                                echo"selected";
-                            }
-                            break;
-                    }
-                    echo"> ".$interesse."</option>";*/
-                    echo"<option value=\"".$ID."\">".$interesse."</option>";
+                   //$j++;
+                   // echo"<option value=\"$ID\"";
+                    //switch($j){
+//                        case 1:
+//                            if($ID == $selInt1){
+//                                echo"selected";
+//                            }
+//                            break;
+//                        case 2:
+//                            if($ID == $selInt2){
+//                                echo"selected";
+//                            }
+//                            break;
+//                        case 3:
+//                            if($ID == $selInt3){
+//                                echo"selected";
+//                            }
+//                            break;
+//                    }
+                    //echo"> ".$interesse."</option>";
+					?>
+                    <option value="<?php echo $ID; ?>" 
+					<?php for(  $teller=1; $teller <= $aantalinteresses; $teller++)
+					{ 
+					
+					if($ID ==  $selInt[$teller]){ echo "selected ";}}
+					
+					?>
+					> <?php echo $interesse ?> </option>
+                    <?php
                 }
                 $stmt->close();
             }

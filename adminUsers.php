@@ -41,7 +41,7 @@ if(!$_SESSION["admin"]){
   <link href="assets/css/style.css" rel="stylesheet">
 <style type="txt/css">
 table{
-  border: #FF0000 solid 1px;
+  border: #000 solid 1px;
 }
 </style>
 

@@ -12,6 +12,9 @@ Database:
 		-paypal									X |
 VERGEET NIET DE .SQL TE UPDATEN!!!
 
+LOGIN OP BOOTSTRAP ZETTEN!!!!!!!!								X |
+Alle references naar tabellen zonder hoofdletters herschrijven 	X |
+Code van php voor ALLE HTML zetten -> errorcheck variabelen 	X |
 
 Admin:
 	-Users editen								X | 							note: heb nu al een stuk of 200 lijnen verwijderd. Wtf was ik aan het denken?!? - 2021-04-26
