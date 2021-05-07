@@ -129,7 +129,7 @@ if(!isset($_SESSION["ID"])){
     }
     else{
       $sql = "SELECT ac.actID, au.auteurNm, au.auteurID, ac.actFoto, ac.actNm, ty.actType, ac.persAantal, ac.persLeeftijdMax, ac.persLeeftijdMin, ac.actBesch, dt.actDatum, TIME_FORMAT(dt.actTijd, '%k:%i'), ac.benNodig, ac.benOpsomming, ac.actPrijs 
-      FROM tblActiviteit ac, tblAuteur au, tblTypes ty, tblDatumTijd dt WHERE ac.actAuteursID = au.auteurID AND ac.actTypeID = ty.actTypeID AND ac.tijdID = dt.tijdID AND ac.actID = ".$_SESSION["ID"];
+      FROM tblactiviteit ac, tblauteur au, tbltypes ty, tbldatumtijd dt WHERE ac.actAuteursID = au.auteurID AND ac.actTypeID = ty.actTypeID AND ac.tijdID = dt.tijdID AND ac.actID = ".$_SESSION["ID"];
       if($stmt = $mysqli->prepare($sql)){
         if(!$stmt->execute()){
           echo("Het uitvoeren van de qry is mislukt: ".$stmt->error."<br>");

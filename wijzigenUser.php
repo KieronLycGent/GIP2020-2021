@@ -183,7 +183,7 @@ if ((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&
         trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
     else{
-        $sql = "DELETE FROM tblInteressesUser WHERE userID = ".$_SESSION["ID"];
+        $sql = "DELETE FROM tblinteressesuser WHERE userID = ".$_SESSION["ID"];
         if($stmt = $mysqli->prepare($sql)){
             if(!$stmt->execute()){
                 echo"Het uitvoeren van qry delOldInt is mislukt: ".$stmt->error."<br>";
@@ -222,7 +222,7 @@ if ((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&
     if(mysqli_connect_errno()){
       trigger_error("fout bij de verbinding: ".$mysqli->error);
     }
-    $sql = "UPDATE tblUser SET userNm = '".$_POST["naam"]."', userStraat = '".$_POST["straat"]."',userPostCode = '".$PostcodeId1."', userFoto = '".$intevoegennaamfoto."', userEmail = '".$_POST["email"]."'WHERE userID = ".$_SESSION["ID"];
+    $sql = "UPDATE tbluser SET userNm = '".$_POST["naam"]."', userStraat = '".$_POST["straat"]."',userPostCode = '".$PostcodeId1."', userFoto = '".$intevoegennaamfoto."', userEmail = '".$_POST["email"]."'WHERE userID = ".$_SESSION["ID"];
     if($stmt = $mysqli->prepare($sql)){
       if(!$stmt->execute()){
         echo"het uitvoeren van de qry is mislukt";
@@ -347,7 +347,7 @@ if(mysqli_connect_errno()){
 }
 else{
     $sql = "SELECT u.userID, u.userNm, u.userFoto, u.userStraat, g.PCode, g.Gemeente, u.userEmail
-    FROM tblUser u, tblGemeente g WHERE u.userID=".$_SESSION["ID"]." AND u.userPostcode = g.PostcodeId";
+    FROM tbluser u, tblgemeente g WHERE u.userID=".$_SESSION["ID"]." AND u.userPostcode = g.PostcodeId";
     if($stmt = $mysqli->prepare($sql)){
         if(!$stmt->execute()){
             echo"Het uitvoeren van qry baseInfo is mislukt: ".$stmt->error."<br>";
@@ -407,7 +407,7 @@ if(mysqli_connect_errno()){
     trigger_error("Fout bij verbinding: ".$mysqli->error);
 }
 else{
-    $sql = "SELECT interesseID FROM tblInteressesuser WHERE userID=".$_SESSION["ID"];
+    $sql = "SELECT interesseID FROM tblinteressesuser WHERE userID=".$_SESSION["ID"];
     if($stmt = $mysqli->prepare($sql)){
         if(!$stmt->execute()){
             echo"Het uitvoeren van qry getUserInts is mislukt: ".$stmt->error."<br>";
@@ -459,7 +459,7 @@ echo"&nbsp; <li><select  multiple size= ". $aantalinteresses1 ." name=\"interess
         trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
     else{
-        $sql = "SELECT interesseID, interesseNm FROM tblInteresse";
+        $sql = "SELECT interesseID, interesseNm FROM tblinteresse";
         if($stmt = $mysqli->prepare($sql)){
             if(!$stmt->execute()){
                 echo"Het uitvoeren van qry getAllInts is mislukt: ".$stmt->error."<br>";       

@@ -11,21 +11,16 @@ if(!$_SESSION["admin"]){
   }
 
 ?>
-<!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
   <title>Contact - Workshopp.er</title>
   <meta content="" name="descriptison">
   <meta content="" name="keywords">
-
   <!-- Favicons -->
   <link href="assets/img/ws.png" rel="icon">
   <link href="assets/img/ws.png" rel="apple-touch-icon">
-
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 
@@ -44,7 +39,6 @@ table{
   border: #000 solid 1px;
 }
 </style>
-
   <!-- =======================================================
   * Template Name: Eterna - v2.1.0
   * Template URL: https://bootstrapmade.com/eterna-free-multipurpose-bootstrap-template/
@@ -52,9 +46,7 @@ table{
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
 </head>
-
 <body>
-
   <!-- ======= Top Bar ======= -->
   <section id="topbar" class="d-none d-lg-block">
     <div class="container d-flex">
@@ -87,49 +79,39 @@ table{
   <!-- ======= Header ======= -->
  <header id="header">
     <div class="container d-flex">
-
       <div class="logo mr-auto">
         <h1 class="text-light"><a href="index.php"><span>Workshopp.er</span></a></h1>
         <!-- Uncomment below if you prefer to use an image logo -->
         <!-- <a href="index.php"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
       </div>
-
       <nav class="nav-menu d-none d-lg-block">
         <ul>
           <li><a href="index.php">Home</a></li>
-
             <li><a href="about.php">Over</a></li>
           <li class="active"><a href="contact.php">Contact</a></li>
               <li><a href="portfolioAut.php">Auteurs</a></li>
             <li><a href="portfolioUser.php">Gebruikers</a></li>
-
         </ul>
       </nav><!-- .nav-menu -->
-
     </div>
   </header><!-- End Header -->
-
   <main id="main">
-
     <!-- ======= Breadcrumbs ======= -->
     <section id="breadcrumbs" class="breadcrumbs">
       <div class="container">
-
         <ol>
           <li><a href="index.php">Home</a></li>
           <li><a href="admin.php">Admin</a></li>
           <li>Gebruikers</li>
         </ol>
         <h2>Gebruikers</h2>
-
       </div>
     </section><!-- End Breadcrumbs -->
-
     <!-- ======= Content Section ======= -->
     <section id="content" class="content">
           <div class="container">
             <div class="row">
-                <table id="tblUsers" class="admin">
+                <table id="tblusers" class="admin">
                     <tr>
                         <th width = 20px>ID</th>
                         <th width = 150px>Naam</th>
@@ -148,7 +130,7 @@ if(mysqli_connect_errno()){
 }
 else{
     $sql = "SELECT u.userID, u.userNm, u.userStraat, g.PCode, g.Gemeente, u.userEmail, u.deactivated
-    FROM tblUser u, tblGemeente g 
+    FROM tbluser u, tblgemeente g 
     WHERE g.PostcodeId = u.userPostcode";
     if($stmt = $mysqli->prepare($sql)){
         if(!$stmt->execute()){
@@ -186,12 +168,9 @@ else{
             </div>
           </div>
     </section>
-
     </main><!-- End #main -->
-
   <!-- ======= Footer ======= -->
   <footer id="footer">
-
     <div class="footer-newsletter">
       <div class="container">
         <div class="row">
@@ -210,7 +189,6 @@ else{
     <div class="footer-top">
       <div class="container">
         <div class="row">
-
           <div class="col-lg-3 col-md-6 footer-links">
             <h4>Useful Links</h4>
             <ul>
@@ -219,7 +197,6 @@ else{
                 <li><i class="bx bx-chevron-right"></i> <a href="contact.php">Contact</a></li>
             </ul>
           </div>
-
             <div class="col-lg-3 col-md-6 footer-contact">
             <h4>Contacteer ons</h4>
             <p>
@@ -228,7 +205,6 @@ else{
               Belgi&euml;<br><br>
               <strong>Telefoon:</strong> +32 499 98 75 34<br>
               <strong>Email:</strong> kieron.parmentier@telenet.be<br>
-                
             </p>
                 <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
                 <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
@@ -252,9 +228,7 @@ else{
       </div>
     </div>
   </footer><!-- End Footer -->
-
   <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
-
   <!-- Vendor JS Files -->
   <script src="assets/vendor/jquery/jquery.min.js"></script>
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -266,10 +240,7 @@ else{
   <script src="assets/vendor/counterup/counterup.min.js"></script>
   <script src="assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
   <script src="assets/vendor/venobox/venobox.min.js"></script>
-
   <!-- Template Main JS File -->
   <script src="assets/js/main.js"></script>
-
 </body>
-
 </html>

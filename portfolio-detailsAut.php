@@ -128,7 +128,7 @@ if(!isset($_SESSION["ID"])){
         trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
     else{
-        $sql = "select auteurID, auteurNm, auteurBesch, auteurFoto from tblAuteur where auteurID=".$_SESSION["ID"];
+        $sql = "select auteurID, auteurNm, auteurBesch, auteurFoto from tblauteur where auteurID=".$_SESSION["ID"];
         if($stmt = $mysqli->prepare($sql)){
             if(!$stmt->execute()){
                 echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";

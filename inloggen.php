@@ -85,10 +85,10 @@ session_start();
                             }
                             else{
                                 if($_POST["acc"]=="user"){
-                                    $sql = "SELECT userEmail, userPasw, userID, deactivated, isAdmin FROM tblUser WHERE userEmail = '".$_POST["email"]."'"; 
+                                    $sql = "SELECT userEmail, userPasw, userID, deactivated, isAdmin FROM tbluser WHERE userEmail = '".$_POST["email"]."'"; 
                                 }
                                 else if($_POST["acc"]=="aut"){
-                                    $sql = "SELECT auteurEmail, auteurPasw, auteurID, deactivated, isAdmin FROM tblAuteur WHERE auteurEmail = '".$_POST["email"]."'";
+                                    $sql = "SELECT auteurEmail, auteurPasw, auteurID, deactivated, isAdmin FROM tblauteur WHERE auteurEmail = '".$_POST["email"]."'";
                                 }
                                 if($stmt = $mysqli->prepare($sql)) {     
                                     if(!$stmt->execute()){
@@ -108,10 +108,10 @@ session_start();
                                     $stmt->close();
                                     if($klopt){
                                         if($_POST["acc"]=="user"){
-                                            $sql = "SELECT userID FROM tblUser WHERE userEmail ='".$_POST["email"]."'";
+                                            $sql = "SELECT userID FROM tbluser WHERE userEmail ='".$_POST["email"]."'";
                                             $_SESSION["ID"] = $ID;                                        }   
                                         else if($_POST["acc"]=="aut"){
-                                            $sql = "SELECT auteurID FROM tblAuteur WHERE auteurEmail = '".$_POST["email"]."'";
+                                            $sql = "SELECT auteurID FROM tblauteur WHERE auteurEmail = '".$_POST["email"]."'";
                                         }
                                         if($stmt = $mysqli->prepare($sql)) {     
                                             if(!$stmt->execute()){

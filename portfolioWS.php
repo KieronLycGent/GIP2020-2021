@@ -189,7 +189,7 @@ if(isset($_GET["item"])){
       }
       else{
         $sql = "SELECT ac.actID, au.auteurNm, ac.actFoto, ac.actNm, ac.actBesch, ac.actPrijs 
-        FROM tblActiviteit ac, tblAuteur au WHERE ac.actAuteursID = au.auteurID ORDER BY ac.actNm";
+        FROM tblactiviteit ac, tblauteur au WHERE ac.actAuteursID = au.auteurID ORDER BY ac.actNm";
         if($stmt = $mysqli->prepare($sql)){
           if(!$stmt->execute()){
             echo("Het uitvoeren van qry noSearch is mislukt: ".$stmt->error."<br>");
@@ -231,19 +231,19 @@ if(isset($_GET["item"])){
       else{
         if($_POST["filter"]=="naam"){
           $sql = "SELECT ac.actID, au.auteurNm, ac.actFoto, ac.actNm, ac.actBesch, ac.actPrijs 
-          FROM tblActiviteit ac, tblAuteur au WHERE ac.actAuteursID = au.auteurID AND ac.actNm LIKE ? ORDER BY ac.actNm";
+          FROM tblactiviteit ac, tblauteur au WHERE ac.actAuteursID = au.auteurID AND ac.actNm LIKE ? ORDER BY ac.actNm";
         }
         elseif($_POST["filter"]=="prijs"){
           $sql = "SELECT ac.actID, au.auteurNm, ac.actFoto, ac.actNm, ac.actBesch, ac.actPrijs
-          FROM tblActiviteit ac, tblAuteur au WHERE ac.actAuteursID = au.auteurID AND ac.actPrijs LIKE ? ORDER BY ac.actNm";
+          FROM tblactiviteit ac, tblauteur au WHERE ac.actAuteursID = au.auteurID AND ac.actPrijs LIKE ? ORDER BY ac.actNm";
         }
         elseif($_POST["filter"]=="auteur"){
           $sql = "SELECT ac.actID, au.auteurNm, ac.actFoto, ac.actNm, ac.actBesch, ac.actPrijs
-          FROM tblActiviteit ac, tblAuteur au WHERE ac.actAuteursID = au.auteurID AND au.auteurNm LIKE ? ORDER BY ac.actNm";
+          FROM tblactiviteit ac, tblauteur au WHERE ac.actAuteursID = au.auteurID AND au.auteurNm LIKE ? ORDER BY ac.actNm";
         }
         elseif($_POST["filter"]=="type"){
           $sql = "SELECT ac.actID, au.auteurNm, ac.actFoto, ac.actNm, ac.actBesch, ac.actPrijs, ty.actType
-          FROM tblActiviteit ac, tblAuteur au, tblTypes ty WHERE ac.actAuteursID = au.auteurID AND ac.actTypeID = ty.actTypeID AND ty.actType LIKE ? ORDER BY ac.actNm";
+          FROM tblactiviteit ac, tblauteur au, tbltypes ty WHERE ac.actAuteursID = au.auteurID AND ac.actTypeID = ty.actTypeID AND ty.actType LIKE ? ORDER BY ac.actNm";
         }
         if($stmt = $mysqli->prepare($sql)){
           $stmt->bind_param("s",$zoek);

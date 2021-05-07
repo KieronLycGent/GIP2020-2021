@@ -9,26 +9,129 @@ if(isset($_SESSION["login"])&&$_SESSION["login"])
 else{
   header("location:index.php");
 }
+//code voor na de form is verzonden
+if(isset($_POST["verzenden"])){
+  print_r($_POST);
+  echo"<br>";
+  if(isset($_POST["ageMax"])){
+    if($_POST["ageMax"]!=""){
+      $ageMax = $_POST["ageMax"];
+    }
+    else{
+      $ageMax = 100;
+    }
+  }
+  else{
+    $ageMax = 100;
+  }
+  if(isset($_POST["titel"])&&$_POST["titel"]!=""&&isset($_POST["besch"])&&$_POST["besch"]!=""&&isset($_POST["pers"])&&$_POST["pers"]>0&&isset($_POST["ageMin"])&&$_POST["ageMin"]>=0&&$_POST["ageMin"]<=$ageMax&&isset($_POST["date"])&&isset($_POST["time"])&&isset($_POST["type"])&&$_POST["type"]!="-"){
+    //query dateTime
+    $mysqli = new MySQLi("localhost","root","","gip");
+    if(mysqli_connect_errno()){
+      trigger_error("Fout bij verbinding: ".$mysqli->error);
+    }
+    else{
+      $sql = "INSERT INTO tbldatumtijd (actDatum, actTijd) VALUES (?,?)";
+      if($stmt = $mysqli->prepare($sql)){
+        $stmt->bind_param('ss',$actDatum,$actTijd);
+        $actDatum = $_POST["date"];
+        $actTijd = $_POST["time"];
+        if(!$stmt->execute()){
+          echo("het uitvoeren van qry dateTime is mislukt: ".$stmt->error."<br>");
+        }
+        else{
+          echo"dateTime ingevoegd <br>";
+        }
+        $stmt->close();
+      }
+      else{
+        echo("Er zit een fout in qry dateTime: ".$mysqli->error."<br>");
+      }
+    }
+    //query fetchDateTimeID
+    $mysqli = new mysqli("localhost","root","","gip");
+    if(mysqli_connect_errno()){
+      trigger_error("Fout bij verbinding: ".$mysqli->error);
+    }
+    else{
+      $sql = "SELECT COUNT(TijdID) FROM tbldatumtijd";
+      if($stmt = $mysqli->prepare($sql)){
+        if(!$stmt->execute()){
+          echo("Het uitvoeren van qry fetchDateTime is mislukt: ".$stmt->error."<br>");
+        }
+        else{
+          $stmt->bind_result($tijdID);
+          $stmt->fetch();
+        }
+        $stmt->close();
+      }
+      else{
+        echo("Er zit een fout in qry fetchDateTime: ".$mysqli->error."<br>");
+      }
+    }
+    //query actInfo
+    $mysqli = new MySQLi("localhost","root","","gip");
+    if(mysqli_connect_errno()){
+      trigger_error("Fout bij verbinding: ".$mysqli->error);
+    }
+    else{
+      $sql = "INSERT INTO tblactiviteit (actAuteursID, actFoto, actNm, actTypeID, persAantal, persLeeftijdMax, persLeeftijdMin, actBesch, tijdID, benNodig, benOpsomming, actPrijs) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"; //Dit zouden er 12 moeten zijn
+      if($stmt = $mysqli->prepare($sql)){
+        $stmt->bind_param('issiiiisiisi',$actAutId,$actFoto,$actNm,$actTypeID,$persAantal,$persLeeftijdMax,$persLeeftijdMin,$actBesch,$tijdID,$benNodig,$benOpsomming,$actPrijs);
+        $actAutId = $_SESSION["loginID"];
+        $actFoto = $mysqli->real_escape_string("ws.png");
+        $actNm = $mysqli->real_escape_string($_POST["titel"]);
+        $actTypeID = $_POST["type"];
+        $persAantal = $_POST["pers"];
+        $persLeeftijdMax = $ageMax;
+        $persLeeftijdMin = $_POST["ageMin"];
+        $actBesch = $mysqli->real_escape_string($_POST["besch"]);
+        if(isset($_POST["benNodig"])){
+          if($_POST["benNodig"]){
+            $benNodig = $_POST["benNodig"];
+          }
+          else{
+            $benNodig = 0;
+          }
+        }
+        else{
+          $benNodig = 0;
+        }
+        if(isset($_POST["benOpsomming"])){
+          $benOpsomming = $mysqli->real_escape_string($_POST["benOpsomming"]);
+        }
+        else{
+          $benOpsomming = "";
+        }
+        $actPrijs = $_POST["prijs"];
+        if(!$stmt->execute()){
+          echo("Het uitvoeren van qry actInfo is mislukt: ".$stmt->error."<br>");
+        }
+        else{
+          echo"WS ingevoegd";
+        }
+        $stmt->close();
+      }
+      else{
+        echo("Er zit een fout in qry actInfo: ".$mysqli->error."<br>");
+      }
+    }
+  }
+}
 ?>
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
   <title>Workshop aanmaken - Workshopp.er</title>
   <meta content="" name="descriptison">
   <meta content="" name="keywords">
-
   <!-- Favicons -->
   <link href="assets/img/ws.png" rel="icon">
   <link href="assets/img/ws.png" rel="apple-touch-icon">
-
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-
   <!-- Vendor CSS Files -->
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="assets/vendor/icofont/icofont.min.css" rel="stylesheet">
@@ -36,10 +139,8 @@ else{
   <link href="assets/vendor/animate.css/animate.min.css" rel="stylesheet">
   <link href="assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
   <link href="assets/vendor/venobox/venobox.css" rel="stylesheet">
-
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
-
   <!-- =======================================================
   * Template Name: Eterna - v2.1.0
   * Template URL: https://bootstrapmade.com/eterna-free-multipurpose-bootstrap-template/
@@ -47,7 +148,6 @@ else{
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
 </head>
-
 <body>
   <section id="topbar" class="d-none d-lg-block">
     <div class="container d-flex">
@@ -58,146 +158,30 @@ else{
       </div>
     </div>
   </section>
-
   <!-- ======= Header ======= -->
  <header id="header">
     <div class="container d-flex">
-
       <div class="logo mr-auto">
         <h1 class="text-light"><a href="index.php"><span>Workshopp.er</span></a></h1>
         <!-- Uncomment below if you prefer to use an image logo -->
         <!-- <a href="index.php"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
       </div>
-
       <nav class="nav-menu d-none d-lg-block">
         <ul>
           <li><a href="index.php">Home</a></li>
-
             <li><a href="about.php">Over</a></li>
           <li><a href="contact.php">Contact</a></li>
               <li class="active"><a href="portfolioAut.php">Auteurs</a></li>
             <li><a href="portfolioUser.php">Gebruikers</a></li>
-
         </ul>
       </nav><!-- .nav-menu -->
-
     </div>
   </header><!-- End Header -->
 <main id="main">
-
     <!-- ======= Portfolio Details Section ======= -->
         <section>
             <div class="container">
-                    <?php
-                    if(isset($_POST["verzenden"])){
-                      print_r($_POST);
-                      echo"<br>";
-                      if(isset($_POST["ageMax"])){
-                        if($_POST["ageMax"]!=""){
-                          $ageMax = $_POST["ageMax"];
-                        }
-                        else{
-                          $ageMax = 100;
-                        }
-                      }
-                      else{
-                        $ageMax = 100;
-                      }
-                      if(isset($_POST["titel"])&&$_POST["titel"]!=""&&isset($_POST["besch"])&&$_POST["besch"]!=""&&isset($_POST["pers"])&&$_POST["pers"]>0&&isset($_POST["ageMin"])&&$_POST["ageMin"]>=0&&$_POST["ageMin"]<=$ageMax&&isset($_POST["date"])&&isset($_POST["time"])&&isset($_POST["type"])&&$_POST["type"]!="-"){
-                        //query dateTime
-                        $mysqli = new MySQLi("localhost","root","","gip");
-                        if(mysqli_connect_errno()){
-                          trigger_error("Fout bij verbinding: ".$mysqli->error);
-                        }
-                        else{
-                          $sql = "INSERT INTO tblDatumTijd (actDatum, actTijd) VALUES (?,?)";
-                          if($stmt = $mysqli->prepare($sql)){
-                            $stmt->bind_param('ss',$actDatum,$actTijd);
-                            $actDatum = $_POST["date"];
-                            $actTijd = $_POST["time"];
-                            if(!$stmt->execute()){
-                              echo("het uitvoeren van qry dateTime is mislukt: ".$stmt->error."<br>");
-                            }
-                            else{
-                              echo"dateTime ingevoegd <br>";
-                            }
-                            $stmt->close();
-                          }
-                          else{
-                            echo("Er zit een fout in qry dateTime: ".$mysqli->error."<br>");
-                          }
-                        }
-                        //query fetchDateTimeID
-                        $mysqli = new mysqli("localhost","root","","gip");
-                        if(mysqli_connect_errno()){
-                          trigger_error("Fout bij verbinding: ".$mysqli->error);
-                        }
-                        else{
-                          $sql = "SELECT COUNT(TijdID) FROM tblDatumTijd";
-                          if($stmt = $mysqli->prepare($sql)){
-                            if(!$stmt->execute()){
-                              echo("Het uitvoeren van qry fetchDateTime is mislukt: ".$stmt->error."<br>");
-                            }
-                            else{
-                              $stmt->bind_result($tijdID);
-                              $stmt->fetch();
-                            }
-                            $stmt->close();
-                          }
-                          else{
-                            echo("Er zit een fout in qry fetchDateTime: ".$mysqli->error."<br>");
-                          }
-                        }
-                        //query actInfo
-                        $mysqli = new MySQLi("localhost","root","","gip");
-                        if(mysqli_connect_errno()){
-                          trigger_error("Fout bij verbinding: ".$mysqli->error);
-                        }
-                        else{
-                          $sql = "INSERT INTO tblActiviteit (actAuteursID, actFoto, actNm, actTypeID, persAantal, persLeeftijdMax, persLeeftijdMin, actBesch, tijdID, benNodig, benOpsomming, actPrijs) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)"; //Dit zouden er 12 moeten zijn
-                          if($stmt = $mysqli->prepare($sql)){
-                            $stmt->bind_param('issiiiisiisi',$actAutId,$actFoto,$actNm,$actTypeID,$persAantal,$persLeeftijdMax,$persLeeftijdMin,$actBesch,$tijdID,$benNodig,$benOpsomming,$actPrijs);
-                            $actAutId = $_SESSION["loginID"];
-                            $actFoto = $mysqli->real_escape_string("ws.png");
-                            $actNm = $mysqli->real_escape_string($_POST["titel"]);
-                            $actTypeID = $_POST["type"];
-                            $persAantal = $_POST["pers"];
-                            $persLeeftijdMax = $ageMax;
-                            $persLeeftijdMin = $_POST["ageMin"];
-                            $actBesch = $mysqli->real_escape_string($_POST["besch"]);
-                            if(isset($_POST["benNodig"])){
-                              if($_POST["benNodig"]){
-                                $benNodig = $_POST["benNodig"];
-                              }
-                              else{
-                                $benNodig = 0;
-                              }
-                            }
-                            else{
-                              $benNodig = 0;
-                            }
-                            if(isset($_POST["benOpsomming"])){
-                              $benOpsomming = $mysqli->real_escape_string($_POST["benOpsomming"]);
-                            }
-                            else{
-                              $benOpsomming = "";
-                            }
-                            $actPrijs = $_POST["prijs"];
-                            if(!$stmt->execute()){
-                              echo("Het uitvoeren van qry actInfo is mislukt: ".$stmt->error."<br>");
-                            }
-                            else{
-                              echo"WS ingevoegd";
-                            }
-                            $stmt->close();
-                          }
-                          else{
-                            echo("Er zit een fout in qry actInfo: ".$mysqli->error."<br>");
-                          }
-                        }
-                      }
-                    }
-                  ?> 
+                    
                 <form id="form1" name="form1" method="post" action="aanmakenWS.php">
                     <h2>Workshop aanmaken</h2>
                     <p>Titel: <br>&nbsp;
@@ -271,38 +255,38 @@ else{
                         trigger_error("Fout bij verbinding: ".$mysqli->error);
                     }
                     else{
-                        $sql = "select actTypeID, actType from tblTypes";
-                        if($stmt = $mysqli->prepare($sql)){
-                            if(!$stmt->execute()){
-                                echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
-                            }
-                            else{                          
-                                echo"&nbsp; <select name=\"type\" id=\"type\"><option value=\"-\">-Selecteer type-</option>";
-                                $stmt->bind_result($ID, $type);
-                                while($stmt->fetch()){
-                                  if(isset($_POST["type"])){
-                                    if($ID == $_POST["type"]){
-                                      echo"<option value =\"$ID\" selected>".$type."</option>";
-                                    }
-                                    else{
-                                      echo"<option value=\"$ID\">".$type."</option>";
-                                    }
-                                  }
-                                  else{
-                                    echo"<option value=\"$ID\">".$type."</option>";
-                                  }
-                                }
-                            }
-                            echo"</select>";
-                            echo"<br>
-                            &nbsp;
-                            <br>
-                            ";
-                            @$stmt->close();
+                      $sql = "select actTypeID, actType from tbltypes";
+                      if($stmt = $mysqli->prepare($sql)){
+                        if(!$stmt->execute()){
+                            echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
                         }
-                        else{
-                            echo"Er zit een fout in de qry: ".$mysqli->error;
+                        else{                          
+                          echo"&nbsp; <select name=\"type\" id=\"type\"><option value=\"-\">-Selecteer type-</option>";
+                          $stmt->bind_result($ID, $type);
+                            while($stmt->fetch()){
+                            if(isset($_POST["type"])){
+                              if($ID == $_POST["type"]){
+                                echo"<option value =\"$ID\" selected>".$type."</option>";
+                              }
+                              else{
+                                echo"<option value=\"$ID\">".$type."</option>";
+                              }
+                            }
+                            else{
+                              echo"<option value=\"$ID\">".$type."</option>";
+                            }
+                          }
                         }
+                        echo"</select>";
+                        echo"<br>
+                        &nbsp;
+                        <br>
+                        ";
+                        @$stmt->close();
+                      }
+                      else{
+                        echo"Er zit een fout in de qry: ".$mysqli->error;
+                      }
                     }
                     ?>
                     </p>

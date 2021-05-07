@@ -19,7 +19,7 @@ if(isset($_POST["naam"])&&$_POST["naam"]!=""&&(isset($_POST["besch"]))&&$_POST["
         if(mysqli_connect_errno()){
             trigger_error("fout bij de verbinding: ".$mysqli->error);
         }
-        $sql = "UPDATE tblAuteur SET auteurNm = '".$_POST["naam"]."', auteurBesch = '".$_POST["besch"]."', auteurFoto = '".$_POST["foto"]."' WHERE auteurID = ".$_SESSION["ID"];;
+        $sql = "UPDATE tblauteur SET auteurNm = '".$_POST["naam"]."', auteurBesch = '".$_POST["besch"]."', auteurFoto = '".$_POST["foto"]."' WHERE auteurID = ".$_SESSION["ID"];;
         if($stmt = $mysqli->prepare($sql)){
             if(!$stmt->execute()){
                 echo"het uitvoeren van de qry is mislukt";
@@ -116,7 +116,7 @@ if(isset($_POST["naam"])&&$_POST["naam"]!=""&&(isset($_POST["besch"]))&&$_POST["
         trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
     else{
-        $sql = "select * from tblAuteur where auteurID=".$_COOKIE["ID"];
+        $sql = "select * from tblauteur where auteurID=".$_COOKIE["ID"];
         if($stmt = $mysqli->prepare($sql)){
             if(!$stmt->execute()){
                 echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";

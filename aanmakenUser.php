@@ -1,83 +1,4 @@
-<!DOCTYPE html>
-
-<html lang="en">
-
-<head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
-  <title>Gebruiker aanmaken - Workshopp.er</title>
-  <meta content="" name="descriptison">
-  <meta content="" name="keywords">
-
-  <!-- Favicons -->
-  <link href="assets/img/ws.png" rel="icon">
-  <link href="assets/img/ws.png" rel="apple-touch-icon">
-
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
-
-  <!-- Vendor CSS Files -->
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/icofont/icofont.min.css" rel="stylesheet">
-  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="assets/vendor/animate.css/animate.min.css" rel="stylesheet">
-  <link href="assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
-  <link href="assets/vendor/venobox/venobox.css" rel="stylesheet">
-
-  <!-- Template Main CSS File -->
-  <link href="assets/css/style.css" rel="stylesheet">
-
-  <!-- =======================================================
-  * Template Name: Eterna - v2.1.0
-  * Template URL: https://bootstrapmade.com/eterna-free-multipurpose-bootstrap-template/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
-</head>
-
-<body>
-  <!-- ======= Top Bar ======= -->
-  <section id="topbar" class="d-none d-lg-block">
-    <div class="container d-flex">
-      <div class="social-links">
-          <?php
-            //echo"<a href=\"inloggen.php\">Inloggen</a>";
-          ?>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======= Header ======= -->
-  <header id="header">
-    <div class="container d-flex">
-
-      <div class="logo mr-auto">
-        <h1 class="text-light"><a href="index.php"><span>Workshopp.er</span></a></h1>
-        <!-- Uncomment below if you prefer to use an image logo -->
-        <!-- <a href="index.php"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
-      </div>
-
-      <nav class="nav-menu d-none d-lg-block">
-        <ul>
-          <li><a href="index.php">Home</a></li>
-
-            <li><a href="about.php">Over</a></li>
-          <li><a href="contact.php">Contact</a></li>
-              <li><a href="portfolioAut.php">Auteurs</a></li>
-            <li class="active"><a href="portfolioUser.php">Gebruikers</a></li>
-
-        </ul>
-      </nav><!-- .nav-menu -->
-
-    </div>
-  </header><!-- End Header -->
-<main id="main">
-
-    <!-- ======= Portfolio Details Section ======= -->
-        <section>
-            <div class="container">
-                <?php
+<?php
 //----------------------------------------------------------De check ofdat de email al gebruikt wordt voor een UserAcc----------------------------------------//
 if(isset($_POST["verzenden"])&&isset($_POST["email"])&&$_POST["email"]!=""){
     $mysqli=new mysqli("localhost","root","","gip");
@@ -85,7 +6,7 @@ if(isset($_POST["verzenden"])&&isset($_POST["email"])&&$_POST["email"]!=""){
         trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
     else{
-        $sql ="SELECT COUNT(userEmail) FROM tblUser WHERE userEmail = '".$_POST["email"]."'";
+        $sql ="SELECT COUNT(userEmail) FROM tbluser WHERE userEmail = '".$_POST["email"]."'";
         if($stmt=$mysqli->prepare($sql)){
             if(!$stmt->execute()){
                 echo"Het uitvoeren van qry emailCheck is mislukt: ".$stmt->error."<br>";
@@ -192,7 +113,7 @@ if(isset($emailCheck)&&$emailCheck){
                         trigger_error('Fout bij verbinding: '.$mysqli->error); 
                     }
                     else{
-                        $sql = "INSERT INTO tblUser (userNm, userEmail, userPasw, userFoto, userPostcode, userStraat) VALUES  (?,?,?,?,?,?)"; 
+                        $sql = "INSERT INTO tbluser (userNm, userEmail, userPasw, userFoto, userPostcode, userStraat) VALUES  (?,?,?,?,?,?)"; 
                         if($stmt = $mysqli->prepare($sql)) {     
                         $stmt->bind_param('ssssis',$naam,$email,$hashedPw,$foto,$post,$straat);
                         $email = $mysqli->real_escape_string($_POST["email"]);
@@ -220,7 +141,7 @@ if(isset($emailCheck)&&$emailCheck){
                         trigger_error("Fout bij verbinding: ".$mysqli->error);
                     }
                     else{
-                        $sql = "SELECT COUNT(userID) FROM tblUser";
+                        $sql = "SELECT COUNT(userID) FROM tbluser";
                         if($stmt=$mysqli->prepare($sql)){
                             @$stmt->bind_param('i', $uID);
                             if(!$stmt->execute()){
@@ -307,8 +228,69 @@ if(isset($emailCheck)&&$emailCheck){
         }
     }
 }
-?> 
-                
+?>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Gebruiker aanmaken - Workshopp.er</title>
+  <meta content="" name="descriptison">
+  <meta content="" name="keywords">
+  <!-- Favicons -->
+  <link href="assets/img/ws.png" rel="icon">
+  <link href="assets/img/ws.png" rel="apple-touch-icon">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+  <!-- Vendor CSS Files -->
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/icofont/icofont.min.css" rel="stylesheet">
+  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+  <link href="assets/vendor/animate.css/animate.min.css" rel="stylesheet">
+  <link href="assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
+  <link href="assets/vendor/venobox/venobox.css" rel="stylesheet">
+  <!-- Template Main CSS File -->
+  <link href="assets/css/style.css" rel="stylesheet">
+  <!-- =======================================================
+  * Template Name: Eterna - v2.1.0
+  * Template URL: https://bootstrapmade.com/eterna-free-multipurpose-bootstrap-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+<body>
+  <!-- ======= Top Bar ======= -->
+  <section id="topbar" class="d-none d-lg-block">
+    <div class="container d-flex">
+      <div class="social-links">
+          <?php
+            //echo"<a href=\"inloggen.php\">Inloggen</a>";
+          ?>
+      </div>
+    </div>
+  </section>
+  <!-- ======= Header ======= -->
+  <header id="header">
+    <div class="container d-flex">
+      <div class="logo mr-auto">
+        <h1 class="text-light"><a href="index.php"><span>Workshopp.er</span></a></h1>
+        <!-- Uncomment below if you prefer to use an image logo -->
+        <!-- <a href="index.php"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
+      </div>
+      <nav class="nav-menu d-none d-lg-block">
+        <ul>
+          <li><a href="index.php">Home</a></li>
+            <li><a href="about.php">Over</a></li>
+          <li><a href="contact.php">Contact</a></li>
+              <li><a href="portfolioAut.php">Auteurs</a></li>
+            <li class="active"><a href="portfolioUser.php">Gebruikers</a></li>
+        </ul>
+      </nav><!-- .nav-menu -->
+    </div>
+  </header><!-- End Header -->
+<main id="main">
+    <!-- ======= Portfolio Details Section ======= -->
+        <section>
+            <div class="container">             
                 <form id="form1" name="form1" method="post" action="aanmakenUser.php">
                     <h2>User aanmaken</h2>
                     <a href="registreer.php">Toch al een account? Log hier dan in.</a>
@@ -384,7 +366,7 @@ if(isset($emailCheck)&&$emailCheck){
                             trigger_error("Fout bij verbinding: ".$mysqli->error);
                         }
                         else{
-                            $sql = "select interesseID, interesseNm from tblInteresse";
+                            $sql = "select interesseID, interesseNm from tblinteresse";
                             if($stmt = $mysqli->prepare($sql)){
                                 if(!$stmt->execute()){
                                     echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";

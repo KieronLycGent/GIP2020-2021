@@ -129,7 +129,7 @@ if(mysqli_connect_errno()){
     trigger_error("Fout bij verbinding: ".$mysqli->error);
 }
 else{
-    $sql = "SELECT u.userID, u.userNm, u.userFoto, u.userStraat, g.PCode, g.Gemeente FROM tblUser u, tblgemeente g WHERE u.userID=".$_SESSION["ID"]." AND u.userPostcode = g.PostcodeID";
+    $sql = "SELECT u.userID, u.userNm, u.userFoto, u.userStraat, g.PCode, g.Gemeente FROM tbluser u, tblgemeente g WHERE u.userID=".$_SESSION["ID"]." AND u.userPostcode = g.PostcodeID";
     if($stmt = $mysqli->prepare($sql)){
         if(!$stmt->execute()){
             echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
@@ -163,7 +163,7 @@ else{
     }
 }
 $mysqli = new mysqli("localhost","root","","gip");
-$sql = "SELECT i.interesseNm FROM tblInteresse i, tblInteressesuser iu WHERE iu.userID = ".$_SESSION["ID"]." AND iu.interesseID = i.interesseID";
+$sql = "SELECT i.interesseNm FROM tblinteresse i, tblinteressesuser iu WHERE iu.userID = ".$_SESSION["ID"]." AND iu.interesseID = i.interesseID";
 if($stmt = $mysqli->prepare($sql)){
   if(!$stmt->execute()){
     echo"Het uitvoeren van qry interesses is mislukt: ".$stmt->error."in qry<br>";

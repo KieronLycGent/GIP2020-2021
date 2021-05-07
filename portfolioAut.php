@@ -148,7 +148,7 @@ if(isset($_GET["item"])){
                   }
                   else{
                       
-                          $sql = "select auteurID, auteurNm, auteurBesch, auteurFoto from tblAuteur";
+                          $sql = "select auteurID, auteurNm, auteurBesch, auteurFoto from tblauteur";
                       
                    
                       if($stmt = $mysqli->prepare($sql)){
@@ -189,7 +189,7 @@ if(isset($_GET["item"])){
                   }
                   else{
                       
-                         $sql = "SELECT * FROM tblAuteur WHERE auteurNm LIKE ? ORDER BY auteurNm";
+                         $sql = "SELECT * FROM tblauteur WHERE auteurNm LIKE ? ORDER BY auteurNm";
                       
                    
                       if($stmt = $mysqli->prepare($sql)){
