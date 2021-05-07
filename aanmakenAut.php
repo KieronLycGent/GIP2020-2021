@@ -1,7 +1,65 @@
-<!DOCTYPE html>
-
+<?php
+//emailCheck
+if(isset($_POST["verzenden"])&&isset($_POST["email"])&&$_POST["email"]!=""){
+  $mysqli=new mysqli("localhost","root","","gip");
+  if(mysqli_connect_errno()){
+      trigger_error("Fout bij verbinding: ".$mysqli->error);
+  }
+  else{
+      $sql ="SELECT COUNT(auteurEmail) FROM tblauteur WHERE auteurEmail = '".$_POST["email"]."'";
+      if($stmt=$mysqli->prepare($sql)){
+          if(!$stmt->execute()){
+              echo"Het uitvoeren van qry emailCheck is mislukt: ".$stmt->error."<br>";
+          }
+          else{
+              $stmt->bind_result($emailCount);
+              $stmt->fetch();
+              if($emailCount >= 1){
+                  $emailCheck = false;
+              }
+              else{
+                  $emailCheck = true;
+              }
+          }
+          $stmt->close();
+      }
+      else{
+          echo"Er zit een fout in qry emailCheck: ".$mysqli->error."<br>";
+      }
+  }
+}
+//Insert
+if((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&isset($_POST["besch"])&&$_POST["besch"]!=""&&isset($_POST["email"])&&$_POST["email"]!=""&&isset($_POST["pw"])&&isset($_POST["pwCheck"])&&$_POST["pwCheck"]==$_POST["pw"]){
+  if($emailCheck){
+    $mysqli= new MySQLi("localhost","root","","gip");
+    if(mysqli_connect_errno()){
+        trigger_error('Fout bij verbinding: '.$mysqli->error); 
+    }
+    else{
+      $sql = "INSERT INTO tblauteur (auteurNm,auteurEmail,auteurPasw,auteurBesch,auteurFoto) VALUES (?,?,?,?,?)"; 
+      if($stmt = $mysqli->prepare($sql)) {     
+        $stmt->bind_param('sssss',$naam,$email,$hashedPw,$besch,$foto);
+        $naam = $mysqli->real_escape_string($_POST["naam"]) ;
+        $email = $mysqli->real_escape_string($_POST["email"]);
+        $hashedPw = password_hash($mysqli->real_escape_string($_POST["pw"]), PASSWORD_DEFAULT);
+        $besch = $mysqli->real_escape_string($_POST["besch"]);
+        $foto = $mysqli->real_escape_string("ws.png");
+        if(!$stmt->execute()){
+          echo 'het uitvoeren van de query is mislukt:';
+        }
+        else{  
+          header("location:inloggen.php");
+        }
+        $stmt->close();
+      }
+      else{
+        echo 'Er zit een fout in de query'; 
+      }
+    }
+  }  
+}
+?>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -76,68 +134,6 @@
     <!-- ======= Portfolio Details Section ======= -->
         <section>
             <div class="container">
-                    <?php 
-//emailCheck
-if(isset($_POST["verzenden"])&&isset($_POST["email"])&&$_POST["email"]!=""){
-  $mysqli=new mysqli("localhost","root","","gip");
-  if(mysqli_connect_errno()){
-      trigger_error("Fout bij verbinding: ".$mysqli->error);
-  }
-  else{
-      $sql ="SELECT COUNT(auteurEmail) FROM tblAuteur WHERE auteurEmail = '".$_POST["email"]."'";
-      if($stmt=$mysqli->prepare($sql)){
-          if(!$stmt->execute()){
-              echo"Het uitvoeren van qry emailCheck is mislukt: ".$stmt->error."<br>";
-          }
-          else{
-              $stmt->bind_result($emailCount);
-              $stmt->fetch();
-              if($emailCount >= 1){
-                  $emailCheck = false;
-              }
-              else{
-                  $emailCheck = true;
-              }
-          }
-          $stmt->close();
-      }
-      else{
-          echo"Er zit een fout in qry emailCheck: ".$mysqli->error."<br>";
-      }
-  }
-}
-//Insert
-if((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&isset($_POST["besch"])&&$_POST["besch"]!=""&&isset($_POST["email"])&&$_POST["email"]!=""&&isset($_POST["pw"])&&isset($_POST["pwCheck"])&&$_POST["pwCheck"]==$_POST["pw"]){
-  if($emailCheck){
-    $mysqli= new MySQLi("localhost","root","","gip");
-    if(mysqli_connect_errno()){
-        trigger_error('Fout bij verbinding: '.$mysqli->error); 
-    }
-    else{
-      $sql = "INSERT INTO tblAuteur (auteurNm,auteurEmail,auteurPasw,auteurBesch,auteurFoto) VALUES (?,?,?,?,?)"; 
-      if($stmt = $mysqli->prepare($sql)) {     
-        $stmt->bind_param('sssss',$naam,$email,$hashedPw,$besch,$foto);
-        $naam = $mysqli->real_escape_string($_POST["naam"]) ;
-        $email = $mysqli->real_escape_string($_POST["email"]);
-        $hashedPw = password_hash($mysqli->real_escape_string($_POST["pw"]), PASSWORD_DEFAULT);
-        $besch = $mysqli->real_escape_string($_POST["besch"]);
-        $foto = $mysqli->real_escape_string("ws.png");
-        if(!$stmt->execute()){
-          echo 'het uitvoeren van de query is mislukt:';
-        }
-        else{  
-          echo 'Account aangemaakt';
-          header("location:inloggen.php");
-        }
-        $stmt->close();
-      }
-      else{
-        echo 'Er zit een fout in de query'; 
-      }
-    }
-  }  
-}
-                ?> 
                 <form id="form1" name="form1" method="post" action="aanmakenAut.php">
                     <h2>Auteur aanmaken</h2>
                     <a href="registreer.php">Toch al een account? Log hier dan in.</a>
@@ -214,7 +210,6 @@ if((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&
     <div class="footer-top">
       <div class="container">
         <div class="row">
-
           <div class="col-lg-3 col-md-6 footer-links">
             <h4>Useful Links</h4>
             <ul>
@@ -223,39 +218,38 @@ if((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&
                 <li><i class="bx bx-chevron-right"></i> <a href="contact.php">Contact</a></li>
             </ul>
           </div>
-
             <div class="col-lg-3 col-md-6 footer-contact">
-            <h4>Contacteer ons</h4>
-            <p>
-              Damaststraat 56<br>
-              Mariakereke, 9030 Gent<br>
-              Belgi&euml;<br><br>
-              <strong>Telefoon:</strong> +32 499 98 75 34<br>
-              <strong>Email:</strong> kieron.parmentier@telenet.be<br>
-                
-            </p>
-                <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
-                <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
-                <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
-                <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
-                <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+              <h4>Contacteer ons</h4>
+              <p>
+                Damaststraat 56<br>
+                Mariakereke, 9030 Gent<br>
+                Belgi&euml;<br><br>
+                <strong>Telefoon:</strong> +32 499 98 75 34<br>
+                <strong>Email:</strong> kieron.parmentier@telenet.be<br>
+              </p>
+              <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+              <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
+              <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+              <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
+              <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="copyright">
+          &copy; Copyright <strong><span>Eterna</span></strong>. All Rights Reserved
+        </div>
+        <div class="credits">
+          <!-- All the links in the footer should remain intact. -->
+          <!-- You can delete the links only if you purchased the pro version. -->
+          <!-- Licensing information: https://bootstrapmade.com/license/ -->
+          <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/eterna-free-multipurpose-bootstrap-template/ -->
+          Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
         </div>
       </div>
     </div>
-      </div>
-    <div class="container">
-      <div class="copyright">
-        &copy; Copyright <strong><span>Eterna</span></strong>. All Rights Reserved
-      </div>
-      <div class="credits">
-        <!-- All the links in the footer should remain intact. -->
-        <!-- You can delete the links only if you purchased the pro version. -->
-        <!-- Licensing information: https://bootstrapmade.com/license/ -->
-        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/eterna-free-multipurpose-bootstrap-template/ -->
-        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-      </div>
-    </div>
-  </footer><!-- End Footer -->
+</footer><!-- End Footer -->
   <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
 
   <!-- Vendor JS Files -->
