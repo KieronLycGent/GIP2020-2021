@@ -13,7 +13,7 @@ Database:
 VERGEET NIET DE .SQL TE UPDATEN!!!
 
 LOGIN OP BOOTSTRAP ZETTEN!!!!!!!!								X |
-Alle references naar tabellen zonder hoofdletters herschrijven 	X |
+Alle references naar tabellen zonder hoofdletters herschrijven 	V | 2021-05-07
 Code van php voor ALLE HTML zetten -> errorcheck variabelen 	X |
 
 Admin:

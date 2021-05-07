@@ -152,9 +152,6 @@ if(isset($_POST["verzenden"])){
   <section id="topbar" class="d-none d-lg-block">
     <div class="container d-flex">
       <div class="social-links">
-          <?php
-            //echo"<a href=\"inloggen.php\">Inloggen</a>";
-          ?>
       </div>
     </div>
   </section>

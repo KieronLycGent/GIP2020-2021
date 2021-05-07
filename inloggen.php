@@ -1,7 +1,78 @@
 <?php
 session_start();
-?>
-<!DOCTYPE html>
+$klopt = false;
+$ID = 0;
+if((isset($_POST["verzenden"]))&&(isset($_POST["email"]))&&($_POST["email"]!="")&&isset($_POST["pw"])&&$_POST["pw"]!=""){
+    $mysqli= new MySQLi("localhost","root","","gip");
+    if(mysqli_connect_errno()){
+        trigger_error('Fout bij verbinding: '.$mysqli->error); 
+    }
+    else{
+        if($_POST["acc"]=="user"){
+            $sql = "SELECT userEmail, userPasw, userID, deactivated, isAdmin FROM tbluser WHERE userEmail = '".$_POST["email"]."'"; 
+        }
+        else if($_POST["acc"]=="aut"){
+            $sql = "SELECT auteurEmail, auteurPasw, auteurID, deactivated, isAdmin FROM tblauteur WHERE auteurEmail = '".$_POST["email"]."'";
+        }
+        if($stmt = $mysqli->prepare($sql)) {     
+            if(!$stmt->execute()){
+                echo 'het uitvoeren van de query is mislukt:'.$stmt->error."in qry";
+            }
+            else{  
+                $stmt->bind_result($emailCheck,$pwCheck,$ID, $deactivated, $admin);
+                while($stmt->fetch()){
+                    if(password_verify($_POST["pw"], $pwCheck)){
+                        $klopt = true;
+                    }
+                    if($deactivated == 1){
+                        $klopt = false;
+                    }
+                }
+            }
+            $stmt->close();
+            if($klopt){
+                if($_POST["acc"]=="user"){
+                    $sql = "SELECT userID FROM tbluser WHERE userEmail ='".$_POST["email"]."'";
+                    $_SESSION["ID"] = $ID;                                        }   
+                else if($_POST["acc"]=="aut"){
+                    $sql = "SELECT auteurID FROM tblauteur WHERE auteurEmail = '".$_POST["email"]."'";
+                }
+                if($stmt = $mysqli->prepare($sql)) {     
+                    if(!$stmt->execute()){
+                        echo 'het uitvoeren van de query is mislukt:'.$stmt->error."in qry";
+                    }
+                    else{  
+                        $stmt->bind_result($_SESSION["loginID"]);
+                        $stmt->fetch();
+                        $_SESSION["login"] = true;
+                        if($_POST["acc"]=="user"){
+                            $_SESSION["loginType"] = "user";
+                        }   
+                        else if($_POST["acc"]=="aut"){
+                            $_SESSION["loginType"] = "aut";
+                        }
+                        if($admin != 0){
+                            $_SESSION["admin"] = true;
+                        }
+                        else{
+                            $_SESSION["admin"] = false;
+                        }
+                        header("location:index.php");
+                        }
+                    $stmt->close();  
+                }
+                else{
+                    echo 'Er zit een fout in de query ' .$mysqli->error; 
+                } 
+            }
+        }
+        else{
+            echo 'Er zit een fout in de query ' .$mysqli->error; 
+        }
+    }
+}
+
+?> 
 <html lang="en">
 
 <head>
@@ -75,84 +146,11 @@ session_start();
     <!-- ======= Portfolio Details Section ======= -->
         <section>
             <div class="container">
-                    <?php 
-                $klopt = false;
-                $ID = 0;
-                        if((isset($_POST["verzenden"]))&&(isset($_POST["email"]))&&($_POST["email"]!="")&&isset($_POST["pw"])&&$_POST["pw"]!=""){
-                            $mysqli= new MySQLi("localhost","root","","gip");
-                            if(mysqli_connect_errno()){
-                                trigger_error('Fout bij verbinding: '.$mysqli->error); 
-                            }
-                            else{
-                                if($_POST["acc"]=="user"){
-                                    $sql = "SELECT userEmail, userPasw, userID, deactivated, isAdmin FROM tbluser WHERE userEmail = '".$_POST["email"]."'"; 
-                                }
-                                else if($_POST["acc"]=="aut"){
-                                    $sql = "SELECT auteurEmail, auteurPasw, auteurID, deactivated, isAdmin FROM tblauteur WHERE auteurEmail = '".$_POST["email"]."'";
-                                }
-                                if($stmt = $mysqli->prepare($sql)) {     
-                                    if(!$stmt->execute()){
-                                        echo 'het uitvoeren van de query is mislukt:'.$stmt->error."in qry";
-                                    }
-                                    else{  
-                                        $stmt->bind_result($emailCheck,$pwCheck,$ID, $deactivated, $admin);
-                                        while($stmt->fetch()){
-                                            if(password_verify($_POST["pw"], $pwCheck)){
-                                                $klopt = true;
-                                            }
-                                            if($deactivated == 1){
-                                                $klopt = false;
-                                            }
-                                        }
-                                    }
-                                    $stmt->close();
-                                    if($klopt){
-                                        if($_POST["acc"]=="user"){
-                                            $sql = "SELECT userID FROM tbluser WHERE userEmail ='".$_POST["email"]."'";
-                                            $_SESSION["ID"] = $ID;                                        }   
-                                        else if($_POST["acc"]=="aut"){
-                                            $sql = "SELECT auteurID FROM tblauteur WHERE auteurEmail = '".$_POST["email"]."'";
-                                        }
-                                        if($stmt = $mysqli->prepare($sql)) {     
-                                            if(!$stmt->execute()){
-                                                echo 'het uitvoeren van de query is mislukt:'.$stmt->error."in qry";
-                                            }
-                                            else{  
-                                                $stmt->bind_result($_SESSION["loginID"]);
-                                                $stmt->fetch();
-                                                $_SESSION["login"] = true;
-                                                if($_POST["acc"]=="user"){
-                                                    $_SESSION["loginType"] = "user";
-                                                }   
-                                                else if($_POST["acc"]=="aut"){
-                                                    $_SESSION["loginType"] = "aut";
-                                                }
-                                                if($admin != 0){
-                                                    $_SESSION["admin"] = true;
-                                                }
-                                                else{
-                                                    $_SESSION["admin"] = false;
-                                                }
-
-                                                header("location:index.php");
-                                                }
-                                            $stmt->close();  
-                                        }
-                                        else{
-                                            echo 'Er zit een fout in de query ' .$mysqli->error; 
-                                        } 
-                                    }
-                                    else{
-                                        echo"<h5 id=\"error\">Paswoord of email niet gekend.</h5>";
-                                    }
-                                }
-                                else{
-                                    echo 'Er zit een fout in de query ' .$mysqli->error; 
-                                }
-                            }
-                        }
-                
-                ?> 
+                <?php
+                if(!$klopt){
+                    echo"<h5 id=\"error\">Paswoord of email niet gekend.</h5>";
+                }
+                ?>
                 <form id="form1" name="form1" method="post" action="inloggen.php">
                     <h2>Inloggen</h2>
                     <a href="registreer.php">Hebt u nog geen account? Maak er dan hier een aan.</a>
@@ -199,24 +197,6 @@ session_start();
             </div>
         </section>
   </main><!-- End #main -->
-
-  <!-- ======= Footer ======= -->
-  <!--<footer id="footer">
-    <div class="footer-top">
-      </div>
-    <div class="container">
-      <div class="copyright">
-        &copy; Copyright <strong><span>Eterna</span></strong>. All Rights Reserved
-      </div>
-      <div class="credits">
-        <!-- All the links in the footer should remain intact. -->
-        <!-- You can delete the links only if you purchased the pro version. -->
-        <!-- Licensing information: https://bootstrapmade.com/license/ -->
-        <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/eterna-free-multipurpose-bootstrap-template/ -->
-        <!--Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-      </div>
-    </div>
-  </footer><!-- End Footer -->
   <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
 
   <!-- Vendor JS Files -->

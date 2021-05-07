@@ -90,8 +90,6 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
     }
 }
 //================================================================================================================================================================//
-?>  
-<?php 
 if(isset($emailCheck)&&$emailCheck){
     //Kijkt of naam, straat, paswoord (en zijn check) zijn ingevuld
     if((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&(isset($_POST["straat"]))&&($_POST["straat"]!="")&&isset($_POST["pw"])&&($_POST["pw"]!="")&&isset($_POST["pwCheck"])&&isset($_POST["email"])&&($_POST["email"]!="")){                           
@@ -262,9 +260,6 @@ if(isset($emailCheck)&&$emailCheck){
   <section id="topbar" class="d-none d-lg-block">
     <div class="container d-flex">
       <div class="social-links">
-          <?php
-            //echo"<a href=\"inloggen.php\">Inloggen</a>";
-          ?>
       </div>
     </div>
   </section>
