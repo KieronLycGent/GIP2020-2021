@@ -8,7 +8,7 @@ Database:
 	-deactivated veld toevoegen					V | 2021-04-23
 		-Dit werkt ook							V | 2021-04-23
 	-betalingen									
-		-rekeningnummer bij Auteurs				X |
+		-rekeningnummer bij Auteurs				V | 2021-05-07 --> .SQL geupdate
 		-paypal									X |
 VERGEET NIET DE .SQL TE UPDATEN!!!
 

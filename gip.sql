@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 23, 2021 at 09:46 AM
+-- Generation Time: May 07, 2021 at 03:14 PM
 -- Server version: 5.7.17
 -- PHP Version: 5.6.30
 
@@ -58,15 +58,16 @@ CREATE TABLE `tblauteur` (
   `auteurEmail` text NOT NULL,
   `auteurPasw` tinytext NOT NULL,
   `isAdmin` tinyint(1) NOT NULL DEFAULT '0',
-  `deactivated` tinyint(1) NOT NULL DEFAULT '0'
+  `deactivated` tinyint(1) NOT NULL DEFAULT '0',
+  `rekNr` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 
 --
 -- Dumping data for table `tblauteur`
 --
 
-INSERT INTO `tblauteur` (`auteurID`, `auteurNm`, `auteurBesch`, `auteurFoto`, `auteurEmail`, `auteurPasw`, `isAdmin`, `deactivated`) VALUES
-(1, 'Admin', 'Administrator', 'ws.png', 'boerestink1@gmail.com', '$2y$10$vTOmjcfbU0X.7rd3LfWKxOO5OpOS3O1KYtuqhqeCUyrf2I3clCsxG', 1, 0);
+INSERT INTO `tblauteur` (`auteurID`, `auteurNm`, `auteurBesch`, `auteurFoto`, `auteurEmail`, `auteurPasw`, `isAdmin`, `deactivated`, `rekNr`) VALUES
+(1, 'Admin', 'Administrator', 'ws.png', 'kieron.parmentier@telenet.be', '$2y$10$vTOmjcfbU0X.7rd3LfWKxOO5OpOS3O1KYtuqhqeCUyrf2I3clCsxG', 1, 0, 'BE3073504951111');
 
 -- --------------------------------------------------------
 
@@ -3049,6 +3050,15 @@ CREATE TABLE `tblinteressesuser` (
   `interesseID` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `tblinteressesuser`
+--
+
+INSERT INTO `tblinteressesuser` (`userID`, `interesseID`) VALUES
+(1, 2),
+(1, 3),
+(1, 5);
+
 -- --------------------------------------------------------
 
 --
@@ -3091,7 +3101,7 @@ CREATE TABLE `tbluser` (
 --
 
 INSERT INTO `tbluser` (`userID`, `userNm`, `userStraat`, `userPostcode`, `userFoto`, `userEmail`, `userPasw`, `isAdmin`, `deactivated`) VALUES
-(1, 'Admin', 'Geen', 861, 'ws.png', 'boerestink1@gmail.com', '$2y$10$oMEmVbdRrg.yIy44av5aBOE1k3Ch.EX5DJ6000VYzN8ZzyWv/9unG', 1, 0);
+(1, 'Admin', 'Geen', 861, 'blog-2.jpg', 'boerestink1@gmail.com', '$2y$10$oMEmVbdRrg.yIy44av5aBOE1k3Ch.EX5DJ6000VYzN8ZzyWv/9unG', 1, 0);
 
 -- --------------------------------------------------------
 
