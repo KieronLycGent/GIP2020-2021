@@ -54,3 +54,6 @@ Workshops:
 --> zie cursus html om dit te testen,
  print_r om te kijken hoe dit ontvangen wordt. 
  - Footer verwijderen: deze heeft zo goed als geen nut 	X | 
+
+
+       $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip"); om te replacen voor de host

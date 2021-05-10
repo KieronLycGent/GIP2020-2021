@@ -116,7 +116,7 @@ if(isset($_POST["naam"])&&$_POST["naam"]!=""&&(isset($_POST["besch"]))&&$_POST["
         trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
     else{
-        $sql = "select * from tblauteur where auteurID=".$_COOKIE["ID"];
+        $sql = "select * from tblauteur where auteurID=".$_SESSION["ID"];
         if($stmt = $mysqli->prepare($sql)){
             if(!$stmt->execute()){
                 echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";

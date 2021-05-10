@@ -5,11 +5,7 @@ if(isset($_GET["end"])){
         session_destroy();
         header("location:".$_SERVER["PHP_SELF"]);
     }
-}
-?>
-<!DOCTYPE html>
-<?php
-    
+}    
 if(!isset($_SESSION["ID"])){
     header("location:portfolioAut.php");
 }
@@ -30,7 +26,27 @@ if(isset($_POST["naam"])&&$_POST["naam"]!=""&&(isset($_POST["besch"]))&&$_POST["
             echo"Er zit een fout in de qry";
         }
 }
-
+$mysqli= new mysqli("localhost","root","","gip");
+if(mysqli_connect_errno()){
+  trigger_error("Fout bij verbinding: ".$mysqli->error);
+}
+else{
+  $sql = "SELECT ac.actID, au.auteurNm, au.auteurID, ac.actFoto, ac.actNm, ty.actType, ac.persAantal, ac.persLeeftijdMax, ac.persLeeftijdMin, ac.actBesch, dt.actDatum, TIME_FORMAT(dt.actTijd, '%k:%i'), ac.benNodig, ac.benOpsomming, ac.actPrijs 
+  FROM tblactiviteit ac, tblauteur au, tbltypes ty, tbldatumtijd dt WHERE ac.actAuteursID = au.auteurID AND ac.actTypeID = ty.actTypeID AND ac.tijdID = dt.tijdID AND ac.actID = ".$_SESSION["ID"];
+  if($stmt = $mysqli->prepare($sql)){
+    if(!$stmt->execute()){
+      echo("Het uitvoeren van de qry is mislukt: ".$stmt->error."<br>");
+    }
+    else{
+      $stmt->bind_result($actID,$autNm,$autID,$actFoto,$actNm,$actType,$persAantal,$persAgeMax,$persAgeMin,$actBesch,$actDatum,$actTijd,$benNodig,$benOpsomming,$actPrijs);
+      $stmt->fetch();
+    }
+    $stmt->close();
+  }
+  else{
+  echo("Er zit een fout in qry getActInfo: ".$mysqli->error);
+  }
+}
 ?>
 <html lang="en">
 
@@ -111,19 +127,77 @@ if(isset($_POST["naam"])&&$_POST["naam"]!=""&&(isset($_POST["besch"]))&&$_POST["
     <!-- ======= Portfolio Details Section ======= -->
     <form action="<?php $_SERVER["PHP_SELF"]?>" method="post">
     <?php
-    $mysqli= new MySQLi("localhost","root","","gip");
+echo"
+<section id\"portfolio-details\" class=\"portfolio-details\">
+  <div class=\"container\">
+    <a class=\"icofont-arrow-left\" href=\"portfolioWS.php\">Terug</a>
+    <a href=\"wijzigenWS.php\"><i class=\"icofont-pencil\">Aanpassen</i></a>
+    <div class=\"row\">
+      <div class=\"col-lg-8\">
+        <img src=\"assets/img/uploads/".$actFoto."\" class=\"img-fluid\" alt=\"\">
+        <div class=\"col-lg-4 portfolio-info\">
+          <h3>Informatie activiteit</h3>
+          <ul>
+            <li><strong>Titel</strong>:</li>
+            <li>&nbsp;".$actNm."</li>
+            <li><strong>Beschrijving</strong>:</li>
+            <li>&nbsp;".$actBesch."</li>
+            <li><strong>Auteur</strong>:</li>
+            <li>&nbsp;".$autNm."</li>
+            <li><strong>Activiteitstype</strong>:</li>
+            <li>&nbsp;".$actType."</li>
+            <li><strong>Leeftijd</strong>:</li>
+            <li>&nbsp;".$persAgeMin."-".$persAgeMax."</li>
+            <li><strong>Datum en tijdstip</strong>:</li>
+            <li>&nbsp;".$actDatum." om ".$actTijd."</li>
+            <li><strong>Benodigdheden</strong>:</li>
+            <li>&nbsp;";
+            if($benOpsomming == ""){
+              echo"Er zijn geen specifieke benodigdheden.";
+              $blancoOpsomming = true;
+            }
+            echo"</li>";
+            if($benNodig != 0){
+              echo"<li>&nbsp;&nbsp;De bovenstaande benodigdheden zijn<strong>verplicht</strong> mee te nemen!</li>";
+            }
+            else{
+              if(!$blancoOpsomming){
+                echo"<li>&nbsp;&nbsp;De bovenstaande benodigdheden zijn niet verplicht mee te nemen.</li>";
+              }
+            }
+            echo"
+            <li><strong>Prijs</strong>:</li>
+            <li>&nbsp;
+            ";
+            if($actPrijs == 0){
+              echo"Deze activiteit is gratis";
+            }
+            else{
+              echo($actPrijs." per persoon");
+            }
+            echo"
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>";
+?>
+    /*$mysqli= new MySQLi("localhost","root","","gip");
     if(mysqli_connect_errno()){
         trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
     else{
-        $sql = "select * from tblauteur where auteurID=".$_COOKIE["ID"];
-        if($stmt = $mysqli->prepare($sql)){
+      
+      $sql = "SELECT ac.actID, au.auteurNm, au.auteurID, ac.actFoto, ac.actNm, ty.actType, ac.persAantal, ac.persLeeftijdMax, ac.persLeeftijdMin, ac.actBesch, dt.actDatum, TIME_FORMAT(dt.actTijd, '%k:%i'), ac.benNodig, ac.benOpsomming, ac.actPrijs 
+      FROM tblactiviteit ac, tblauteur au, tbltypes ty, tbldatumtijd dt WHERE ac.actAuteursID = au.auteurID AND ac.actTypeID = ty.actTypeID AND ac.tijdID = dt.tijdID AND ac.actID = ".$_SESSION["ID"];        if($stmt = $mysqli->prepare($sql)){
             if(!$stmt->execute()){
                 echo"Het uitvoeren van de qry is mislukt: ".$stmt->error."in query";
             }
             else{
-                $stmt->bind_result($auteurID, $auteurNm, $auteurBesch, $auteurFoto);
-                echo"
+              $stmt->bind_result($actID,$autNm,$autID,$actFoto,$actNm,$actType,$persAantal,$persAgeMax,$persAgeMin,$actBesch,$actDatum,$actTijd,$benNodig,$benOpsomming,$actPrijs);
+              echo"
                 <section id=\"portfolio-details\" class=\"portfolio-details\">
                     <div class=\"container\">
                         <div class=\"row\">
@@ -154,7 +228,7 @@ if(isset($_POST["naam"])&&$_POST["naam"]!=""&&(isset($_POST["besch"]))&&$_POST["
         else{
             echo"Er zit een fout in de qry: ".$mysqli->error;
         }
-    }
+    }*/
 
     ?>
         

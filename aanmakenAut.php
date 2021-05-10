@@ -36,16 +36,17 @@ if((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&
         trigger_error('Fout bij verbinding: '.$mysqli->error); 
     }
     else{
-      $sql = "INSERT INTO tblauteur (auteurNm,auteurEmail,auteurPasw,auteurBesch,auteurFoto) VALUES (?,?,?,?,?)"; 
+      $sql = "INSERT INTO tblauteur (auteurNm,auteurEmail,auteurPasw,auteurBesch,auteurFoto,rekNr) VALUES (?,?,?,?,?,?)"; 
       if($stmt = $mysqli->prepare($sql)) {     
-        $stmt->bind_param('sssss',$naam,$email,$hashedPw,$besch,$foto);
+        $stmt->bind_param('ssssss',$naam,$email,$hashedPw,$besch,$foto,$rekNr);
         $naam = $mysqli->real_escape_string($_POST["naam"]) ;
         $email = $mysqli->real_escape_string($_POST["email"]);
         $hashedPw = password_hash($mysqli->real_escape_string($_POST["pw"]), PASSWORD_DEFAULT);
         $besch = $mysqli->real_escape_string($_POST["besch"]);
         $foto = $mysqli->real_escape_string("ws.png");
+        $rekNr = $mysqli->real_escape_string($_POST["rekNr"]);
         if(!$stmt->execute()){
-          echo 'het uitvoeren van de query is mislukt:';
+          echo 'het uitvoeren van de query is mislukt:'.$stmt->error;
         }
         else{  
           header("location:inloggen.php");
@@ -171,6 +172,13 @@ if((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&
                                                                                                        if(isset($_POST["besch"])){
                                                                                                            echo($_POST["besch"]);
                                                                                                        }?>">
+                    </p>
+                    <p>Rekeningnummer: &nbsp;
+                      <input type="text" name="rekNr" id="rekNr" placeholder="Rekeningnummer" required value="<?php
+                                                                                                              if(isset($_POST["rekNr"])){
+                                                                                                                echo($_POST["rekNr"]);
+                                                                                                              }
+                                                                                                              ?>">
                     </p>
                     <p>
                         &nbsp;

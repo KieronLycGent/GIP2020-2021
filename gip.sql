@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 07, 2021 at 03:14 PM
+-- Generation Time: May 10, 2021 at 09:51 AM
 -- Server version: 5.7.17
 -- PHP Version: 5.6.30
 
@@ -41,7 +41,8 @@ CREATE TABLE `tblactiviteit` (
   `tijdID` int(11) NOT NULL,
   `benNodig` tinyint(1) NOT NULL,
   `benOpsomming` longtext,
-  `actPrijs` double NOT NULL DEFAULT '0'
+  `actPrijs` double NOT NULL DEFAULT '0',
+  `deactivated` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
 
 -- --------------------------------------------------------
@@ -91,6 +92,14 @@ CREATE TABLE `tbldatumtijd` (
   `actDatum` date NOT NULL,
   `actTijd` time NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 ROW_FORMAT=COMPACT;
+
+--
+-- Dumping data for table `tbldatumtijd`
+--
+
+INSERT INTO `tbldatumtijd` (`tijdID`, `actDatum`, `actTijd`) VALUES
+(1, '2003-03-02', '12:12:00'),
+(2, '0001-01-01', '01:01:00');
 
 -- --------------------------------------------------------
 
@@ -3101,7 +3110,7 @@ CREATE TABLE `tbluser` (
 --
 
 INSERT INTO `tbluser` (`userID`, `userNm`, `userStraat`, `userPostcode`, `userFoto`, `userEmail`, `userPasw`, `isAdmin`, `deactivated`) VALUES
-(1, 'Admin', 'Geen', 861, 'blog-2.jpg', 'boerestink1@gmail.com', '$2y$10$oMEmVbdRrg.yIy44av5aBOE1k3Ch.EX5DJ6000VYzN8ZzyWv/9unG', 1, 0);
+(1, 'Admin', 'Geen', 861, 'blog-2.jpg', 'kieron.parmentier@telenet.be', '$2y$10$oMEmVbdRrg.yIy44av5aBOE1k3Ch.EX5DJ6000VYzN8ZzyWv/9unG', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -3197,7 +3206,7 @@ ALTER TABLE `tblauteursperact`
 -- AUTO_INCREMENT for table `tbldatumtijd`
 --
 ALTER TABLE `tbldatumtijd`
-  MODIFY `tijdID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `tijdID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `tblgemeente`
 --

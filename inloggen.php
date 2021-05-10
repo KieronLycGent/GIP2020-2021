@@ -147,7 +147,7 @@ if((isset($_POST["verzenden"]))&&(isset($_POST["email"]))&&($_POST["email"]!="")
         <section>
             <div class="container">
                 <?php
-                if(!$klopt){
+                if(isset($_POST["verzenden"])&&!$klopt){
                     echo"<h5 id=\"error\">Paswoord of email niet gekend.</h5>";
                 }
                 ?>
