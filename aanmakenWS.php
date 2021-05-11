@@ -11,8 +11,8 @@ else{
 }
 //code voor na de form is verzonden
 if(isset($_POST["verzenden"])){
-  print_r($_POST);
-  echo"<br>";
+ // print_r($_POST);
+  // echo"<br>";
   if(isset($_POST["ageMax"])){
     if($_POST["ageMax"]!=""){
       $ageMax = $_POST["ageMax"];
@@ -109,6 +109,7 @@ if(isset($_POST["verzenden"])){
         }
         else{
           echo"WS ingevoegd";
+          header("location:portfolioWSEigen.php");
         }
         $stmt->close();
       }
@@ -245,7 +246,9 @@ if(isset($_POST["verzenden"])){
                         ?></textarea>
                     </p>
                     <p>Type: <br>&nbsp;
-                    <?php
+                    <?php if(isset($_POST["verzenden"])&&$_POST["type"]=="-"){
+                      echo"<a id=\"error\">Gelieve een optie te selecteren.</a><br>";
+                    }
                     //activiteitstype als selectie geven
                     $mysqli= new MySQLi("localhost","root","","gip");
                     if(mysqli_connect_errno()){

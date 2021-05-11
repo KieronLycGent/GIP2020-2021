@@ -9,7 +9,10 @@ if(isset($_GET["end"])){
 if(!$_SESSION["admin"]){
     header("location:index.php");
   }
-
+if(isset($_GET["option"])&&$_GET["option"] == "edit"){
+  $_SESSION["ID"] = $_GET["item"];
+    header("location:wijzigenUser.php");
+}
 ?>
 <html lang="en">
 <head>

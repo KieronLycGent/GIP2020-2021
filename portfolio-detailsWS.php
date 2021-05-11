@@ -9,6 +9,45 @@ if(isset($_GET["end"])){
 if(!isset($_SESSION["ID"])){
     header("location:portfolioWS.php");
 }
+if(isset($_POST["join"])){
+  // getActID
+  $mysqli=new mysqli("localhost","root","","gip");
+  if(mysqli_connect_errno()){
+    trigger_error("Fout bij verbinding: ".$mysqli->error);
+  }
+  else{
+    $sql="SELECT ac.actID FROM tblactiviteit ac WHERE ac.actID = ".$_SESSION["ID"];
+    if($stmt = $mysqli->prepare($sql)){
+      if(!$stmt->execute()){
+        echo("Het uitvoeren van qry getActID is mislukt: ".$stmt->error."<br>");
+      }
+      else{
+        $stmt->bind_result($actID);
+        $stmt->fetch();
+      }
+      $stmt->close();
+    }
+    else{
+      echo("Er zit een fout in qry getActID: ".$mysqli->error);
+    }
+  }
+  // joinAct
+  $mysqli=new mysqli("localhost","root","","gip");
+  if(mysqli_connect_errno()){
+    trigger_error("Fout bij verbinding: ".$mysqli->error);
+  }
+  else{
+    $sql="INSERT INTO tblusersperact(actID, userID, inschrDatum, betaald) VALUES (?,?,GETDATE(),0)";
+    if($stmt = $mysqli->prepare($sql)){
+      $stmt->bind_param('iis',$actID,$inschrID,$inschrDatum);
+      $inschrID = $_SESSION["loginID"];
+      if(!$stmt->execute()){
+        echo"Het uitvoeren van qry joinAct is mislukt: ".$stmt->error."<br>";
+      }
+      // NOG NIEEEEEEEEEEEEEEEEEEET KLAAAAAAAAAAAAAAAAAAAR
+    }
+  }
+}
 $mysqli= new mysqli("localhost","root","","gip");
 if(mysqli_connect_errno()){
   trigger_error("Fout bij verbinding: ".$mysqli->error);
@@ -143,9 +182,14 @@ else{
     echo"
     <section id\"portfolio-details\" class=\"portfolio-details\">
       <div class=\"container\">
-        <a class=\"icofont-arrow-left\" href=\"portfolioWS.php\">Terug</a>
-        <a href=\"wijzigenWS.php\"><i class=\"icofont-pencil\">Aanpassen</i></a>
-        <div class=\"row\">
+        <a class=\"icofont-arrow-left\" href=\"portfolioWS.php\">Terug</a>";
+      if($_SESSION["loginID"]==$autID&&$_SESSION["loginType"]=="aut"){
+        echo"<br><a href=\"wijzigenWS.php\"><i class=\"icofont-pencil\">Aanpassen</i></a>";
+      }
+      else if($_SESSION["admin"]){
+        echo"<br><a href=\"wijzigenWS.php\"><i class=\"icofont-pencil\">Aanpassen als admin</i></a>";
+      }
+       echo" <div class=\"row\">
           <div class=\"col-lg-8\">
             <img src=\"assets/img/uploads/".$actFoto."\" class=\"img-fluid\" alt=\"\">
             <div class=\"col-lg-4 portfolio-info\">
@@ -171,7 +215,7 @@ else{
                 }
                 echo"</li>";
                 if($benNodig != 0){
-                  echo"<li>&nbsp;&nbsp;De bovenstaande benodigdheden zijn<strong>verplicht</strong> mee te nemen!</li>";
+                  echo"<li>&nbsp;De bovenstaande benodigdheden zijn <strong>verplicht</strong> mee te nemen!</li>";
                 }
                 else{
                   if(!$blancoOpsomming){
@@ -192,6 +236,9 @@ else{
                 </li>
               </ul>
             </div>
+            <form name =\"frmJoin\" id=\"frmJoin\" method=\"post\" action=\"".$_SERVER["PHP_SELF"]."\">
+              <input type=\"submit\" name=\"join\" id=\"join\" value=\"inschrijven\">
+            </form>
           </div>
         </div>
       </div>

@@ -12,12 +12,15 @@ Database:
 		-paypal									X |
 VERGEET NIET DE .SQL TE UPDATEN!!!
 
+- Footer verwijderen: deze heeft zo goed als geen nut 	X | 
+
+
 LOGIN OP BOOTSTRAP ZETTEN!!!!!!!!								X |
 Alle references naar tabellen zonder hoofdletters herschrijven 	V | 2021-05-07
 Code van php voor ALLE HTML zetten -> errorcheck variabelen 	X |
 
 Admin:
-	-Users editen								X | 							note: heb nu al een stuk of 200 lijnen verwijderd. Wtf was ik aan het denken?!? - 2021-04-26
+	-Users editen								V | 2021-04-11							note: heb nu al een stuk of 200 lijnen verwijderd. Wtf was ik aan het denken?!? - 2021-04-26
 		-User details -> interesses error fixen V | 2021-04-26
 	-Auteurs editen								X |
 	-Workshops editen							X |
@@ -29,7 +32,7 @@ Admin:
 
 	-structuren van opslaan veranderen
 		-aanmakenUser.php 						V | 2021-04-18
-	-wijzigenUser.php 							X |
+	-wijzigenUser.php 							V | 2021-05-06 \\ Dank u mevr. Vandamme
 			Moet helemaal herschreven worden
 
 Registratie:
@@ -50,10 +53,13 @@ Workshops:
 	-Joinen in workshops als user 		X |
 	-Betaling voor premium workshops	X |
 
-- Uploaden foto 										X |
---> zie cursus html om dit te testen,
+- Uploaden foto
+	PROBLEEM: 
+	1) Je moet een foto Uploaden									V | 2021-05-11
+		FIX: check ofdat de img "" is --> mag doorgelaten worden
+	2) Als 2 users een foto uploaden met dezelfde naam --> error	V | 2021-05-10
+		FIX: Geef een message dat de user zelf maar een andere naam moet ingeven
  print_r om te kijken hoe dit ontvangen wordt. 
- - Footer verwijderen: deze heeft zo goed als geen nut 	X | 
 
 
        $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip"); om te replacen voor de host

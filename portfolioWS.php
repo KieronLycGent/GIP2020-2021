@@ -204,7 +204,7 @@ if(isset($_GET["item"])){
                     <div class=\"portfolio-info\">
                       <h4>".$actNm."</h4>
                       <p>".$actBesch."</p>
-                      <p>".$actPrijs."</p>
+                      <p>Prijs: &euro;".$actPrijs."</p>
                       <p>Door: ".$autNm."</p>
                     <div class=\"portfolio-links\">
                       <a href=\"portfolioWS.php?item=".$actID."\" title=\"More Details\"><i class=\"bx bx-link\"></i></a>

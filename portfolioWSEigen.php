@@ -6,9 +6,6 @@ if(isset($_GET["end"])){
         header("location:".$_SERVER["PHP_SELF"]);
     }
 }
-?>
-<!DOCTYPE html>
-<?php
 if(isset($_GET["item"])){
     $_SESSION["ID"] = $_GET["item"];
     header("location:portfolio-detailsWS.php");
