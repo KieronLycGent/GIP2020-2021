@@ -4,7 +4,5 @@
 </form> -->
 <?php
     print_r($_POST);
+
 ?>
-<form name ="frmJoin" id="frmJoin" method="post" action="<?php echo($_SERVER["PHP_SELF"]) ?>">
-    <input type="submit" name="join" id="join" value="inschrijven">
-</form>

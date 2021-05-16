@@ -16,36 +16,45 @@ if(isset($_POST["join"])){
     trigger_error("Fout bij verbinding: ".$mysqli->error);
   }
   else{
-    $sql="SELECT ac.actID FROM tblactiviteit ac WHERE ac.actID = ".$_SESSION["ID"];
+    $sql="SELECT ac.actID, ac.actPrijs FROM tblactiviteit ac WHERE ac.actID = ".$_SESSION["ID"];
     if($stmt = $mysqli->prepare($sql)){
       if(!$stmt->execute()){
-        echo("Het uitvoeren van qry getActID is mislukt: ".$stmt->error."<br>");
+        echo("Het uitvoeren van qry getActIDPrijs is mislukt: ".$stmt->error."<br>");
       }
       else{
-        $stmt->bind_result($actID);
+        $stmt->bind_result($actID,$actPrijs);
         $stmt->fetch();
       }
       $stmt->close();
     }
     else{
-      echo("Er zit een fout in qry getActID: ".$mysqli->error);
+      echo("Er zit een fout in qry getActIDPrijs: ".$mysqli->error);
     }
   }
   // joinAct
-  $mysqli=new mysqli("localhost","root","","gip");
-  if(mysqli_connect_errno()){
-    trigger_error("Fout bij verbinding: ".$mysqli->error);
+  if($actPrijs==0){
+    $mysqli=new mysqli("localhost","root","","gip");
+    if(mysqli_connect_errno()){
+      trigger_error("Fout bij verbinding: ".$mysqli->error);
+    }
+    else{
+      $sql="INSERT INTO tblusersperact(actID, userID, inschrDatum, betaald) VALUES (?,?,NOW(),1)";
+      if($stmt = $mysqli->prepare($sql)){
+        $stmt->bind_param('ii',$actID,$inschrID);
+        $inschrID = $_SESSION["loginID"];
+        if(!$stmt->execute()){
+          echo"Het uitvoeren van qry joinAct is mislukt: ".$stmt->error."<br>";
+        }
+        $stmt->close();
+      }
+      else{
+        echo"Er zit een fout in qry joinAct: ".$mysqli->error."<br>";
+      }
+    }
   }
   else{
-    $sql="INSERT INTO tblusersperact(actID, userID, inschrDatum, betaald) VALUES (?,?,GETDATE(),0)";
-    if($stmt = $mysqli->prepare($sql)){
-      $stmt->bind_param('iis',$actID,$inschrID,$inschrDatum);
-      $inschrID = $_SESSION["loginID"];
-      if(!$stmt->execute()){
-        echo"Het uitvoeren van qry joinAct is mislukt: ".$stmt->error."<br>";
-      }
-      // NOG NIEEEEEEEEEEEEEEEEEEET KLAAAAAAAAAAAAAAAAAAAR
-    }
+    $_SESSION["actID"] = $actID;
+    header("location:cart.php");
   }
 }
 $mysqli= new mysqli("localhost","root","","gip");
@@ -230,16 +239,23 @@ else{
                   echo"Deze activiteit is gratis";
                 }
                 else{
-                  echo($actPrijs." per persoon");
+                  echo($actPrijs."&euro; per persoon");
                 }
                 echo"
                 </li>
               </ul>
-            </div>
-            <form name =\"frmJoin\" id=\"frmJoin\" method=\"post\" action=\"".$_SERVER["PHP_SELF"]."\">
-              <input type=\"submit\" name=\"join\" id=\"join\" value=\"inschrijven\">
-            </form>
-          </div>
+            </div>";
+            if($actPrijs == 0){
+              echo"<form name =\"frmJoin\" id=\"frmJoin\" method=\"post\" action=\"".$_SERVER["PHP_SELF"]."\">
+            <input type=\"submit\" name=\"join\" id=\"join\" value=\"inschrijven\">
+            </form>";
+            }
+            else{
+              echo"<form name =\"frmJoin\" id=\"frmJoin\" method=\"post\" action=\"".$_SERVER["PHP_SELF"]."\">
+              <input type=\"submit\" name=\"join\" id=\"join\" value=\"Betalen\">
+              </form>";
+            }
+        echo"</div>
         </div>
       </div>
     </section>";
