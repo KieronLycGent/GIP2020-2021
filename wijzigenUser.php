@@ -97,12 +97,6 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
     }
 }
 //---------------------------------------------------------------------------------------einde PC en Gemeente check
-if ((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&(isset($_POST["email"]))&&($_POST["email"]!="")&&(isset($_POST["straat"]))&&($_POST["straat"]!="") && $pcErr == false){
-    
-  
-    
-        
-}
 $uploadOk = 0;
 if ((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&(isset($_POST["email"]))&&($_POST["email"]!="")&&(isset($_POST["straat"]))&&($_POST["straat"]!="") && $pcErr == false){
 	
@@ -342,7 +336,6 @@ if ((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&
                 <div class="row">
                     <div class="col-lg-8">
     <?php
-    // Deze hele code moet van scratch herschreven worden: CHAOS!!!
 //-----------------------------------------------qry baseInfo------------------------------------------
 
 if(!isset($_POST["verzenden"])){
