@@ -16,7 +16,7 @@ VERGEET NIET DE .SQL TE UPDATEN!!!
 - Footer verwijderen: deze heeft zo goed als geen nut 	V |2021-05-14 
 
 
-LOGIN OP BOOTSTRAP ZETTEN!!!!!!!!								X |
+LOGIN OP BOOTSTRAP ZETTEN!!!!!!!!								V | 2021-05-16
 Alle references naar tabellen zonder hoofdletters herschrijven 	V | 2021-05-07
 Code van php voor ALLE HTML zetten -> errorcheck variabelen 	X |
 

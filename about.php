@@ -50,28 +50,6 @@ if(isset($_GET["end"])){
  <section id="topbar" class="d-none d-lg-block">
     <div class="container d-flex">
       <div class="social-links">
-          <?php
-          if(isset($_SESSION["login"])){
-              if(!($_SESSION["login"])){
-                  echo"<a href=\"inloggen.php\">Inloggen</a>";
-                  echo"<a href=\"registreer.php\">Registreren</a>";
-              }
-              else{
-                  echo"<a href=\"".$_SERVER["PHP_SELF"]."?end=true\">Uitloggen</a>";
-                  if($_SESSION["loginType"] == "user"){
-                      
-                      echo"<a href=\"wijzigenUser.php\">Profiel</a>";
-                  }
-                  else{
-                      echo"<a href=\"wijzigenAut.php\">Profiel</a>";
-                  }
-              }
-          }
-          else{
-              echo"<a href=\"inloggen.php\">Inloggen</a>";
-              echo"<a href=\"registreer.php\">Registreren</a>";
-          }
-          ?>
       </div>
     </div>
   </section>
@@ -87,8 +65,34 @@ if(isset($_GET["end"])){
 
       <nav class="nav-menu d-none d-lg-block">
         <ul>
+        <?php
+        if(isset($_SESSION["login"])){
+          if(!($_SESSION["login"])){
+              echo"<li><a href=\"inloggen.php\"><i class=\"icofont-sign-in\">Inloggen</i></a></li>";
+              echo"<li><a href=\"registreer.php\">Registreren</a>";
+          }
+          else{
+              echo"<li><a href=\"".$_SERVER["PHP_SELF"]."?end=true\"><i class=\"icofont-sign-out\"></i>Uitloggen</a></li>";
+              if($_SESSION["admin"]!=0){
+                echo"<li><a href=\"admin.php\">Admin</a></li>";
+              }
+              else{
+                if($_SESSION["loginType"] == "user"){
+                  
+                  echo"<li><a href=\"wijzigenUser.php\">Profiel</a></li>";
+              }
+              else{
+                  echo"<li><a href=\"wijzigenAut.php\">Profiel</a></li>";
+              }
+              }
+          }
+      }
+      else{
+          echo"<li><a href=\"inloggen.php\"><i class=\"icofont-sign-in\"></i>Inloggen</a></li>";
+          echo"<li><a href=\"registreer.php\">Registreren</a></li>";
+      }
+      ?>
           <li><a href="index.php">Home</a></li>
-
             <li class="active"><a href="about.php">Over</a></li>
           <li><a href="contact.php">Contact</a></li>
               <li><a href="portfolioAut.php">Auteurs</a></li>

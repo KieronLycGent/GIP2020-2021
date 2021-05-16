@@ -94,6 +94,33 @@ if(!isset($_SESSION["ID"])){
 
       <nav class="nav-menu d-none d-lg-block">
         <ul>
+        <?php
+        if(isset($_SESSION["login"])){
+          if(!($_SESSION["login"])){
+              echo"<li><a href=\"inloggen.php\"><i class=\"icofont-sign-in\">Inloggen</i></a></li>";
+              echo"<li><a href=\"registreer.php\">Registreren</a>";
+          }
+          else{
+              echo"<li><a href=\"".$_SERVER["PHP_SELF"]."?end=true\"><i class=\"icofont-sign-out\"></i>Uitloggen</a></li>";
+              if($_SESSION["admin"]!=0){
+                echo"<li><a href=\"admin.php\">Admin</a></li>";
+              }
+              else{
+                if($_SESSION["loginType"] == "user"){
+                  
+                  echo"<li><a href=\"wijzigenUser.php\">Profiel</a></li>";
+              }
+              else{
+                  echo"<li><a href=\"wijzigenAut.php\">Profiel</a></li>";
+              }
+              }
+          }
+      }
+      else{
+          echo"<li><a href=\"inloggen.php\"><i class=\"icofont-sign-in\"></i>Inloggen</a></li>";
+          echo"<li><a href=\"registreer.php\">Registreren</a></li>";
+      }
+      ?>
           <li><a href="index.php">Home</a></li>
 
             <li><a href="about.php">Over</a></li>
