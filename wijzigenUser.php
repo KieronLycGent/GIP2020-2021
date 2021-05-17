@@ -10,11 +10,7 @@ if(isset($_GET["end"])){
         session_destroy();
         header("location:".$_SERVER["PHP_SELF"]);
     }
-}
-?>
-<!DOCTYPE html>
-<?php
-    
+}    
 if(!isset($_SESSION["ID"])){
     header("location:portfolioUser.php");
 }

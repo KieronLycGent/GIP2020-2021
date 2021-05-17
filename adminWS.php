@@ -7,15 +7,18 @@ if(isset($_GET["end"])){
     }
 }
 if(!$_SESSION["admin"]){
-  header("location:index.php");
+    header("location:index.php");
+  }
+if(isset($_GET["option"])&&$_GET["option"] == "edit"){
+  $_SESSION["ID"] = $_GET["item"];
+   header("location:wijzigenWS.php");
 }
 ?>
-<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Over - Workshopp.er</title>
+  <title>Admin: Auteurs - Workshopp.er</title>
   <meta content="" name="descriptison">
   <meta content="" name="keywords">
   <!-- Favicons -->
@@ -23,6 +26,7 @@ if(!$_SESSION["admin"]){
   <link href="assets/img/ws.png" rel="apple-touch-icon">
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
   <!-- Vendor CSS Files -->
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="assets/vendor/icofont/icofont.min.css" rel="stylesheet">
@@ -30,8 +34,14 @@ if(!$_SESSION["admin"]){
   <link href="assets/vendor/animate.css/animate.min.css" rel="stylesheet">
   <link href="assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
   <link href="assets/vendor/venobox/venobox.css" rel="stylesheet">
+
   <!-- Template Main CSS File -->
   <link href="assets/css/style.css" rel="stylesheet">
+<style type="txt/css">
+table{
+  border: #000 solid 1px;
+}
+</style>
   <!-- =======================================================
   * Template Name: Eterna - v2.1.0
   * Template URL: https://bootstrapmade.com/eterna-free-multipurpose-bootstrap-template/
@@ -40,15 +50,15 @@ if(!$_SESSION["admin"]){
   ======================================================== -->
 </head>
 <body>
-<!-- ======= Top Bar ======= -->
- <section id="topbar" class="d-none d-lg-block">
+  <!-- ======= Top Bar ======= -->
+  <section id="topbar" class="d-none d-lg-block">
     <div class="container d-flex">
       <div class="social-links">
       </div>
     </div>
   </section>
   <!-- ======= Header ======= -->
-  <header id="header">
+ <header id="header">
     <div class="container d-flex">
       <div class="logo mr-auto">
         <h1 class="text-light"><a href="index.php"><span>Workshopp.er</span></a></h1>
@@ -85,45 +95,87 @@ if(!$_SESSION["admin"]){
       }
       ?>
           <li><a href="index.php">Home</a></li>
-            <li class="active"><a href="about.php">Over</a></li>
-          <li><a href="contact.php">Contact</a></li>
+            <li><a href="about.php">Over</a></li>
+          <li class="active"><a href="contact.php">Contact</a></li>
               <li><a href="portfolioAut.php">Auteurs</a></li>
             <li><a href="portfolioUser.php">Gebruikers</a></li>
         </ul>
       </nav><!-- .nav-menu -->
     </div>
   </header><!-- End Header -->
-<main id="main">
-<!-- ======= Featured Section ======= -->
-<section id="featured" class="featured">
-<h3>&nbsp;</h3>
-  <div class="container">
-    <div class="row">
-      <a href="">
-        <div class="col-lg-4">
-          <div class="icon-box">
-            <h3><a href="adminUsers.php">Gebruikers aanpassen/deactiveren</a></h3>
+  <main id="main">
+    <!-- ======= Breadcrumbs ======= -->
+    <section id="breadcrumbs" class="breadcrumbs">
+      <div class="container">
+        <ol>
+          <li><a href="index.php">Home</a></li>
+          <li><a href="admin.php">Admin</a></li>
+          <li>Auteurs</li>
+        </ol>
+        <h2>Auteurs</h2>
+      </div>
+    </section><!-- End Breadcrumbs -->
+    <!-- ======= Content Section ======= -->
+    <section id="content" class="content">
+          <div class="container">
+            <div class="row">
+                <table id="tblusers" class="admin">
+                    <tr>
+                        <th width = 20px>ID</th>
+                        <th width = 150px>Naam</th>
+                        <th width = 200px>Email</th>
+                        <th width = 200px>Rekeningnummer</th>
+                        <th width = 20px>Gedeactiveerd?</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <?php
+$mysqli = new mysqli("localhost","root","","gip");
+if(mysqli_connect_errno()){
+    trigger_error("Fout bij verbinding: ".$mysqli->error);
+}
+else{
+    $sql = "SELECT a.auteurID,a.auteurNm,a.auteurEmail,a.rekNr,a.deactivated
+    FROM tblauteur a";
+    if($stmt = $mysqli->prepare($sql)){
+        if(!$stmt->execute()){
+            echo"Het uitvoeren van qry getAuts is mislukt: ".$stmt->error."in query";
+        }
+        else{
+            $stmt->bind_result($aID,$aNm,$aEmail,$aRekNr,$aDeact);
+            while($stmt->fetch()){
+                echo"
+                <tr>
+                    <td>".$aID."</td>
+                    <td>".$aNm."</td>
+                    <td>".$aEmail."</td>
+                    <td>".$aRekNr."</td>";
+                    switch($aDeact){
+                        case 0:
+                            echo"<td>Nee</td>";
+                            break;
+                        default:
+                            echo"<td>Ja</td>";
+                            break;
+                    }
+                echo"
+                    <td><a href=\"adminAuteurs.php?item=".$aID."&option=edit\"><i class=\"icofont-pencil-alt-5\"></i></a>
+                    <td><a href=\"adminAuteurs.php?item=".$aID."&option=deact\"><i class=\"icofont-not-allowed\"></i></a>
+                </tr>";
+            }
+        }
+        $stmt->close();
+    }
+    else{
+      echo"Er zit een fout in qry getAuts: ".$mysqli->error;
+    }
+}
+                    ?>
+                </table>
+            </div>
           </div>
-        </div>
-      </a>
-      <a href="">
-        <div class="col-lg-4">
-          <div class="icon-box">
-            <h3><a href="adminAuteurs.php">Auteurs aanpassen/deactiveren</a></h3>
-          </div>
-        </div>
-      </a>
-      <a href="">
-        <div class="col-lg-4">
-          <div class="icon-box">
-            <h3><a href="adminWS.php">Workshops aanpassen/deactiveren</a></h3>
-          </div>
-        </div>
-      </a>
-    </div>
-  </div>
-</section><!-- End Featured Section -->
-</main><!-- End #main -->
+    </section>
+    </main><!-- End #main -->
   <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
   <!-- Vendor JS Files -->
   <script src="assets/vendor/jquery/jquery.min.js"></script>

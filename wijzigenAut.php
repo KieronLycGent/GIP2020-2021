@@ -10,16 +10,12 @@ if(isset($_GET["end"])){
         session_destroy();
         header("location:".$_SERVER["PHP_SELF"]);
     }
-}
-?>
-<!DOCTYPE html>
-<?php
-    
+} 
 if(!isset($_SESSION["ID"])){
     header("location:portfolioAut.php");
 }
 $uploadOk = 0;
-if ((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&(isset($_POST["email"]))&&($_POST["email"]!="")&&(isset($_POST["straat"]))&&($_POST["straat"]!="") && $pcErr == false){
+if ((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&&(isset($_POST["email"]))&&($_POST["email"]!="")){
 	
   if (isset($_POST["verzenden"]) && $_FILES["fileToUpload"]["name"] !=""){
 	
@@ -98,17 +94,17 @@ if ((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&
       trigger_error("fout bij de verbinding: ".$mysqli->error);
     }
     if($noUpload){
-      $sql = "UPDATE tbluser SET userNm = '".$_POST["naam"]."', userStraat = '".$_POST["straat"]."',userPostCode = '".$PostcodeId1."', userEmail = '".$_POST["email"]."'WHERE userID = ".$_SESSION["ID"];
+      $sql = "UPDATE tblauteur SET auteurNm = '".$_POST["naam"]."', auteurBesch = '".$_POST["beschrijving"]."', rekNr = '".$_POST["reknr"]."', auteurEmail = '".$_POST["email"]."'WHERE auteurID = ".$_SESSION["ID"];
     }
     else{
-      $sql = "UPDATE tbluser SET userNm = '".$_POST["naam"]."', userStraat = '".$_POST["straat"]."',userPostCode = '".$PostcodeId1."', userFoto = '".$intevoegennaamfoto."', userEmail = '".$_POST["email"]."'WHERE userID = ".$_SESSION["ID"];
+      $sql = "UPDATE tblauteur SET auteurNm = '".$_POST["naam"]."', auteurBesch = '".$_POST["beschrijving"]."', rekNr =  '".$_POST["reknr"]."', auteurFoto = '".$intevoegennaamfoto."', auteurEmail = '".$_POST["email"]."'WHERE auteurID = ".$_SESSION["ID"];
     }
     if($stmt = $mysqli->prepare($sql)){
       if(!$stmt->execute()){
         echo"het uitvoeren van de qry is mislukt";
       }
 			else{
-				header("location:portfolio-detailsUser.php");
+				header("location:portfolio-detailsAut.php");
 				}
             $stmt->close();
       }

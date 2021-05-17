@@ -9,8 +9,8 @@ Database:
 		-Dit werkt ook							V | 2021-04-23
 	-betalingen									
 		-rekeningnummer bij Auteurs				V | 2021-05-07 --> .SQL geupdate
-		-paypal/andere betaling					X |
-		https://financesonline.com/how-to-do-payment-gateway-integration-in-php-java-and-c/
+		-paypal/andere betaling					X | is uitbreiding en moet dus niet!!!
+
 VERGEET NIET DE .SQL TE UPDATEN!!!
 
 - Footer verwijderen: deze heeft zo goed als geen nut 	V |2021-05-14 
@@ -23,7 +23,7 @@ Code van php voor ALLE HTML zetten -> errorcheck variabelen 	X |
 Admin:
 	-Users editen								V | 2021-04-11							note: heb nu al een stuk of 200 lijnen verwijderd. Wtf was ik aan het denken?!? - 2021-04-26
 		-User details -> interesses error fixen V | 2021-04-26
-	-Auteurs editen								X |
+	-Auteurs editen								V | 2021-05-17
 	-Workshops editen							X |
 	-Users deactiveren							X |
 	-Auteurs deactiveren						X |

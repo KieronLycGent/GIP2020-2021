@@ -55,29 +55,6 @@ if(!isset($_SESSION["ID"])){
  <section id="topbar" class="d-none d-lg-block">
     <div class="container d-flex">
       <div class="social-links">
-          <?php
-          if(isset($_SESSION["login"])){
-              if(!($_SESSION["login"])){
-                  echo"<a href=\"inloggen.php\">Inloggen</a>";
-                  echo"<a href=\"registreer.php\">Registreren</a>";
-              }
-              else{
-                  echo"<a href=\"".$_SERVER["PHP_SELF"]."?end=true\">Uitloggen</a>";
-                  if($_SESSION["loginType"] == "user"){
-                      
-                      echo"<a href=\"wijzigenUser.php\">Profiel</a>";
-                  }
-                  else{
-                      echo"<a href=\"wijzigenAut.php\">Profiel</a>";
-                  }
-              }
-          }
-          else{
-              echo"<a href=\"inloggen.php\">Inloggen</a>";
-              echo"<a href=\"registreer.php\">Registreren</a>";
-          }
-          ?>
-          <a href="wijzigenUser.php">ADMIN_Wijzigen</a>
       </div>
     </div>
   </section>
