@@ -244,7 +244,7 @@ if ((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Details user - Workshopp.er</title>
+  <title>Aanpassen Gebruiker - Workshopp.er</title>
   <meta content="" name="descriptison">
   <meta content="" name="keywords">
 
@@ -313,10 +313,10 @@ if ((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&
       <div class="container">
         <ol>
           <li><a href="index.php">Home</a></li>
-          <li>Gebruikers</li>
-          <li>Details</li>
+          <li>Profiel</li>
+          <li>Aanpassen</li>
         </ol>
-        <h2>Gebruikersdetails</h2>
+        <h2>Gebruiker aanpassen</h2>
       </div>
     </section><!-- End Breadcrumbs -->
     <!-- ======= Portfolio Details Section ======= -->

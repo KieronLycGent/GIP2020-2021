@@ -74,7 +74,7 @@ if(isset($_GET["end"])){
               }
               else{
                   echo"<li><a href=\"".$_SERVER["PHP_SELF"]."?end=true\"><i class=\"icofont-sign-out\"></i>Uitloggen</a></li>";
-                  if($_SESSION["admin"]!=0){
+                  if($_SESSION["admin"]){
                     echo"<li><a href=\"admin.php\">Admin</a></li>";
                   }
                   else{
@@ -107,6 +107,7 @@ if(isset($_GET["end"])){
             }
             if(isset($_SESSION["login"])){
               if(($_SESSION["login"])){
+                
                 if($_SESSION["loginType"] == "aut"){
                     echo"<li><a href=\"aanmakenWS.php\">Workshop aanmaken</a></li>
                          <li><a href=\"portfolioWSEigen.php\">Mijn workshops</a></li>";

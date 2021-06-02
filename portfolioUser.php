@@ -150,7 +150,7 @@ if(isset($_GET["item"])){
                   }
                   else{
                       
-                          $sql = "select userID, userNm, userFoto from tbluser";
+                          $sql = "select userID, userNm, userFoto from tbluser where deactivated = 0";
                       
                    
                       if($stmt = $mysqli->prepare($sql)){

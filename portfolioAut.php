@@ -151,7 +151,7 @@ if(isset($_GET["item"])){
                   }
                   else{
                       
-                          $sql = "select auteurID, auteurNm, auteurBesch, auteurFoto from tblauteur";
+                          $sql = "select auteurID, auteurNm, auteurBesch, auteurFoto from tblauteur WHERE deactivated = 0";
                       
                    
                       if($stmt = $mysqli->prepare($sql)){
