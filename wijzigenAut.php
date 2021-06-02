@@ -89,7 +89,7 @@ if ((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&
   }
     
     if ($uploadOk == 1){    
-    $mysqli = new MySQLi("localhost","root","","gip");
+    $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
     if(mysqli_connect_errno()){
       trigger_error("fout bij de verbinding: ".$mysqli->error);
     }
@@ -216,7 +216,7 @@ if ((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&
 
 if(!isset($_POST["verzenden"])){
 
-$mysqli = new mysqli("localhost","root","","gip");
+  $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
 if(mysqli_connect_errno()){
     trigger_error("Fout bij verbinding: ".$mysqli->error);
 }

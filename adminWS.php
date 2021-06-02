@@ -123,14 +123,14 @@ table{
                     <tr>
                         <th width = 20px>ID</th>
                         <th width = 150px>Naam</th>
-                        <th width = 200px>Email</th>
-                        <th width = 200px>Rekeningnummer</th>
+                        <th width = 150px>Auteur</th>
+                        <th width = 400px>Beschrijving</th>
                         <th width = 20px>Gedeactiveerd?</th>
                         <th></th>
                         <th></th>
                     </tr>
                     <?php
-$mysqli = new mysqli("localhost","root","","gip");
+$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
 if(mysqli_connect_errno()){
     trigger_error("Fout bij verbinding: ".$mysqli->error);
 }

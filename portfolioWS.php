@@ -6,16 +6,12 @@ if(isset($_GET["end"])){
         header("location:".$_SERVER["PHP_SELF"]);
     }
 }
-?>
-<!DOCTYPE html>
-<?php
 if(isset($_GET["item"])){
     $_SESSION["ID"] = $_GET["item"];
     header("location:portfolio-detailsWS.php");
 }    
 ?>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -188,7 +184,7 @@ if(isset($_GET["item"])){
               <div class="row portfolio-container">
                   <?php
     if(!isset($_POST["search"])){
-      $mysqli = new mysqli("localhost","root","","gip");
+      $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
       if(mysqli_connect_errno()){
         trigger_error("Fout bij verbinding: ".$mysqli->error."<br>");
       }
@@ -229,7 +225,7 @@ if(isset($_GET["item"])){
     }
     else{
       $term = "%".$_POST["search"]."%";
-      $mysqli = new mysqli("localhost","root","","gip");
+      $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
       if(mysqli_connect_errno()){
         trigger_error("Fout bij verbinding: ".$mysqli->error."<br>");
       }

@@ -19,7 +19,7 @@ $pcErr = false;
 
 if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postcode"] != "") &&isset($_POST["gemeente"]) && $_POST["gemeente"] !="" )
 {
-    $mysqli=new MySQLi("localhost","root","","gip");
+  $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
     if (mysqli_connect_errno())
     {
         trigger_error('Fout bij verbinding: '.$mysqli->error);
@@ -46,7 +46,7 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
 					 $pcErr = false;
                         if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postcode"] != "") &&isset($_POST["gemeente"]) && $_POST["gemeente"] !="" )
                         {
-                            $mysqli=new MySQLi("localhost","root","","gip");
+                          $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
 
                             if (mysqli_connect_errno())
                             {
@@ -169,7 +169,7 @@ if ((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&
     
     if ($uploadOk == 1){    
       //Het deleten van de oude interesses
-      $mysqli = new mysqli("localhost","root","","gip");
+      $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
       if(mysqli_connect_errno()){
           trigger_error("Fout bij verbinding: ".$mysqli->error);
       }
@@ -191,7 +191,7 @@ if ((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&
     //Het inserten van alle interesses
     //int1
     foreach ( $_POST["interesse"] as $interes){
-        $mysqli= new MySQLI("localhost","root","","gip");
+      $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
         if(mysqli_connect_errno()){
             trigger_error("Fout bij verbinding 'Int1': ".$mysqli->error);
         }
@@ -209,7 +209,7 @@ if ((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&
             }
         }
     }
-    $mysqli = new MySQLi("localhost","root","","gip");
+    $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
     if(mysqli_connect_errno()){
       trigger_error("fout bij de verbinding: ".$mysqli->error);
     }
@@ -235,7 +235,6 @@ if ((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&
 }
 ?>       
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -266,7 +265,6 @@ if ((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&
             color: red;
         }
     </style>
-
   <!-- =======================================================
   * Template Name: Eterna - v2.1.0
   * Template URL: https://bootstrapmade.com/eterna-free-multipurpose-bootstrap-template/
@@ -274,7 +272,6 @@ if ((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
 </head>
-
 <body>
   <!-- ======= Top Bar ======= -->
   <section id="topbar" class="d-none d-lg-block">
@@ -286,17 +283,14 @@ if ((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&
       </div>
     </div>
   </section>
-
   <!-- ======= Header ======= -->
   <header id="header">
     <div class="container d-flex">
-
       <div class="logo mr-auto">
         <h1 class="text-light"><a href="index.php"><span>Workshopp.er</span></a></h1>
         <!-- Uncomment below if you prefer to use an image logo -->
         <!-- <a href="index.php"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
       </div>
-
       <nav class="nav-menu d-none d-lg-block">
         <ul>
           <li><a href="index.php">Home</a></li>
@@ -304,39 +298,32 @@ if ((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&
           <li><a href="contact.php">Contact</a></li>
               <li><a href="portfolioAut.php">Auteurs</a></li>
             <li class="active"><a href="portfolioUser.php">Gebruikers</a></li>
-
         </ul>
       </nav><!-- .nav-menu -->
-
     </div>
   </header><!-- End Header -->
 <main id="main">
     <!-- ======= Breadcrumbs ======= -->
     <section id="breadcrumbs" class="breadcrumbs">
       <div class="container">
-
         <ol>
           <li><a href="index.php">Home</a></li>
           <li>Gebruikers</li>
           <li>Details</li>
         </ol>
         <h2>Gebruikersdetails</h2>
-
       </div>
     </section><!-- End Breadcrumbs -->
-
     <!-- ======= Portfolio Details Section ======= -->
     <form action="<?php $_SERVER["PHP_SELF"]?>" method="post" enctype="multipart/form-data">
         <section id="portfolio-details" class="portfolio-details">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-8">
-    <?php
+<?php
 //-----------------------------------------------qry baseInfo------------------------------------------
-
 if(!isset($_POST["verzenden"])){
-
-$mysqli = new mysqli("localhost","root","","gip");
+  $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
 if(mysqli_connect_errno()){
     trigger_error("Fout bij verbinding: ".$mysqli->error);
 }
@@ -350,8 +337,7 @@ else{
         else{
             $stmt->bind_result($userID,$userNm,$userFoto,$userStraat,$pCode,$gemeente,$email);
             $stmt->fetch();
-			$userFoto1 = $userFoto;
-			
+            $userFoto1 = $userFoto;		
         }
         $stmt->close();
     }
@@ -374,7 +360,8 @@ else {
                         <img src="assets/img/uploads/<?php  echo $userFoto ?> " class="img-fluid\" ><br>
                                                                                                     <input type="text" name="foto" hidden value="<?php echo $userFoto  ?>" >
                                                                                                     
-<?php   if($pcErr ||  (isset($_POST["verzenden"]) && $uploadOk == 0)) { echo"  <label id=\"error\">Fout: ". $boodschapfoto . "</label><br>";}?>                                                                                                  
+<?php
+if($pcErr ||  (isset($_POST["verzenden"]) && $uploadOk == 0)) { echo"  <label id=\"error\">Fout: ". $boodschapfoto . "</label><br>";}?>                                                                                                  
                                                                                                     
               <input type="file" name="fileToUpload" id="fileToUpload"       >         
                       <?php echo "
@@ -392,7 +379,7 @@ else {
             echo"  <li><label>Interesses: (Hou Ctrl ingedrukt tijdens het selecteren voor meerdere selecties)</label><br></li>";
            // echo"  <li><label>Interesses: (de gemarkeerde interesses zijn de interesses tot nu toe, iemand kan meerdere interesses hebben) bij verzenden ontstaat er een array interesse met indexen 0 tot een het aantal geselecteerd waarden -1 . Hou daar rekening bij wanneer je de update wil doen Meerdere selecties doe je met de controltoets</label><br></li>";
 //-------------------------------------------------------qry getUserInts-----------------------------
-$mysqli = new mysqli("localhost","root","","gip");
+$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
 if(mysqli_connect_errno()){
     trigger_error("Fout bij verbinding: ".$mysqli->error);
 }
@@ -432,16 +419,10 @@ else{
     else{
         echo"Er zit een fout in qry aantal interesses".$mysqli->error."<br>";
     }
-	
-	
 }
 //---------------------------------------------qry getAllInts-------------------------------------
 echo"&nbsp; <li><select  multiple size= ". $aantalinteresses1 ." name=\"interesse[] \" id=\"interesse\">";
-
-  
-
-
-    $mysqli = new mysqli("localhost","root","","gip");
+$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
     if(mysqli_connect_errno()){
         trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
@@ -462,8 +443,10 @@ echo"&nbsp; <li><select  multiple size= ". $aantalinteresses1 ." name=\"interess
 					if($ID ==  $selInt[$teller]){ echo "selected ";}}
 					
 					?>
-					> <?php echo $interesse ?> </option>
-                    <?php
+					> <?php
+                                        echo $interesse
+                                        ?></option>
+<?php
                 }
                 $stmt->close();
             }
@@ -481,7 +464,7 @@ echo"</select></li>
     </div>
     </div>
     </section>";
-?>    
+?> 
     </form>
   </main><!-- End #main -->
 

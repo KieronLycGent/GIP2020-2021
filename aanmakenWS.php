@@ -11,8 +11,6 @@ else{
 }
 //code voor na de form is verzonden
 if(isset($_POST["verzenden"])){
- // print_r($_POST);
-  // echo"<br>";
   if(isset($_POST["ageMax"])){
     if($_POST["ageMax"]!=""){
       $ageMax = $_POST["ageMax"];
@@ -26,7 +24,7 @@ if(isset($_POST["verzenden"])){
   }
   if(isset($_POST["titel"])&&$_POST["titel"]!=""&&isset($_POST["besch"])&&$_POST["besch"]!=""&&isset($_POST["pers"])&&$_POST["pers"]>0&&isset($_POST["ageMin"])&&$_POST["ageMin"]>=0&&$_POST["ageMin"]<=$ageMax&&isset($_POST["date"])&&isset($_POST["time"])&&isset($_POST["type"])&&$_POST["type"]!="-"){
     //query dateTime
-    $mysqli = new MySQLi("localhost","root","","gip");
+    $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
     if(mysqli_connect_errno()){
       trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
@@ -39,17 +37,14 @@ if(isset($_POST["verzenden"])){
         if(!$stmt->execute()){
           echo("het uitvoeren van qry dateTime is mislukt: ".$stmt->error."<br>");
         }
-        else{
-          echo"dateTime ingevoegd <br>";
-        }
-        $stmt->close();
+      $stmt->close();
       }
       else{
         echo("Er zit een fout in qry dateTime: ".$mysqli->error."<br>");
       }
     }
     //query fetchDateTimeID
-    $mysqli = new mysqli("localhost","root","","gip");
+    $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
     if(mysqli_connect_errno()){
       trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
@@ -70,7 +65,7 @@ if(isset($_POST["verzenden"])){
       }
     }
     //query actInfo
-    $mysqli = new MySQLi("localhost","root","","gip");
+    $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
     if(mysqli_connect_errno()){
       trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
@@ -108,7 +103,6 @@ if(isset($_POST["verzenden"])){
           echo("Het uitvoeren van qry actInfo is mislukt: ".$stmt->error."<br>");
         }
         else{
-          echo"WS ingevoegd";
           header("location:portfolioWSEigen.php");
         }
         $stmt->close();
@@ -250,7 +244,7 @@ if(isset($_POST["verzenden"])){
                       echo"<a id=\"error\">Gelieve een optie te selecteren.</a><br>";
                     }
                     //activiteitstype als selectie geven
-                    $mysqli= new MySQLi("localhost","root","","gip");
+                    $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
                     if(mysqli_connect_errno()){
                         trigger_error("Fout bij verbinding: ".$mysqli->error);
                     }

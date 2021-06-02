@@ -1,8 +1,8 @@
 <?php
 //----------------------------------------------------------De check ofdat de email al gebruikt wordt voor een UserAcc----------------------------------------//
 if(isset($_POST["verzenden"])&&isset($_POST["email"])&&$_POST["email"]!=""){
-    $mysqli=new mysqli("localhost","root","","gip");
-    if(mysqli_connect_errno()){
+    $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
+        if(mysqli_connect_errno()){
         trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
     else{
@@ -30,7 +30,7 @@ if(isset($_POST["verzenden"])&&isset($_POST["email"])&&$_POST["email"]!=""){
 }
 //----------------------------------------------------------De check voor postcodes en gemeentes-------------------------------------------------------------//
 if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postcode"] != "") &&isset($_POST["gemeente"]) && $_POST["gemeente"] !="" ){
-    $mysqli=new MySQLI("localhost","root","","gip");
+    $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
     if (mysqli_connect_errno()){
         trigger_error('Fout bij verbinding: '.$mysqli->error);
     }
@@ -49,7 +49,7 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
                 $aantalPostcodeId1= $aantalPostcodeId;
                 if($aantalPostcodeId1 > 0){
                         if((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postcode"] != "") && isset($_POST["gemeente"]) && $_POST["gemeente"]!=""){
-                            $mysqli=new MySQLI("localhost","root","","gip");
+                            $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
                             if(mysqli_connect_errno()){
                                 trigger_error('Fout bij verbinding: '.$mysqli->error);
                             }
@@ -101,12 +101,12 @@ if(isset($emailCheck)&&$emailCheck){
                 if((($_POST["interesse1"]==$_POST["interesse2"])&&($_POST["interesse1"]!="-")) || (($_POST["interesse1"] == $_POST["interesse3"])&&($_POST["interesse3"]!="-")) || (($_POST["interesse2"] == $_POST["interesse3"])&&($_POST["interesse2"]!="-"))){
                     echo"U hebt een interesse 2 of meerdere keren aangeduid, u kunt een keuze ook openlaten";
                 }
-                $mysqli= new MySQLi("localhost","root","","gip");
+                $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
                 if(mysqli_connect_errno()){
                     trigger_error("Fout bij verbinding: ".$mysqli->error);
                 }
                 else{
-                    $mysqli= new MySQLi("localhost","root","","gip");
+                    $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
                     if(mysqli_connect_errno()){
                         trigger_error('Fout bij verbinding: '.$mysqli->error); 
                     }
@@ -134,7 +134,7 @@ if(isset($emailCheck)&&$emailCheck){
                     }
                     //----------Einde van insert 1 (alles behalve interesses)-------------------
                     //----------Stuk code dat de ID van de user returnt-------------------------
-                    $mysqli = new MySQLI("localhost","root","","gip");
+                    $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
                     if(mysqli_connect_errno()){
                         trigger_error("Fout bij verbinding: ".$mysqli->error);
                     }
@@ -160,7 +160,7 @@ if(isset($emailCheck)&&$emailCheck){
                     //code insert int1
                     //Zorgt ervoor dat als er een interesse als "-" wordt geselecteerd dat deze worden weggelaten.
                     if($_POST["interesse1"] != "-"){
-                        $mysqli= new MySQLI("localhost","root","","gip");
+                        $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
                         if(mysqli_connect_errno()){
                             trigger_error("Fout bij verbinding 'Int1': ".$mysqli->error);
                         }
@@ -181,7 +181,7 @@ if(isset($emailCheck)&&$emailCheck){
                     //------------------------------
                     //code insert int2
                     if($_POST["interesse2"] != "-"){
-                    $mysqli= new MySQLI("localhost","root","","gip");
+                        $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
                         if(mysqli_connect_errno()){
                             trigger_error("Fout bij verbinding 'Int2': ".$mysqli->error);
                         }
@@ -202,7 +202,7 @@ if(isset($emailCheck)&&$emailCheck){
                     //-----------------------------
                     //<code insert int3
                     if($_POST["interesse3"] != "-"){
-                        $mysqli= new MySQLI("localhost","root","","gip");
+                        $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
                         if(mysqli_connect_errno()){
                             trigger_error("Fout bij verbinding 'Int3': ".$mysqli->error);
                         }
@@ -356,7 +356,7 @@ if(isset($emailCheck)&&$emailCheck){
                     <?php
                     $i = 0;
                     for($i=0; $i<3; $i++){
-                        $mysqli= new MySQLi("localhost","root","","gip");
+                        $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
                         if(mysqli_connect_errno()){
                             trigger_error("Fout bij verbinding: ".$mysqli->error);
                         }
