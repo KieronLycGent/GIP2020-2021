@@ -24,7 +24,8 @@ if(isset($_POST["verzenden"])){
   }
   if(isset($_POST["titel"])&&$_POST["titel"]!=""&&isset($_POST["besch"])&&$_POST["besch"]!=""&&isset($_POST["pers"])&&$_POST["pers"]>0&&isset($_POST["ageMin"])&&$_POST["ageMin"]>=0&&$_POST["ageMin"]<=$ageMax&&isset($_POST["date"])&&isset($_POST["time"])&&isset($_POST["type"])&&$_POST["type"]!="-"){
     //query dateTime
-    $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
+    $mysqli= new mysqli("localhost","root","","gip");
+    //$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
     if(mysqli_connect_errno()){
       trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
@@ -44,7 +45,8 @@ if(isset($_POST["verzenden"])){
       }
     }
     //query fetchDateTimeID
-    $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
+    $mysqli= new mysqli("localhost","root","","gip");
+    //$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
     if(mysqli_connect_errno()){
       trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
@@ -65,7 +67,8 @@ if(isset($_POST["verzenden"])){
       }
     }
     //query actInfo
-    $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
+    $mysqli= new mysqli("localhost","root","","gip");
+    //$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
     if(mysqli_connect_errno()){
       trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
@@ -244,7 +247,8 @@ if(isset($_POST["verzenden"])){
                       echo"<a id=\"error\">Gelieve een optie te selecteren.</a><br>";
                     }
                     //activiteitstype als selectie geven
-                    $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
+                    $mysqli= new mysqli("localhost","root","","gip");
+                    //$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
                     if(mysqli_connect_errno()){
                         trigger_error("Fout bij verbinding: ".$mysqli->error);
                     }

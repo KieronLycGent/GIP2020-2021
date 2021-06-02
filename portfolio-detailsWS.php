@@ -11,7 +11,8 @@ if(!isset($_SESSION["ID"])){
 }
 if(isset($_POST["join"])){
   // getActID
-  $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
+  $mysqli= new mysqli("localhost","root","","gip");
+  //$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
   if(mysqli_connect_errno()){
     trigger_error("Fout bij verbinding: ".$mysqli->error);
   }
@@ -33,7 +34,8 @@ if(isset($_POST["join"])){
   }
   // joinAct
   if($actPrijs==0){
-    $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
+    $mysqli= new mysqli("localhost","root","","gip");
+    //$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
     if(mysqli_connect_errno()){
       trigger_error("Fout bij verbinding: ".$mysqli->error);
     }
@@ -57,7 +59,8 @@ if(isset($_POST["join"])){
     header("location:cart.php");
   }
 }
-$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
+$mysqli= new mysqli("localhost","root","","gip");
+//$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
 if(mysqli_connect_errno()){
   trigger_error("Fout bij verbinding: ".$mysqli->error);
 }

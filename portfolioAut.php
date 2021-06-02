@@ -144,7 +144,8 @@ if(isset($_GET["item"])){
     
 
     if(!isset($_POST["search"])){
-      $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
+      $mysqli= new mysqli("localhost","root","","gip");
+      //$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
                   if(mysqli_connect_errno()){
                       trigger_error("Fout bij verbinding: ".$mysqli->error);
                   }
@@ -185,7 +186,8 @@ if(isset($_GET["item"])){
     }
     else{
                    $term = "%".$_POST["search"]."%";
-                   $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
+                   $mysqli= new mysqli("localhost","root","","gip");
+                   //$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
                   if(mysqli_connect_errno()){
                       trigger_error("Fout bij verbinding: ".$mysqli->error);
                   }

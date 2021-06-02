@@ -19,7 +19,8 @@ $pcErr = false;
 
 if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postcode"] != "") &&isset($_POST["gemeente"]) && $_POST["gemeente"] !="" )
 {
-  $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
+  $mysqli= new mysqli("localhost","root","","gip");
+  //$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
     if (mysqli_connect_errno())
     {
         trigger_error('Fout bij verbinding: '.$mysqli->error);
@@ -46,7 +47,8 @@ if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postc
 					 $pcErr = false;
                         if ((isset($_POST["verzenden"]))&& (isset($_POST["postcode"])) && ($_POST["postcode"] != "") &&isset($_POST["gemeente"]) && $_POST["gemeente"] !="" )
                         {
-                          $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
+                          $mysqli= new mysqli("localhost","root","","gip");
+                          //$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
 
                             if (mysqli_connect_errno())
                             {
@@ -169,7 +171,8 @@ if ((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&
     
     if ($uploadOk == 1){    
       //Het deleten van de oude interesses
-      $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
+      $mysqli= new mysqli("localhost","root","","gip");
+      //$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
       if(mysqli_connect_errno()){
           trigger_error("Fout bij verbinding: ".$mysqli->error);
       }
@@ -191,7 +194,8 @@ if ((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&
     //Het inserten van alle interesses
     //int1
     foreach ( $_POST["interesse"] as $interes){
-      $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
+      $mysqli= new mysqli("localhost","root","","gip");
+      //$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
         if(mysqli_connect_errno()){
             trigger_error("Fout bij verbinding 'Int1': ".$mysqli->error);
         }
@@ -209,7 +213,8 @@ if ((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&
             }
         }
     }
-    $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
+    $mysqli= new mysqli("localhost","root","","gip");
+    //$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
     if(mysqli_connect_errno()){
       trigger_error("fout bij de verbinding: ".$mysqli->error);
     }
@@ -323,7 +328,8 @@ if ((isset($_POST["verzenden"]))&&(isset($_POST["naam"]))&&($_POST["naam"]!="")&
 <?php
 //-----------------------------------------------qry baseInfo------------------------------------------
 if(!isset($_POST["verzenden"])){
-  $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
+  $mysqli= new mysqli("localhost","root","","gip");
+  //$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
 if(mysqli_connect_errno()){
     trigger_error("Fout bij verbinding: ".$mysqli->error);
 }
@@ -379,7 +385,8 @@ if($pcErr ||  (isset($_POST["verzenden"]) && $uploadOk == 0)) { echo"  <label id
             echo"  <li><label>Interesses: (Hou Ctrl ingedrukt tijdens het selecteren voor meerdere selecties)</label><br></li>";
            // echo"  <li><label>Interesses: (de gemarkeerde interesses zijn de interesses tot nu toe, iemand kan meerdere interesses hebben) bij verzenden ontstaat er een array interesse met indexen 0 tot een het aantal geselecteerd waarden -1 . Hou daar rekening bij wanneer je de update wil doen Meerdere selecties doe je met de controltoets</label><br></li>";
 //-------------------------------------------------------qry getUserInts-----------------------------
-$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
+$mysqli= new mysqli("localhost","root","","gip");
+//$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
 if(mysqli_connect_errno()){
     trigger_error("Fout bij verbinding: ".$mysqli->error);
 }
@@ -422,7 +429,8 @@ else{
 }
 //---------------------------------------------qry getAllInts-------------------------------------
 echo"&nbsp; <li><select  multiple size= ". $aantalinteresses1 ." name=\"interesse[] \" id=\"interesse\">";
-$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
+$mysqli= new mysqli("localhost","root","","gip");
+//$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
     if(mysqli_connect_errno()){
         trigger_error("Fout bij verbinding: ".$mysqli->error);
     }

@@ -12,6 +12,7 @@ if(!isset($_SESSION["ID"])){
 if(isset($_POST["naam"])&&$_POST["naam"]!=""&&(isset($_POST["besch"]))&&$_POST["besch"]!=""&&(isset($_POST["foto"]))&&$_POST["foto"]!=""){
      
     $mysqli = new MySQLi("localhost","root","","gip");
+    //$mysqli= new mysqli("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
         if(mysqli_connect_errno()){
             trigger_error("fout bij de verbinding: ".$mysqli->error);
         }
@@ -26,7 +27,8 @@ if(isset($_POST["naam"])&&$_POST["naam"]!=""&&(isset($_POST["besch"]))&&$_POST["
             echo"Er zit een fout in de qry";
         }
 }
-$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
+$mysqli= new mysqli("localhost","root","","gip");
+//$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
 if(mysqli_connect_errno()){
   trigger_error("Fout bij verbinding: ".$mysqli->error);
 }
@@ -183,7 +185,6 @@ echo"
     </div>
   </div>
 </section>";
-?>
     /*$mysqli= new MySQLi("localhost","root","","gip");
     if(mysqli_connect_errno()){
         trigger_error("Fout bij verbinding: ".$mysqli->error);

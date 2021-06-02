@@ -125,7 +125,8 @@ if(!isset($_SESSION["ID"])){
     <!-- ======= Portfolio Details Section ======= -->
 
 <?php
-$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
+$mysqli= new mysqli("localhost","root","","gip");
+//$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
 if(mysqli_connect_errno()){
     trigger_error("Fout bij verbinding: ".$mysqli->error);
 }
@@ -163,7 +164,8 @@ else{
         echo"Er zit een fout in de qry: ".$mysqli->error;
     }
 }
-$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
+$mysqli= new mysqli("localhost","root","","gip");
+//$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
 $sql = "SELECT i.interesseNm FROM tblinteresse i, tblinteressesuser iu WHERE iu.userID = ".$_SESSION["ID"]." AND iu.interesseID = i.interesseID";
 if($stmt = $mysqli->prepare($sql)){
   if(!$stmt->execute()){

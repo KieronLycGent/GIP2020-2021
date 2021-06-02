@@ -3,7 +3,8 @@ session_start();
 $klopt = false;
 $ID = 0;
 if((isset($_POST["verzenden"]))&&(isset($_POST["email"]))&&($_POST["email"]!="")&&isset($_POST["pw"])&&$_POST["pw"]!=""){
-    $mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
+    $mysqli= new mysqli("localhost","root","","gip");
+    //$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
     if(mysqli_connect_errno()){
         trigger_error('Fout bij verbinding: '.$mysqli->error); 
     }
