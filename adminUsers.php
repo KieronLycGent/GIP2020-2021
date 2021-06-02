@@ -11,7 +11,53 @@ if(!$_SESSION["admin"]){
   }
 if(isset($_GET["option"])&&$_GET["option"] == "edit"){
   $_SESSION["ID"] = $_GET["item"];
-    header("location:wijzigenUser.php");
+  header("location:wijzigenUser.php");
+}
+if(isset($_GET["option"])&&$_GET["option"] == "deact"){
+  $deactID = $_GET["item"];
+  $mysqli= new mysqli("localhost","root","","gip");
+  //$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
+  if(mysqli_connect_errno()){
+    trigger_error("Fout bij verbinding: ".$mysqli->error);
+  }
+  else{
+    $sql = "SELECT deactivated FROM tbluser WHERE userID = $deactID";
+    if($stmt = $mysqli->prepare($sql)){
+      if(!$stmt->execute()){
+        echo"uitvoeren van qry getDeact is mislukt".$stmt->error;
+      }
+      $stmt->bind_result($deact);
+      echo($deact);
+      $stmt->fetch();
+    }
+    else{
+      echo"Er zit een fout in qry getDeact: ".$mysqli->error;
+    }
+    $stmt->close();
+  }
+  $mysqli= new mysqli("localhost","root","","gip");
+  //$mysqli= new MySQLi("fdb18.awardspace.net","3833910_gip","Paswoord100","3833910_gip");
+  if(mysqli_connect_errno()){
+    trigger_error("Fout bij verbinding: ".$mysqli->error);
+  }
+  else{
+    if($deact == 0){
+      $sql = "UPDATE tbluser SET deactivated = 1 WHERE userID = $deactID";
+    }
+    else{
+      $sql = "UPDATE tbluser SET deactivated = 0 WHERE userID = $deactID";
+    }
+    if($stmt = $mysqli->prepare($sql)){
+      if(!$stmt->execute()){
+        echo"uitvoeren van qry deactivate is mislukt".$stmt->error;
+      }
+      $stmt->close();
+      header("location:".$_SERVER["PHP_SELF"]);
+    }
+    else{
+      echo"Er zit een fout in qry deactivate" .$mysqli->error;
+    }
+  }
 }
 ?>
 <html lang="en">
