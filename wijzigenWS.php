@@ -98,13 +98,62 @@ else{
       </div>
 
       <nav class="nav-menu d-none d-lg-block">
-        <ul>
+      <ul>
+        <?php
+          if(isset($_SESSION["login"])){
+              if(!($_SESSION["login"])){
+                  echo"<li><a href=\"inloggen.php\"><i class=\"icofont-sign-in\">Inloggen</i></a></li>";
+                  echo"<li><a href=\"registreer.php\">Registreren</a>";
+              }
+              else{
+                  echo"<li><a href=\"".$_SERVER["PHP_SELF"]."?end=true\"><i class=\"icofont-sign-out\"></i>Uitloggen</a></li>";
+                  if($_SESSION["admin"]){
+                    echo"<li><a href=\"admin.php\">Admin</a></li>";
+                  }
+                  else{
+                    if($_SESSION["loginType"] == "user"){
+                      
+                      echo"<li><a href=\"wijzigenUser.php\">Profiel</a></li>";
+                  }
+                  else{
+                      echo"<li><a href=\"wijzigenAut.php\">Profiel</a></li>";
+                  }
+                  }
+              }
+          }
+          else{
+              echo"<li><a href=\"inloggen.php\"><i class=\"icofont-sign-in\"></i>Inloggen</a></li>";
+              echo"<li><a href=\"registreer.php\">Registreren</a></li>";
+          }
+          ?>
           <li class="active"><a href="index.php">Home</a></li>
-
             <li><a href="about.php">Over</a></li>
           <li><a href="contact.php">Contact</a></li>
-              <li class="active"><a href="portfolioAut.php">Auteurs</a></li>
-            <li><a href="portfolioUser.php">Gebruikers</a></li>
+          <?php
+            if(isset($_SESSION["admin"])){
+              if($_SESSION["admin"]){
+                echo"
+                <li><a href=\"portfolioAut.php\">Auteurs</a></li>
+                <li><a href=\"portfolioUser.php\">Gebruikers</a></li>
+                ";
+              }
+            }
+            if(isset($_SESSION["login"])){
+              if(($_SESSION["login"])){
+                
+                if($_SESSION["loginType"] == "aut"){
+                    echo"<li><a href=\"aanmakenWS.php\">Workshop aanmaken</a></li>
+                         <li><a href=\"portfolioWSEigen.php\">Mijn workshops</a></li>";
+                }
+                else if($_SESSION["loginType"] == "user"){
+                    echo"<li><a href=\"portfolioWS.php\">Workshops</a></li>";
+                }
+              }
+            }
+            else{
+              echo"<li><a href=\"portfolioWS.php\">Workshops</a></li>";
+            }                
+            ?>
 
         </ul>
       </nav><!-- .nav-menu -->
