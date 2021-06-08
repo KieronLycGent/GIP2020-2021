@@ -95,7 +95,7 @@ if(isset($_GET["item"])){
               echo"<li><a href=\"registreer.php\">Registreren</a></li>";
           }
           ?>
-          <li class="active"><a href="index.php">Home</a></li>
+          <li><a href="index.php">Home</a></li>
             <li><a href="about.php">Over</a></li>
           <li><a href="contact.php">Contact</a></li>
           <?php
@@ -137,9 +137,9 @@ if(isset($_GET["item"])){
       <div class="container">
         <ol>
           <li><a href="index.php">Home</a></li>
-          <li><a href="portfolioUser.php">Users</a></li>
+          <li><a href="portfolioUser.php">Gebruikers</a></li>
         </ol>
-        <h2>Users</h2>
+        <h2>Gebruikers</h2>
       </div>
     </section>
     <!-- End Breadcrumbs -->
@@ -258,19 +258,6 @@ if(isset($_GET["item"])){
           </div>
         </div>
       </section><!-- End Portfolio Section -->
-<!-- ====== Auteurs ====== -->
-      
-    <!-- ======= Clients Section ======= -->
-    <section id="clients" class="clients">
-      
-        <div class="section-title">
-          <h2>Auteurs</h2>
-          <p>Dit is een lijst van al onze auteurs. Hier kunt u naar bepaalde auteurs op naam.</p>
-        </div>
-        
-       
-    </section><!-- End Clients Section -->
-
   </main><!-- End #main -->
   <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
 

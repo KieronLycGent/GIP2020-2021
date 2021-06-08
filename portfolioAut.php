@@ -258,19 +258,6 @@ if(isset($_GET["item"])){
           </div>
         </div>
       </section><!-- End Portfolio Section -->
-<!-- ====== Auteurs ====== -->
-      
-    <!-- ======= Clients Section ======= -->
-    <section id="clients" class="clients">
-      
-        <div class="section-title">
-          <h2>Auteurs</h2>
-          <p>Dit is een lijst van al onze auteurs. Hier kunt u naar bepaalde auteurs op naam.</p>
-        </div>
-        
-       
-    </section><!-- End Clients Section -->
-
   </main><!-- End #main -->
   <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
   <!-- Vendor JS Files -->

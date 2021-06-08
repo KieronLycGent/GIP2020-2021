@@ -66,7 +66,7 @@ if(!$_SESSION["admin"]){
           else{
               echo"<li><a href=\"".$_SERVER["PHP_SELF"]."?end=true\"><i class=\"icofont-sign-out\"></i>Uitloggen</a></li>";
               if($_SESSION["admin"]!=0){
-                echo"<li><a href=\"admin.php\">Admin</a></li>";
+                echo"<li class=\"active\"><a href=\"admin.php\">Admin</a></li>";
               }
               else{
                 if($_SESSION["loginType"] == "user"){
@@ -85,7 +85,7 @@ if(!$_SESSION["admin"]){
       }
       ?>
           <li><a href="index.php">Home</a></li>
-            <li class="active"><a href="about.php">Over</a></li>
+            <li><a href="about.php">Over</a></li>
           <li><a href="contact.php">Contact</a></li>
               <li><a href="portfolioAut.php">Auteurs</a></li>
             <li><a href="portfolioUser.php">Gebruikers</a></li>

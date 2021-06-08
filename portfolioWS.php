@@ -96,7 +96,7 @@ if(isset($_GET["item"])){
               echo"<li><a href=\"registreer.php\">Registreren</a></li>";
           }
           ?>
-          <li class="active"><a href="index.php">Home</a></li>
+          <li><a href="index.php">Home</a></li>
             <li><a href="about.php">Over</a></li>
           <li><a href="contact.php">Contact</a></li>
           <?php

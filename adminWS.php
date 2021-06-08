@@ -18,7 +18,7 @@ if(isset($_GET["option"])&&$_GET["option"] == "edit"){
 <head>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-  <title>Admin: Auteurs - Workshopp.er</title>
+  <title>Admin: Workshops - Workshopp.er</title>
   <meta content="" name="descriptison">
   <meta content="" name="keywords">
   <!-- Favicons -->
@@ -122,9 +122,9 @@ table{
                 <table id="tblusers" class="admin">
                     <tr>
                         <th width = 20px>ID</th>
-                        <th width = 150px>Naam</th>
-                        <th width = 150px>Auteur</th>
-                        <th width = 400px>Beschrijving</th>
+                        <th width = 150px>Titel</th>
+                        <th width = 150px>Type</th>
+                        <th width = 400px>Prijs</th>
                         <th width = 20px>Gedeactiveerd?</th>
                         <th></th>
                         <th></th>
@@ -136,21 +136,22 @@ if(mysqli_connect_errno()){
     trigger_error("Fout bij verbinding: ".$mysqli->error);
 }
 else{
-    $sql = "SELECT a.auteurID,a.auteurNm,a.auteurEmail,a.rekNr,a.deactivated
-    FROM tblauteur a";
+    $sql = "SELECT a.actID,a.actNm,t.actType,a.actPrijs,a.deactivated
+    FROM tblactiviteit a, tbltypes t
+    WHERE a.actTypeID = t.actTypeID";
     if($stmt = $mysqli->prepare($sql)){
         if(!$stmt->execute()){
             echo"Het uitvoeren van qry getAuts is mislukt: ".$stmt->error."in query";
         }
         else{
-            $stmt->bind_result($aID,$aNm,$aEmail,$aRekNr,$aDeact);
+            $stmt->bind_result($aID,$aNm,$aType,$aPrijs,$aDeact);
             while($stmt->fetch()){
                 echo"
                 <tr>
                     <td>".$aID."</td>
                     <td>".$aNm."</td>
-                    <td>".$aEmail."</td>
-                    <td>".$aRekNr."</td>";
+                    <td>".$aType."</td>
+                    <td>&euro;".$aPrijs."</td>";
                     switch($aDeact){
                         case 0:
                             echo"<td>Nee</td>";
@@ -160,8 +161,8 @@ else{
                             break;
                     }
                 echo"
-                    <td><a href=\"adminAuteurs.php?item=".$aID."&option=edit\"><i class=\"icofont-pencil-alt-5\"></i></a>
-                    <td><a href=\"adminAuteurs.php?item=".$aID."&option=deact\"><i class=\"icofont-not-allowed\"></i></a>
+                    <td><a href=\"adminWS.php?item=".$aID."&option=edit\"><i class=\"icofont-pencil-alt-5\"></i></a>
+                    <td><a href=\"adminWS.php?item=".$aID."&option=deact\"><i class=\"icofont-not-allowed\"></i></a>
                 </tr>";
             }
         }
