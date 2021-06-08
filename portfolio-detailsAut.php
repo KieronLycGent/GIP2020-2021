@@ -98,14 +98,14 @@ if(!isset($_SESSION["ID"])){
               echo"<li><a href=\"registreer.php\">Registreren</a></li>";
           }
           ?>
-          <li class="active"><a href="index.php">Home</a></li>
+          <li><a href="index.php">Home</a></li>
             <li><a href="about.php">Over</a></li>
           <li><a href="contact.php">Contact</a></li>
           <?php
             if(isset($_SESSION["admin"])){
               if($_SESSION["admin"]){
                 echo"
-                <li><a href=\"portfolioAut.php\">Auteurs</a></li>
+                <li class=\"active\"><a href=\"portfolioAut.php\">Auteurs</a></li>
                 <li><a href=\"portfolioUser.php\">Gebruikers</a></li>
                 ";
               }

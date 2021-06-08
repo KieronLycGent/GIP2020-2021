@@ -113,7 +113,7 @@ if(isset($_GET["item"])){
                 
                 if($_SESSION["loginType"] == "aut"){
                     echo"<li><a href=\"aanmakenWS.php\">Workshop aanmaken</a></li>
-                         <li><a href=\"portfolioWSEigen.php\">Mijn workshops</a></li>";
+                         <li class=\"active\"><a href=\"portfolioWSEigen.php\">Mijn workshops</a></li>";
                 }
                 else if($_SESSION["loginType"] == "user"){
                     echo"<li><a href=\"portfolioWS.php\">Workshops</a></li>";

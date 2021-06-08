@@ -103,7 +103,7 @@ if(isset($_GET["item"])){
               if($_SESSION["admin"]){
                 echo"
                 <li><a href=\"portfolioAut.php\">Auteurs</a></li>
-                <li><a href=\"portfolioUser.php\">Gebruikers</a></li>
+                <li class=\"active\"><a href=\"portfolioUser.php\">Gebruikers</a></li>
                 ";
               }
             }

@@ -153,11 +153,11 @@ if((isset($_POST["verzenden"]))&&(isset($_POST["email"]))&&($_POST["email"]!="")
               }
           }
           else{
-              echo"<li><a href=\"inloggen.php\"><i class=\"icofont-sign-in\"></i>Inloggen</a></li>";
+              echo"<li class=\"active\"><a href=\"inloggen.php\"><i class=\"icofont-sign-in\"></i>Inloggen</a></li>";
               echo"<li><a href=\"registreer.php\">Registreren</a></li>";
           }
           ?>
-          <li class="active"><a href="index.php">Home</a></li>
+          <li><a href="index.php">Home</a></li>
             <li><a href="about.php">Over</a></li>
           <li><a href="contact.php">Contact</a></li>
           <?php

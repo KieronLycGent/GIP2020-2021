@@ -116,12 +116,12 @@ if(isset($_GET["item"])){
                          <li><a href=\"portfolioWSEigen.php\">Mijn workshops</a></li>";
                 }
                 else if($_SESSION["loginType"] == "user"){
-                    echo"<li><a href=\"portfolioWS.php\">Workshops</a></li>";
+                    echo"<li class=\"active\"><a href=\"portfolioWS.php\">Workshops</a></li>";
                 }
               }
             }
             else{
-              echo"<li><a href=\"portfolioWS.php\">Workshops</a></li>";
+              echo"<li class=\"active\"><a href=\"portfolioWS.php\">Workshops</a></li>";
             }                
             ?>
 
